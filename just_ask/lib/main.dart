@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_ask/screens/SignInOrRegister.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,10 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        appBar: AppBar(title: Text("Just Ask")),
+        body: SignInOrRegister(),
+      ),
     );
   }
 }
