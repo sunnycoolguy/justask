@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "711703986440",
+    "project_id": "justask-9eea3",
+    "storage_bucket": "justask-9eea3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711703986440:android:dcc76f908b32dbcbfeacbd",
+        "android_client_info": {
+          "package_name": "com.sunny.just_ask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711703986440-u7hfaakg9ark6f7iff896dr198divmr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLunxsUn5gWEVy5b9oLR3P6Dmp48u_Qvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711703986440-u7hfaakg9ark6f7iff896dr198divmr2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
