@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/SignInOrRegister.dart';
 import 'package:just_ask/screens/JustAsk.dart';
+import 'services/authenticator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +27,17 @@ class Wrapper extends StatelessWidget {
 
           //App was successfully connected to Firebase and we can display our app.
           if (snapshot.connectionState == ConnectionState.done) {
-            return MaterialApp(
-              title: 'JustAsk',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
+            Stream<User> userStateStream = Authenticator().userStateStream;
+            return StreamProvider.value(
+              value: userStateStream,
+              child: MaterialApp(
+                title: 'JustAsk',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                home: JustAsk(),
               ),
-              home: JustAsk(),
             );
           }
 
