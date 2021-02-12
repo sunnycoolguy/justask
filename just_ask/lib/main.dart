@@ -28,7 +28,7 @@ class Wrapper extends StatelessWidget {
           //App was successfully connected to Firebase and we can display our app.
           if (snapshot.connectionState == ConnectionState.done) {
             Stream<User> userStateStream = Authenticator().userStateStream;
-            return StreamProvider.value(
+            return StreamProvider<User>.value(
               value: userStateStream,
               child: MaterialApp(
                 title: 'JustAsk',

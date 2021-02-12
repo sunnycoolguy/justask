@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInOrRegister extends StatefulWidget {
@@ -5,10 +6,13 @@ class SignInOrRegister extends StatefulWidget {
   _SignInOrRegisterState createState() => _SignInOrRegisterState();
 }
 
-enum Mode { signIn, signUp }
+enum FormMode { signIn, signUp }
+enum UserMode { teacher, student }
 
 class _SignInOrRegisterState extends State<SignInOrRegister> {
-  Mode mode = Mode.signIn;
+  FormMode formMode = FormMode.signIn;
+  UserMode userMode = UserMode.teacher;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -18,8 +22,8 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 80.0),
-            mode == Mode.signUp
+            SizedBox(height: 50.0),
+            formMode == FormMode.signUp
                 ? Container(
                     margin:
                         EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -32,14 +36,14 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                           border: OutlineInputBorder()),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'Please enter your first name';
                         }
                         return null;
                       },
                     ),
                   )
                 : SizedBox(),
-            mode == Mode.signUp
+            formMode == FormMode.signUp
                 ? Container(
                     margin:
                         EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -52,7 +56,7 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                           border: OutlineInputBorder()),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'Please enter your last name';
                         }
                         return null;
                       },
@@ -69,7 +73,7 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                     border: OutlineInputBorder()),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Please enter an email.';
                   }
                   return null;
                 },
@@ -84,43 +88,82 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                     labelText: 'Enter your password',
                     border: OutlineInputBorder()),
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter some text';
+                  if (value.length < 6) {
+                    return 'Please enter a password that is at least 6 characters or longer.';
                   }
                   return null;
                 },
               ),
             ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text(mode == Mode.signIn ? "Sign In" : "Register"),
-            ),
+            formMode == FormMode.signUp
+                ? Text("Are you a teacher or student?")
+                : SizedBox(),
+            formMode == FormMode.signUp
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Radio(
+                        value: UserMode.teacher,
+                        groupValue: userMode,
+                        onChanged: (value) {
+                          setState(() {
+                            userMode = value;
+                          });
+                        },
+                      ),
+                      Text('Teacher'),
+                      Radio(
+                        value: UserMode.student,
+                        groupValue: userMode,
+                        onChanged: (value) {
+                          setState(() {
+                            userMode = value;
+                          });
+                        },
+                      ),
+                      Text('Student')
+                    ],
+                  )
+                : SizedBox(),
             Text("First time on JustAsk? Sign up."),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Radio(
-                  value: Mode.signUp,
-                  groupValue: mode,
+                  value: FormMode.signUp,
+                  groupValue: formMode,
                   onChanged: (value) {
                     setState(() {
-                      mode = value;
+                      formMode = value;
                     });
                   },
                 ),
                 Text('Sign Up'),
                 Radio(
-                  value: Mode.signIn,
-                  groupValue: mode,
+                  value: FormMode.signIn,
+                  groupValue: formMode,
                   onChanged: (value) {
                     setState(() {
-                      mode = value;
+                      formMode = value;
                     });
                   },
                 ),
                 Text('Sign In')
               ],
-            )
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    if (formMode == FormMode.signIn) {
+                      //Sign the user in
+                    } else {
+                      //Sign user up
+                      //Create corresponding teacher or student document on FireStore
+                    }
+                  }
+                },
+                child:
+                    Text(formMode == FormMode.signIn ? "Sign In" : "Register"))
           ],
         ),
       ),
