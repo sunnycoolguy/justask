@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:just_ask/services/authenticator.dart';
+import 'package:just_ask/services/cloud_storer.dart';
 
 class SignInOrRegister extends StatefulWidget {
   @override
@@ -10,8 +12,13 @@ enum FormMode { signIn, signUp }
 enum UserMode { teacher, student }
 
 class _SignInOrRegisterState extends State<SignInOrRegister> {
+  Authenticator _authenticator = Authenticator();
   FormMode formMode = FormMode.signIn;
   UserMode userMode = UserMode.teacher;
+  String email;
+  String password;
+  String firstName;
+  String lastName;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,6 +47,11 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                         }
                         return null;
                       },
+                      onChanged: (text) {
+                        setState(() {
+                          firstName = text;
+                        });
+                      },
                     ),
                   )
                 : SizedBox(),
@@ -60,6 +72,11 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                         }
                         return null;
                       },
+                      onChanged: (text) {
+                        setState(() {
+                          lastName = text;
+                        });
+                      },
                     ),
                   )
                 : SizedBox(),
@@ -77,6 +94,11 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                   }
                   return null;
                 },
+                onChanged: (text) {
+                  setState(() {
+                    email = text;
+                  });
+                },
               ),
             ),
             Container(
@@ -92,6 +114,11 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                     return 'Please enter a password that is at least 6 characters or longer.';
                   }
                   return null;
+                },
+                onChanged: (text) {
+                  setState(() {
+                    password = text;
+                  });
                 },
               ),
             ),
@@ -152,13 +179,28 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
               ],
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     if (formMode == FormMode.signIn) {
                       //Sign the user in
+                      await _authenticator.signIn(
+                          email: email, password: password);
                     } else {
                       //Sign user up
+                      UserCredential userCredential = await _authenticator
+                          .createAccountWithEmailAndPassword(
+                              email: email, password: password);
+                      CloudStorer cloudStorer =
+                          CloudStorer(userID: userCredential.user.uid);
                       //Create corresponding teacher or student document on FireStore
+                      if (userMode == UserMode.teacher) {
+                        //create a teacher account
+                        cloudStorer.createTeacherAccount(
+                            email, firstName, lastName);
+                      } else {
+                        cloudStorer.createStudentAccount(
+                            email, firstName, lastName);
+                      }
                     }
                   }
                 },
