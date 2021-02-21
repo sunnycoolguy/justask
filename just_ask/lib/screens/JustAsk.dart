@@ -9,10 +9,6 @@ class JustAsk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('JustAsk'),
-        ),
-        body: currentUser == null ? SignInOrRegister() : Home());
+    return currentUser == null ? SignInOrRegister() : Home();
   }
 }
