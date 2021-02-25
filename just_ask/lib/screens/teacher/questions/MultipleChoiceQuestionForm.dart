@@ -109,9 +109,9 @@ class _MultipleChoiceQuestionFormState
                   hintText: 'What is the actual answer to the question?',
                   labelText: 'Correct answer'),
               validator: (String value) {
-                return value != firstAnswer ||
-                        value != secondAnswer ||
-                        value != thirdAnswer ||
+                return value != firstAnswer &&
+                        value != secondAnswer &&
+                        value != thirdAnswer &&
                         value != fourthAnswer
                     ? 'Your correct answer must match one of the possible answers'
                     : null;
