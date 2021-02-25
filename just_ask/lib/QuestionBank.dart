@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_ask/screens/teacher/QuestionsView.dart';
 import 'package:just_ask/screens/teacher/UpdateQuestionBankForm.dart';
 import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,9 @@ class _QuestionBankState extends State<QuestionBank> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MultipleChoiceQuestionForm()));
+                builder: (context) => QuestionsView(
+                    questionBankName: widget.questionBankName,
+                    questionBankId: widget.questionBankId)));
       },
       onLongPress: () {
         showDialog(

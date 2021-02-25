@@ -1,7 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_ask/services/cloud_storer.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MultipleChoiceQuestionForm extends StatefulWidget {
+  String questionBankId;
+  MultipleChoiceQuestionForm({String questionBankId}) {
+    this.questionBankId = questionBankId;
+  }
   @override
   _MultipleChoiceQuestionFormState createState() =>
       _MultipleChoiceQuestionFormState();
@@ -15,6 +22,8 @@ class _MultipleChoiceQuestionFormState
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    CloudStorer _cloudStorer =
+        CloudStorer(userID: Provider.of<User>(context).uid);
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a Multiple Choice Question'),
@@ -114,8 +123,20 @@ class _MultipleChoiceQuestionFormState
               },
             ),
             ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {}
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
+                    await _cloudStorer.addQuestion(
+                        question: questionText,
+                        correctAnswer: correctAnswer,
+                        answers: [
+                          firstAnswer,
+                          secondAnswer,
+                          thirdAnswer,
+                          fourthAnswer
+                        ],
+                        questionBankId: widget.questionBankId);
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: Text('Submit'))
           ]),

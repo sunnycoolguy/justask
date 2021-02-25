@@ -67,6 +67,40 @@ class CloudStorer {
     }
   }
 
+  //TODO: Add questions
+  Future<void> addQuestion(
+      {String question,
+      String correctAnswer,
+      List<String> answers,
+      String questionBankId}) async {
+    await users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .add({
+      'question': question,
+      'correctAnswer': correctAnswer,
+      'answers': answers
+    });
+  }
+
+  //TODO: Read Questions
+  getQuestions({String questionBankId}) {
+    try {
+      return users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .snapshots();
+    } catch (e) {
+      print(e);
+    }
+  }
+  //TODO: Update Questions
+  //TODO: Delete questions
+
   Future<void> createTeacherAccount(
       String email, String firstName, String lastName) async {
     print('Creating a teacher account for user $userID');
