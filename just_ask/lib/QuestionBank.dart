@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/teacher/UpdateQuestionBankForm.dart';
+import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/cloud_storer.dart';
@@ -22,6 +23,12 @@ class _QuestionBankState extends State<QuestionBank> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(widget.questionBankName),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MultipleChoiceQuestionForm()));
+      },
       onLongPress: () {
         showDialog(
             context: context,
