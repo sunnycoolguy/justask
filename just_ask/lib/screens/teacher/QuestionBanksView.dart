@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:just_ask/QuestionBank.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +20,11 @@ class _QuestionBanksViewState extends State<QuestionBanksView> {
     User currentUser = context.watch<User>();
     String currentUserId = currentUser.uid;
     CloudStorer _cloudStorer = CloudStorer(userID: currentUserId);
-    return StreamBuilder<QuerySnapshot>(
+    return StreamBuilder<List<QuestionBank>>(
         stream: _cloudStorer.QuestionBanks,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            print(snapshot.error);
             return Scaffold(body: Text('Error Retrieving Question Banks'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,14 +41,13 @@ class _QuestionBanksViewState extends State<QuestionBanksView> {
             ]),
             drawer: Drawer(),
             body: Container(
-                child: snapshot.data.docs.length == 0
-                    ? Text('No question banks yet')
-                    : Text('Here are your question banks sir')),
+                child: ListView(
+              children: snapshot.data,
+            ) //TODO: Use listview builder instead?,
+                ),
             floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () {
-                  print(currentUserId);
-                  print(Provider.of<User>(context, listen: false).uid);
                   showDialog(
                       context: context,
                       builder: (_) => QuestionBankForm(userID: currentUserId));

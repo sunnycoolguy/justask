@@ -3,16 +3,17 @@ import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class QuestionBankForm extends StatefulWidget {
-  String userID;
-  QuestionBankForm({String userID}) {
-    this.userID = userID;
+class UpdateQuestionBankForm extends StatefulWidget {
+  String questionBankId;
+  UpdateQuestionBankForm({String questionBankId}) {
+    this.questionBankId = questionBankId;
   }
+
   @override
-  _QuestionBankFormState createState() => _QuestionBankFormState();
+  _UpdateQuestionBankFormState createState() => _UpdateQuestionBankFormState();
 }
 
-class _QuestionBankFormState extends State<QuestionBankForm> {
+class _UpdateQuestionBankFormState extends State<UpdateQuestionBankForm> {
   String questionBankName;
   final _formKey = GlobalKey<FormState>();
   @override
@@ -23,7 +24,7 @@ class _QuestionBankFormState extends State<QuestionBankForm> {
           key: _formKey,
           child: Column(
             children: [
-              Text('Enter the name of your new question bank.'),
+              Text('Enter the new name of your question bank.'),
               TextFormField(
                 onChanged: (value) {
                   setState(() {
@@ -42,11 +43,13 @@ class _QuestionBankFormState extends State<QuestionBankForm> {
         ),
         actions: [
           TextButton(
-              child: Text('Add'),
+              child: Text('Update'),
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  await CloudStorer(userID: widget.userID)
-                      .addQuestionBank(questionBankName);
+                  await CloudStorer(
+                          userID: Provider.of<User>(context, listen: false).uid)
+                      .editQuestionBank(
+                          widget.questionBankId, questionBankName);
                   Navigator.of(context).pop();
                 }
               })

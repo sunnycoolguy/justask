@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../QuestionBank.dart';
 
 class CloudStorer {
   String userID;
@@ -8,8 +9,24 @@ class CloudStorer {
     this.userID = userID;
   }
 
+  List<QuestionBank> mapQuerySnapshotToQuestionBankList(
+      QuerySnapshot querySnapshot) {
+    return querySnapshot.docs
+        .map(
+          (doc) => QuestionBank(
+            questionBankId: doc.id,
+            questionBankName: doc.data()['questionBankName'],
+          ),
+        )
+        .toList();
+  }
+
   get QuestionBanks {
-    return users.doc(userID).collection('QuestionBanks').snapshots();
+    return users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .snapshots()
+        .map(mapQuerySnapshotToQuestionBankList);
   }
 
   Future<void> addQuestionBank(String questionBankName) async {
@@ -18,6 +35,36 @@ class CloudStorer {
         .doc(userID)
         .collection('QuestionBanks')
         .add({'questionBankName': questionBankName});
+  }
+
+  //TODO: Edit Question Bank
+  Future<void> editQuestionBank(
+      String questionBankId, String questionBankName) async {
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .update({'questionBankName': questionBankName});
+      print('Success!');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //TODO: Delete QuestionBank
+  Future<void> deleteQuestionBank(String questionBankId) async {
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .delete();
+      print('success');
+    } catch (e) {
+      print('das a failure bro');
+      print(e);
+    }
   }
 
   Future<void> createTeacherAccount(
