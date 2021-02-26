@@ -51,7 +51,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                     TextButton(
                       child: Text(
                         'MCQ',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       onPressed: () {
                         fabKey.currentState.close();
@@ -65,7 +65,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                     TextButton(
                       child: Text(
                         'T/F',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       onPressed: () {
                         fabKey.currentState.close();
@@ -79,7 +79,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                     TextButton(
                       child: Text(
                         'FIB',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       onPressed: () {
                         fabKey.currentState.close();
