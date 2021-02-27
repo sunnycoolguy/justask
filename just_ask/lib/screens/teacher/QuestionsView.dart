@@ -1,12 +1,14 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/Loading.dart';
+import 'package:just_ask/screens/teacher/QuestionTile.dart';
 import 'package:just_ask/screens/teacher/questions/FillInTheBlankQuestionForm.dart';
 import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.dart';
 import 'package:just_ask/screens/teacher/questions/TrueOrFalseQuestionForm.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'QuestionModel.dart';
 
 class QuestionsView extends StatefulWidget {
   String questionBankId = '';
@@ -26,9 +28,25 @@ class _QuestionsViewState extends State<QuestionsView> {
   Widget build(BuildContext context) {
     CloudStorer _cloudStorer =
         CloudStorer(userID: Provider.of<User>(context).uid);
+
+    List<QuestionTile> questionModelListToQuestionTileList(
+        List<QuestionModel> data) {
+      print('wow!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      return data
+          .map(
+            (questionModel) => QuestionTile(
+              questionModel: questionModel,
+            ),
+          )
+          .toList();
+    }
+
     return StreamBuilder(
+        stream:
+            _cloudStorer.getQuestions(questionBankId: widget.questionBankId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            print(snapshot.error);
             return Scaffold(body: Text('Error loading questions'));
           }
 
@@ -40,19 +58,21 @@ class _QuestionsViewState extends State<QuestionsView> {
               appBar: AppBar(
                 title: Text(widget.questionBankName),
               ),
-              body: snapshot.data.docs.length == 0
-                  ? Text('No questions yet!')
-                  : Text('Here are your questions sir!'),
+              body: ListView.separated(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) =>
+                    QuestionTile(questionModel: snapshot.data[index]),
+                separatorBuilder: (context, index) => Divider(),
+              ),
               floatingActionButton: FabCircularMenu(
-                  fabOpenIcon: Icon(Icons.menu, color: Colors.white),
+                  fabOpenIcon: Icon(Icons.add, color: Colors.white),
                   fabCloseIcon: Icon(Icons.close, color: Colors.white),
                   key: fabKey,
                   children: [
                     TextButton(
-                      child: Text(
-                        'MCQ',
-                        style: TextStyle(color: Colors.white, fontSize: 18.0),
-                      ),
+                      child: Text('MCQ',
+                          style:
+                              TextStyle(fontSize: 20.0, color: Colors.white)),
                       onPressed: () {
                         fabKey.currentState.close();
                         Navigator.of(context).push(MaterialPageRoute(
@@ -91,8 +111,6 @@ class _QuestionsViewState extends State<QuestionsView> {
                       },
                     ),
                   ]));
-        },
-        stream:
-            _cloudStorer.getQuestions(questionBankId: widget.questionBankId));
+        });
   }
 }

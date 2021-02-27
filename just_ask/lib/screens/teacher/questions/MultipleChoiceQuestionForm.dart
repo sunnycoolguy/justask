@@ -125,7 +125,7 @@ class _MultipleChoiceQuestionFormState
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    await _cloudStorer.addQuestion(
+                    await _cloudStorer.addMCQQuestion(
                         question: questionText,
                         correctAnswer: correctAnswer,
                         answers: [

@@ -15,7 +15,7 @@ class TrueOrFalseQuestionForm extends StatefulWidget {
 }
 
 class _TrueOrFalseQuestionFormState extends State<TrueOrFalseQuestionForm> {
-  bool correctAnswer;
+  String correctAnswer;
   String questionText = '';
   List<bool> isSelected = [true, false];
   final _formKey = GlobalKey<FormState>();
@@ -77,7 +77,11 @@ class _TrueOrFalseQuestionFormState extends State<TrueOrFalseQuestionForm> {
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    bool rightAnswer = isSelected[0] == false ? false : true;
+                    correctAnswer = isSelected[0] == false ? 'false' : 'true';
+                    await _cloudStorer.addTFQuestion(
+                        question: questionText,
+                        correctAnswer: correctAnswer,
+                        questionBankId: widget.questionBankId);
                     Navigator.of(context).pop();
                   }
                 },

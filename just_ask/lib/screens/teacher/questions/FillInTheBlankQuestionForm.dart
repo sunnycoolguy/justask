@@ -69,6 +69,10 @@ class _FillInTheBlankQuestionFormState
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    await _cloudStorer.addFIBQuestion(
+                        question: questionText,
+                        correctAnswer: correctAnswer,
+                        questionBankId: widget.questionBankId);
                     Navigator.of(context).pop();
                   }
                 },

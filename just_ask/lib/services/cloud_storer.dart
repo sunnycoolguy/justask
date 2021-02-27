@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:just_ask/screens/teacher/QuestionModel.dart';
 import '../QuestionBank.dart';
 
 class CloudStorer {
@@ -68,7 +69,8 @@ class CloudStorer {
   }
 
   //TODO: Add questions
-  Future<void> addQuestion(
+
+  Future<void> addMCQQuestion(
       {String question,
       String correctAnswer,
       List<String> answers,
@@ -81,8 +83,54 @@ class CloudStorer {
         .add({
       'question': question,
       'correctAnswer': correctAnswer,
-      'answers': answers
+      'type': 'MCQ',
+      'answers': answers,
+      'timestamp': FieldValue.serverTimestamp()
     });
+  }
+
+  Future<void> addTFQuestion(
+      {String question, String correctAnswer, String questionBankId}) async {
+    await users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .add({
+      'question': question,
+      'correctAnswer': correctAnswer,
+      'type': 'T/F',
+      'answers': null,
+      'timestamp': FieldValue.serverTimestamp()
+    });
+  }
+
+  Future<void> addFIBQuestion(
+      {String question, String correctAnswer, String questionBankId}) async {
+    await users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .add({
+      'question': question,
+      'correctAnswer': correctAnswer,
+      'type': 'FIB',
+      'answers': null,
+      'timestamp': FieldValue.serverTimestamp()
+    });
+  }
+
+  List<QuestionModel> snapshotToQuestionModelList(QuerySnapshot querySnapshot) {
+    return querySnapshot.docs
+        .map((QueryDocumentSnapshot queryDocumentSnapshot) {
+      return QuestionModel(
+          correctAnswer: queryDocumentSnapshot.data()['correctAnswer'],
+          question: queryDocumentSnapshot.data()['question'],
+          questionType: queryDocumentSnapshot.data()['type'],
+          answers: queryDocumentSnapshot.data()['answers'],
+          questionId: queryDocumentSnapshot.id);
+    }).toList();
   }
 
   //TODO: Read Questions
@@ -93,7 +141,8 @@ class CloudStorer {
           .collection('QuestionBanks')
           .doc(questionBankId)
           .collection('questions')
-          .snapshots();
+          .snapshots()
+          .map(snapshotToQuestionModelList);
     } catch (e) {
       print(e);
     }
