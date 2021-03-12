@@ -31,7 +31,6 @@ class _QuestionsViewState extends State<QuestionsView> {
 
     List<QuestionTile> questionModelListToQuestionTileList(
         List<QuestionModel> data) {
-      print('wow!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       return data
           .map(
             (questionModel) => QuestionTile(

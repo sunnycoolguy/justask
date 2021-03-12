@@ -232,6 +232,21 @@ class CloudStorer {
   }
 
   //TODO: Delete questions
+  Future<void> deleteQuestion(String questionBankId, String questionId) async {
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .doc(questionId)
+          .delete();
+      print('success');
+    } catch (e) {
+      print('das a failure bro');
+      print(e);
+    }
+  }
 
   Future<void> createTeacherAccount(
       String email, String firstName, String lastName) async {

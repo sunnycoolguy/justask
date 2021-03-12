@@ -5,6 +5,7 @@ import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.da
 import 'package:just_ask/screens/teacher/questions/UpdateFillInTheBlankQuestionForm.dart';
 import 'package:just_ask/screens/teacher/questions/UpdateMultipleChoiceQuestionForm.dart';
 import 'package:just_ask/screens/teacher/questions/UpdateTrueOrFalseQuestionForm.dart';
+import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 
 class QuestionTile extends StatefulWidget {
@@ -32,6 +33,14 @@ class _QuestionTileState extends State<QuestionTile> {
     return ListTile(
       title: Text(widget.question),
       subtitle: Text(widget.questionType),
+      trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            CloudStorer _cloudStorer = CloudStorer(
+                userID: Provider.of<User>(context, listen: false).uid);
+            _cloudStorer.deleteQuestion(
+                widget.questionBankId, widget.questionId);
+          }),
       onLongPress: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           if (widget.questionType == 'MCQ') {

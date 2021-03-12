@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
+import 'package:provider/provider.dart';
 import '../../Loading.dart';
 
 class UpdateFillInTheBlankQuestionForm extends StatefulWidget {
@@ -22,8 +24,8 @@ class UpdateFillInTheBlankQuestionForm extends StatefulWidget {
 
 class _UpdateFillInTheBlankQuestionFormState
     extends State<UpdateFillInTheBlankQuestionForm> {
-  String correctAnswer = '';
-  String questionText = '';
+  String correctAnswer;
+  String question;
   final _formKey = GlobalKey<FormState>();
   Future<DocumentSnapshot> documentSnapshot;
 
@@ -36,6 +38,8 @@ class _UpdateFillInTheBlankQuestionFormState
 
   @override
   Widget build(BuildContext context) {
+    CloudStorer _cloudStorer =
+        CloudStorer(userID: Provider.of<User>(context).uid);
     return FutureBuilder(
       future: documentSnapshot,
       builder: (context, snapshot) {
@@ -56,7 +60,7 @@ class _UpdateFillInTheBlankQuestionFormState
               key: _formKey,
               child: ListView(children: [
                 TextFormField(
-                  initialValue: snapshot.data.data()['question'],
+                  initialValue: question ?? snapshot.data.data()['question'],
                   decoration: InputDecoration(
                       hintText: 'What is the updated question you want to ask?',
                       labelText: 'Question'),
@@ -64,18 +68,19 @@ class _UpdateFillInTheBlankQuestionFormState
                     if (value.length == 0) {
                       return 'You must provide a question to ask';
                     } else if (!value.contains('_')) {
-                      return 'Your question must provide an underscore for the missing term';
+                      return 'Your question must provide at least one underscore for the missing term(s)';
                     }
                     return null;
                   },
                   onChanged: (value) {
                     setState(() {
-                      questionText = value;
+                      question = value;
                     });
                   },
                 ),
                 TextFormField(
-                  initialValue: snapshot.data.data()['correctAnswer'],
+                  initialValue:
+                      correctAnswer ?? snapshot.data.data()['correctAnswer'],
                   decoration: InputDecoration(
                       hintText: 'What is the updated answer to the question?',
                       labelText: 'Correct answer'),
@@ -93,8 +98,14 @@ class _UpdateFillInTheBlankQuestionFormState
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        //TODO: add code to update FIB question
                         Navigator.of(context).pop();
+                        _cloudStorer.updateFIBQuestion(
+                            question:
+                                question ?? snapshot.data.data()['question'],
+                            correctAnswer: correctAnswer ??
+                                snapshot.data.data()['correctAnswer'],
+                            questionBankId: widget.questionBankId,
+                            questionId: widget.questionId);
                       }
                     },
                     child: Text('Submit'))
