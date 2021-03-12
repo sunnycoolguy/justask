@@ -60,8 +60,10 @@ class _QuestionsViewState extends State<QuestionsView> {
               ),
               body: ListView.separated(
                 itemCount: snapshot.data.length,
-                itemBuilder: (context, index) =>
-                    QuestionTile(questionModel: snapshot.data[index]),
+                itemBuilder: (context, index) => QuestionTile(
+                  questionModel: snapshot.data[index],
+                  questionBankId: widget.questionBankId,
+                ),
                 separatorBuilder: (context, index) => Divider(),
               ),
               floatingActionButton: FabCircularMenu(

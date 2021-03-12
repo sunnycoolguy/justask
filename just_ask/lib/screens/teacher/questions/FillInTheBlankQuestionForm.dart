@@ -6,8 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FillInTheBlankQuestionForm extends StatefulWidget {
   String questionBankId;
+  String questionId;
   FillInTheBlankQuestionForm({String questionBankId}) {
     this.questionBankId = questionBankId;
+  }
+
+  FillInTheBlankQuestionForm.update(
+      {String questionBankId, String questionId}) {
+    this.questionBankId = questionBankId;
+    this.questionId = questionId;
   }
 
   @override

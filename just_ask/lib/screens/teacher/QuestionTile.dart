@@ -1,16 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/screens/teacher/QuestionModel.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.dart';
+import 'package:just_ask/screens/teacher/questions/UpdateFillInTheBlankQuestionForm.dart';
+import 'package:just_ask/screens/teacher/questions/UpdateMultipleChoiceQuestionForm.dart';
+import 'package:just_ask/screens/teacher/questions/UpdateTrueOrFalseQuestionForm.dart';
+import 'package:provider/provider.dart';
 
 class QuestionTile extends StatefulWidget {
   String correctAnswer;
   String question;
   String questionType;
   List<dynamic> answers;
-  QuestionTile({QuestionModel questionModel}) {
+  String questionBankId;
+  String questionId;
+  QuestionTile({QuestionModel questionModel, String questionBankId}) {
     correctAnswer = questionModel.correctAnswer;
     question = questionModel.question;
     questionType = questionModel.questionType;
+    this.questionBankId = questionBankId;
+    this.questionId = questionModel.questionId;
   }
 
   @override
@@ -23,8 +32,25 @@ class _QuestionTileState extends State<QuestionTile> {
     return ListTile(
       title: Text(widget.question),
       subtitle: Text(widget.questionType),
-      onLongPress: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MultipleChoiceQuestionForm()))
+      onLongPress: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          if (widget.questionType == 'MCQ') {
+            return UpdateMultipleChoiceQuestionForm(
+                questionBankId: widget.questionBankId,
+                questionId: widget.questionId,
+                userId: Provider.of<User>(context).uid);
+          } else if (widget.questionType == 'FIB') {
+            return UpdateFillInTheBlankQuestionForm(
+              questionBankId: widget.questionBankId,
+              questionId: widget.questionId,
+              userId: Provider.of<User>(context).uid,
+            );
+          }
+          return UpdateTrueOrFalseQuestionForm(
+              userId: Provider.of<User>(context).uid,
+              questionId: widget.questionId,
+              questionBankId: widget.questionBankId);
+        }));
       },
     );
   }

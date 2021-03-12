@@ -147,7 +147,90 @@ class CloudStorer {
       print(e);
     }
   }
+
+  getQuestion({String questionBankId, String questionId}) {
+    return users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .doc(questionId)
+        .get();
+  }
+
   //TODO: Update Questions
+  // ignore: missing_return
+  Future<void> updateMCQQuestion(
+      {String question,
+      String correctAnswer,
+      List<String> answers,
+      String questionBankId,
+      String questionId}) {
+    try {
+      users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .doc(questionId)
+          .update({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'MCQ',
+        'answers': answers,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      print('Error $e');
+    }
+  }
+
+  // ignore: missing_return
+  Future<void> updateTFQuestion(
+      {String question,
+      String correctAnswer,
+      String questionBankId,
+      String questionId}) {
+    try {
+      users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .doc(questionId)
+          .update({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'T/F',
+        'answers': null,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // ignore: missing_return
+  Future<void> updateFIBQuestion(
+      {String question,
+      String correctAnswer,
+      String questionBankId,
+      String questionId}) {
+    users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .doc(questionId)
+        .update({
+      'question': question,
+      'correctAnswer': correctAnswer,
+      'type': 'FIB',
+      'answers': null,
+      'timestamp': FieldValue.serverTimestamp()
+    });
+  }
+
   //TODO: Delete questions
 
   Future<void> createTeacherAccount(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class MultipleChoiceQuestionForm extends StatefulWidget {
   String questionBankId;
@@ -104,23 +105,33 @@ class _MultipleChoiceQuestionFormState
                 });
               },
             ),
-            TextFormField(
-              decoration: InputDecoration(
-                  hintText: 'What is the actual answer to the question?',
-                  labelText: 'Correct answer'),
-              validator: (String value) {
-                return value != firstAnswer &&
-                        value != secondAnswer &&
-                        value != thirdAnswer &&
-                        value != fourthAnswer
-                    ? 'Your correct answer must match one of the possible answers'
-                    : null;
-              },
-              onChanged: (value) {
-                setState(() {
-                  correctAnswer = value;
-                });
-              },
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: DropDownFormField(
+                  titleText: 'Correct answer',
+                  hintText: 'Which answer is the correct one?',
+                  value: correctAnswer,
+                  validator: (dynamic value) {
+                    return value != "A" &&
+                            value != "B" &&
+                            value != "C" &&
+                            value != "D"
+                        ? 'You must pick a correct answer'
+                        : null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      correctAnswer = value;
+                    });
+                  },
+                  dataSource: [
+                    {"display": "A", "value": "A"},
+                    {"display": "B", "value": "B"},
+                    {"display": "C", "value": "C"},
+                    {"display": "D", "value": "D"}
+                  ],
+                  textField: 'display',
+                  valueField: 'value'),
             ),
             ElevatedButton(
                 onPressed: () async {

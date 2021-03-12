@@ -1,3 +1,4 @@
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
@@ -16,8 +17,7 @@ class TrueOrFalseQuestionForm extends StatefulWidget {
 
 class _TrueOrFalseQuestionFormState extends State<TrueOrFalseQuestionForm> {
   String correctAnswer;
-  String questionText = '';
-  List<bool> isSelected = [true, false];
+  String question;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -43,43 +43,39 @@ class _TrueOrFalseQuestionFormState extends State<TrueOrFalseQuestionForm> {
               },
               onChanged: (value) {
                 setState(() {
-                  questionText = value;
+                  question = value;
                 });
               },
             ),
             Text('Is the statement true or false?'),
-            Center(
-              child: ToggleButtons(
-                isSelected: isSelected,
-                children: [
-                  TextButton(
-                    child: Text('True', style: TextStyle(color: Colors.blue)),
-                    onPressed: null,
-                  ),
-                  TextButton(
-                      child:
-                          Text('False', style: TextStyle(color: Colors.blue)),
-                      onPressed: null),
-                ],
-                onPressed: (index) {
-                  setState(() {
-                    for (int i = 0; i < isSelected.length; i++) {
-                      if (i == index) {
-                        isSelected[i] = true;
-                      } else {
-                        isSelected[i] = false;
-                      }
-                    }
-                  });
-                },
-              ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: DropDownFormField(
+                  titleText: 'Correct answer',
+                  hintText: 'Is the answer true or false?',
+                  value: correctAnswer,
+                  validator: (dynamic value) {
+                    return value != "true" && value != "false"
+                        ? 'You must pick a correct answer'
+                        : null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      correctAnswer = value;
+                    });
+                  },
+                  dataSource: [
+                    {"display": "True", "value": "true"},
+                    {"display": "False", "value": "false"}
+                  ],
+                  textField: 'display',
+                  valueField: 'value'),
             ),
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    correctAnswer = isSelected[0] == false ? 'false' : 'true';
                     await _cloudStorer.addTFQuestion(
-                        question: questionText,
+                        question: question,
                         correctAnswer: correctAnswer,
                         questionBankId: widget.questionBankId);
                     Navigator.of(context).pop();
