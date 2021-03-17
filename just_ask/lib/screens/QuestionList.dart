@@ -9,19 +9,20 @@ import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class QuestionsView extends StatefulWidget {
+//ignore: must_be_immutable
+class QuestionList extends StatefulWidget {
   String questionBankId = '';
   String questionBankName = '';
 
-  QuestionsView({String questionBankId, String questionBankName}) {
+  QuestionList({String questionBankId, String questionBankName}) {
     this.questionBankId = questionBankId;
     this.questionBankName = questionBankName;
   }
   @override
-  _QuestionsViewState createState() => _QuestionsViewState();
+  _QuestionListState createState() => _QuestionListState();
 }
 
-class _QuestionsViewState extends State<QuestionsView> {
+class _QuestionListState extends State<QuestionList> {
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
   @override
   Widget build(BuildContext context) {

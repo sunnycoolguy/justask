@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/QuestionsView.dart';
+import 'package:just_ask/screens/QuestionList.dart';
 import 'package:just_ask/screens/UpdateQuestionBankForm.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 
+//ignore: must_be_immutable
 class QuestionBankTile extends StatefulWidget {
   String questionBankName;
   String questionBankId;
@@ -27,7 +28,7 @@ class _QuestionBankTileState extends State<QuestionBankTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => QuestionsView(
+                builder: (context) => QuestionList(
                     questionBankName: widget.questionBankName,
                     questionBankId: widget.questionBankId)));
       },

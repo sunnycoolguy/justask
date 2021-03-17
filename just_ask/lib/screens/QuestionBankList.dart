@@ -8,12 +8,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/authenticator.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
 
-class QuestionBanksView extends StatefulWidget {
+class QuestionBankList extends StatefulWidget {
   @override
-  _QuestionBanksViewState createState() => _QuestionBanksViewState();
+  _QuestionBankListState createState() => _QuestionBankListState();
 }
 
-class _QuestionBanksViewState extends State<QuestionBanksView> {
+class _QuestionBankListState extends State<QuestionBankList> {
   Authenticator _authenticator = Authenticator();
   @override
   Widget build(BuildContext context) {

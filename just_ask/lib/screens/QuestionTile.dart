@@ -7,6 +7,7 @@ import 'package:just_ask/screens/question_forms/UpdateTrueOrFalseQuestionForm.da
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 
+//ignore: must_be_immutable
 class QuestionTile extends StatefulWidget {
   String correctAnswer;
   String question;
