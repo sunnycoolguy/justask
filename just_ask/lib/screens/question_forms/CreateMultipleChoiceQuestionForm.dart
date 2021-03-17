@@ -5,18 +5,19 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
-class MultipleChoiceQuestionForm extends StatefulWidget {
+//ignore: must_be_immutable
+class CreateMultipleChoiceQuestionForm extends StatefulWidget {
   String questionBankId;
-  MultipleChoiceQuestionForm({String questionBankId}) {
+  CreateMultipleChoiceQuestionForm({String questionBankId}) {
     this.questionBankId = questionBankId;
   }
   @override
-  _MultipleChoiceQuestionFormState createState() =>
-      _MultipleChoiceQuestionFormState();
+  _CreateMultipleChoiceQuestionFormState createState() =>
+      _CreateMultipleChoiceQuestionFormState();
 }
 
-class _MultipleChoiceQuestionFormState
-    extends State<MultipleChoiceQuestionForm> {
+class _CreateMultipleChoiceQuestionFormState
+    extends State<CreateMultipleChoiceQuestionForm> {
   String firstAnswer, secondAnswer, thirdAnswer, fourthAnswer;
   String correctAnswer = '';
   String questionText = '';

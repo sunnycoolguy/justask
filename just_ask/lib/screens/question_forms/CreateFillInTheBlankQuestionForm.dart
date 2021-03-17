@@ -4,26 +4,27 @@ import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FillInTheBlankQuestionForm extends StatefulWidget {
+//ignore: must_be_immutable
+class CreateFillInTheBlankQuestionForm extends StatefulWidget {
   String questionBankId;
   String questionId;
-  FillInTheBlankQuestionForm({String questionBankId}) {
+  CreateFillInTheBlankQuestionForm({String questionBankId}) {
     this.questionBankId = questionBankId;
   }
 
-  FillInTheBlankQuestionForm.update(
+  CreateFillInTheBlankQuestionForm.update(
       {String questionBankId, String questionId}) {
     this.questionBankId = questionBankId;
     this.questionId = questionId;
   }
 
   @override
-  _FillInTheBlankQuestionFormState createState() =>
-      _FillInTheBlankQuestionFormState();
+  _CreateFillInTheBlankQuestionFormState createState() =>
+      _CreateFillInTheBlankQuestionFormState();
 }
 
-class _FillInTheBlankQuestionFormState
-    extends State<FillInTheBlankQuestionForm> {
+class _CreateFillInTheBlankQuestionFormState
+    extends State<CreateFillInTheBlankQuestionForm> {
   String correctAnswer = '';
   String questionText = '';
   final _formKey = GlobalKey<FormState>();
