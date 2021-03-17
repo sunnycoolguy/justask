@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './QuestionBank.dart';
+import './QuestionBankTile.dart';
 import 'package:just_ask/models/QuestionBankModel.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/cloud_storer.dart';
