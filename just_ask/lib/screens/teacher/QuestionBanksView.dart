@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/QuestionBank.dart';
+import 'package:just_ask/models/QuestionBankModel.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class _QuestionBanksViewState extends State<QuestionBanksView> {
     User currentUser = context.watch<User>();
     String currentUserId = currentUser.uid;
     CloudStorer _cloudStorer = CloudStorer(userID: currentUserId);
-    return StreamBuilder<List<QuestionBank>>(
+    return StreamBuilder<List<QuestionBankModel>>(
         stream: _cloudStorer.QuestionBanks,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -41,10 +42,16 @@ class _QuestionBanksViewState extends State<QuestionBanksView> {
             ]),
             drawer: Drawer(),
             body: Container(
-                child: ListView(
-              children: snapshot.data,
-            ) //TODO: Use listview builder instead?,
-                ),
+                child: ListView.separated(
+                    itemBuilder: (BuildContext context, int index) {
+                      return QuestionBankTile(
+                        questionBankId: snapshot.data[index].questionBankId,
+                        questionBankName: snapshot.data[index].questionBankName,
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        Divider(),
+                    itemCount: snapshot.data.length)),
             floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () {

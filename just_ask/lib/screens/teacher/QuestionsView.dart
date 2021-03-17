@@ -8,7 +8,6 @@ import 'package:just_ask/screens/teacher/questions/TrueOrFalseQuestionForm.dart'
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'QuestionModel.dart';
 
 class QuestionsView extends StatefulWidget {
   String questionBankId = '';
@@ -28,18 +27,6 @@ class _QuestionsViewState extends State<QuestionsView> {
   Widget build(BuildContext context) {
     CloudStorer _cloudStorer =
         CloudStorer(userID: Provider.of<User>(context).uid);
-
-    List<QuestionTile> questionModelListToQuestionTileList(
-        List<QuestionModel> data) {
-      return data
-          .map(
-            (questionModel) => QuestionTile(
-              questionModel: questionModel,
-            ),
-          )
-          .toList();
-    }
-
     return StreamBuilder(
         stream:
             _cloudStorer.getQuestions(questionBankId: widget.questionBankId),

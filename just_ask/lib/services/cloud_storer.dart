@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:just_ask/screens/teacher/QuestionModel.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/models/QuestionModel.dart';
+import 'package:just_ask/models/QuestionBankModel.dart';
 import '../QuestionBank.dart';
 
 class CloudStorer {
@@ -10,15 +11,12 @@ class CloudStorer {
     this.userID = userID;
   }
 
-  List<QuestionBank> mapQuerySnapshotToQuestionBankList(
+  List<QuestionBankModel> snapshotToQuestionBankModelList(
       QuerySnapshot querySnapshot) {
     return querySnapshot.docs
-        .map(
-          (doc) => QuestionBank(
-            questionBankId: doc.id,
+        .map((doc) => QuestionBankModel(
             questionBankName: doc.data()['questionBankName'],
-          ),
-        )
+            questionBankId: doc.id))
         .toList();
   }
 
@@ -27,7 +25,7 @@ class CloudStorer {
         .doc(userID)
         .collection('QuestionBanks')
         .snapshots()
-        .map(mapQuerySnapshotToQuestionBankList);
+        .map(snapshotToQuestionBankModelList);
   }
 
   Future<void> addQuestionBank(String questionBankName) async {

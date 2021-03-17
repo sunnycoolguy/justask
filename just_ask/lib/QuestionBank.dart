@@ -6,20 +6,20 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 
-class QuestionBank extends StatefulWidget {
+class QuestionBankTile extends StatefulWidget {
   String questionBankName;
   String questionBankId;
 
-  QuestionBank({String questionBankName, String questionBankId}) {
+  QuestionBankTile({String questionBankName, String questionBankId}) {
     this.questionBankName = questionBankName;
     this.questionBankId = questionBankId;
   }
 
   @override
-  _QuestionBankState createState() => _QuestionBankState();
+  _QuestionBankTileState createState() => _QuestionBankTileState();
 }
 
-class _QuestionBankState extends State<QuestionBank> {
+class _QuestionBankTileState extends State<QuestionBankTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
