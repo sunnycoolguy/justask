@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/teacher/QuestionBanksView.dart';
+import 'package:just_ask/screens/QuestionBanksView.dart';
 
 class Home extends StatelessWidget {
   @override

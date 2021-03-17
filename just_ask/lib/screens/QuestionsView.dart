@@ -1,10 +1,10 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/Loading.dart';
-import 'package:just_ask/screens/teacher/QuestionTile.dart';
-import 'package:just_ask/screens/teacher/question_forms/FillInTheBlankQuestionForm.dart';
-import 'package:just_ask/screens/teacher/question_forms/MultipleChoiceQuestionForm.dart';
-import 'package:just_ask/screens/teacher/question_forms/TrueOrFalseQuestionForm.dart';
+import 'package:just_ask/screens/QuestionTile.dart';
+import 'package:just_ask/screens/question_forms/FillInTheBlankQuestionForm.dart';
+import 'package:just_ask/screens/question_forms/MultipleChoiceQuestionForm.dart';
+import 'package:just_ask/screens/question_forms/TrueOrFalseQuestionForm.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';

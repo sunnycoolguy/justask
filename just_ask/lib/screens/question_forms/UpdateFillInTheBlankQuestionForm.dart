@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
-import '../../Loading.dart';
+import '../Loading.dart';
 
 class UpdateFillInTheBlankQuestionForm extends StatefulWidget {
   String questionBankId;

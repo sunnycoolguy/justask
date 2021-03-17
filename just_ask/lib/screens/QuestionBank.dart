@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/teacher/QuestionsView.dart';
-import 'package:just_ask/screens/teacher/UpdateQuestionBankForm.dart';
+import 'package:just_ask/screens/QuestionsView.dart';
+import 'package:just_ask/screens/UpdateQuestionBankForm.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/cloud_storer.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 
-import '../../Loading.dart';
+import '../Loading.dart';
 
 class UpdateMultipleChoiceQuestionForm extends StatefulWidget {
   String questionBankId;

@@ -6,7 +6,7 @@ import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:just_ask/services/authenticator.dart';
-import 'package:just_ask/screens/teacher/QuestionBankForm.dart';
+import 'package:just_ask/screens/QuestionBankForm.dart';
 
 class QuestionBanksView extends StatefulWidget {
   @override
