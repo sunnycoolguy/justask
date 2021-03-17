@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class QuestionBankForm extends StatefulWidget {
   String userID;

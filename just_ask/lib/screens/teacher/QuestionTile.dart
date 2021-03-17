@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/models/QuestionModel.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/teacher/questions/MultipleChoiceQuestionForm.dart';
-import 'package:just_ask/screens/teacher/questions/UpdateFillInTheBlankQuestionForm.dart';
-import 'package:just_ask/screens/teacher/questions/UpdateMultipleChoiceQuestionForm.dart';
-import 'package:just_ask/screens/teacher/questions/UpdateTrueOrFalseQuestionForm.dart';
+import 'package:just_ask/screens/teacher/question_forms/UpdateFillInTheBlankQuestionForm.dart';
+import 'package:just_ask/screens/teacher/question_forms/UpdateMultipleChoiceQuestionForm.dart';
+import 'package:just_ask/screens/teacher/question_forms/UpdateTrueOrFalseQuestionForm.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 

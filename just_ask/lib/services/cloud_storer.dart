@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/models/QuestionModel.dart';
 import 'package:just_ask/models/QuestionBankModel.dart';
-import '../QuestionBank.dart';
 
 class CloudStorer {
   String userID;
@@ -20,7 +19,7 @@ class CloudStorer {
         .toList();
   }
 
-  get QuestionBanks {
+  get questionBanks {
     return users
         .doc(userID)
         .collection('QuestionBanks')

@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/QuestionBank.dart';
+import './QuestionBank.dart';
 import 'package:just_ask/models/QuestionBankModel.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/cloud_storer.dart';
@@ -22,7 +21,7 @@ class _QuestionBanksViewState extends State<QuestionBanksView> {
     String currentUserId = currentUser.uid;
     CloudStorer _cloudStorer = CloudStorer(userID: currentUserId);
     return StreamBuilder<List<QuestionBankModel>>(
-        stream: _cloudStorer.QuestionBanks,
+        stream: _cloudStorer.questionBanks,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print(snapshot.error);
