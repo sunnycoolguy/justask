@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 
+//ignore: must_be_immutable
 class QuestionBankForm extends StatefulWidget {
   String userID;
   QuestionBankForm({String userID}) {
