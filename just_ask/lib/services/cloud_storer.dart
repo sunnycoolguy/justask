@@ -28,11 +28,14 @@ class CloudStorer {
   }
 
   Future<void> addQuestionBank(String questionBankName) async {
-    print(userID);
-    await users
-        .doc(userID)
-        .collection('QuestionBanks')
-        .add({'questionBankName': questionBankName});
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .add({'questionBankName': questionBankName});
+    } catch (e) {
+      throw e;
+    }
   }
 
   //TODO: Edit Question Bank
@@ -44,9 +47,8 @@ class CloudStorer {
           .collection('QuestionBanks')
           .doc(questionBankId)
           .update({'questionBankName': questionBankName});
-      print('Success!');
     } catch (e) {
-      print(e);
+      throw e;
     }
   }
 
@@ -58,10 +60,8 @@ class CloudStorer {
           .collection('QuestionBanks')
           .doc(questionBankId)
           .delete();
-      print('success');
     } catch (e) {
-      print('das a failure bro');
-      print(e);
+      throw e;
     }
   }
 
@@ -72,18 +72,22 @@ class CloudStorer {
       String correctAnswer,
       List<String> answers,
       String questionBankId}) async {
-    await users
-        .doc(userID)
-        .collection('QuestionBanks')
-        .doc(questionBankId)
-        .collection('questions')
-        .add({
-      'question': question,
-      'correctAnswer': correctAnswer,
-      'type': 'MCQ',
-      'answers': answers,
-      'timestamp': FieldValue.serverTimestamp()
-    });
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .add({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'MCQ',
+        'answers': answers,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> addTFQuestion(
