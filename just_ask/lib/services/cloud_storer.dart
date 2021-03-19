@@ -38,7 +38,6 @@ class CloudStorer {
     }
   }
 
-  //TODO: Edit Question Bank
   Future<void> editQuestionBank(
       String questionBankId, String questionBankName) async {
     try {
@@ -52,7 +51,6 @@ class CloudStorer {
     }
   }
 
-  //TODO: Delete QuestionBank
   Future<void> deleteQuestionBank(String questionBankId) async {
     try {
       await users

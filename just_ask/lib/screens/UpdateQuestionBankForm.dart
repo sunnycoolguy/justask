@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
 
+//ignore: must_be_immutable
 class UpdateQuestionBankForm extends StatefulWidget {
   String questionBankId;
   UpdateQuestionBankForm({String questionBankId}) {
@@ -50,13 +51,12 @@ class _UpdateQuestionBankFormState extends State<UpdateQuestionBankForm> {
                 if (_formKey.currentState.validate()) {
                   try {
                     await CloudStorer(
-                        userID: Provider
-                            .of<User>(context, listen: false)
-                            .uid)
+                            userID:
+                                Provider.of<User>(context, listen: false).uid)
                         .editQuestionBank(
-                        widget.questionBankId, questionBankName);
+                            widget.questionBankId, questionBankName);
                     Navigator.of(context).pop();
-                  } catch (e){
+                  } catch (e) {
                     Navigator.of(context).pop();
                     if (Platform.isAndroid) {
                       showDialog(

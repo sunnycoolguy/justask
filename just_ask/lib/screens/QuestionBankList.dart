@@ -1,4 +1,5 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/models/QuestionModel.dart';
 import 'package:just_ask/screens/question_forms/CreateFillInTheBlankQuestionForm.dart';
@@ -14,6 +15,7 @@ import 'question_forms/CreateMultipleChoiceQuestionForm.dart';
 import 'question_forms/CreateTrueOrFalseQuestionForm.dart';
 import 'question_forms/UpdateFillInTheBlankQuestionForm.dart';
 import 'question_forms/UpdateMultipleChoiceQuestionForm.dart';
+import 'dart:io' show Platform;
 
 class QuestionBankList extends StatefulWidget {
   @override
@@ -94,9 +96,29 @@ Widget _buildQuestionBankTile(
     trailing: IconButton(
         icon: Icon(Icons.delete),
         onPressed: () async {
-          await CloudStorer(
-                  userID: Provider.of<User>(context, listen: false).uid)
-              .deleteQuestionBank(questionBankId);
+          try {
+            await CloudStorer(
+                userID: Provider
+                    .of<User>(context, listen: false)
+                    .uid)
+                .deleteQuestionBank(questionBankId);
+          } catch (e){
+            if (Platform.isAndroid) {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                      title: Text('Error'),
+                      content: Text(
+                          'The were was an issue deleting the question bank. Please try again later.')));
+            } else {
+              showCupertinoDialog(
+                  context: context,
+                  builder: (_) => CupertinoAlertDialog(
+                      title: Text('Error'),
+                      content: Text(
+                          'There was an issue deleting the question bank. Please try again later.')));
+            }
+          }
         }),
   );
 }
