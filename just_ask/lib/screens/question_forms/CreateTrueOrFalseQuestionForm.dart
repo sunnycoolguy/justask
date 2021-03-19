@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
 class CreateTrueOrFalseQuestionForm extends StatefulWidget {
@@ -76,11 +77,30 @@ class _CreateTrueOrFalseQuestionFormState
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    await _cloudStorer.addTFQuestion(
-                        question: question,
-                        correctAnswer: correctAnswer,
-                        questionBankId: widget.questionBankId);
-                    Navigator.of(context).pop();
+                    try {
+                      await _cloudStorer.addTFQuestion(
+                          question: question,
+                          correctAnswer: correctAnswer,
+                          questionBankId: widget.questionBankId);
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      Navigator.of(context).pop();
+                      if (Platform.isAndroid) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'The were was an issue adding the TF question. Please try again later.')));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'There was an issue adding the TF question. Please try again later.')));
+                      }
+                    }
                   }
                 },
                 child: Text('Submit'))

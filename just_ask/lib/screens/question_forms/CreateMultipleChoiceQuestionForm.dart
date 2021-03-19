@@ -4,6 +4,7 @@ import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
 class CreateMultipleChoiceQuestionForm extends StatefulWidget {
@@ -137,17 +138,36 @@ class _CreateMultipleChoiceQuestionFormState
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    await _cloudStorer.addMCQQuestion(
-                        question: questionText,
-                        correctAnswer: correctAnswer,
-                        answers: [
-                          firstAnswer,
-                          secondAnswer,
-                          thirdAnswer,
-                          fourthAnswer
-                        ],
-                        questionBankId: widget.questionBankId);
-                    Navigator.of(context).pop();
+                    try {
+                      await _cloudStorer.addMCQQuestion(
+                          question: questionText,
+                          correctAnswer: correctAnswer,
+                          answers: [
+                            firstAnswer,
+                            secondAnswer,
+                            thirdAnswer,
+                            fourthAnswer
+                          ],
+                          questionBankId: widget.questionBankId);
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      Navigator.of(context).pop();
+                      if (Platform.isAndroid) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'The were was an issue adding the MCQ question. Please try again later.')));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'There was an issue adding the MCQ question bank. Please try again later.')));
+                      }
+                    }
                   }
                 },
                 child: Text('Submit'))

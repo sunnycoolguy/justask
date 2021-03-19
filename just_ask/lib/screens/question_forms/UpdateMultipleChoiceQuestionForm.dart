@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-
 import '../Loading.dart';
+import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
 class UpdateMultipleChoiceQuestionForm extends StatefulWidget {
@@ -33,9 +33,9 @@ class _UpdateMultipleChoiceQuestionFormState
 
   @override
   void initState() {
+    super.initState();
     questionSnapshot = CloudStorer(userID: widget.userId).getQuestion(
         questionId: widget.questionId, questionBankId: widget.questionBankId);
-    super.initState();
   }
 
   @override
@@ -45,7 +45,8 @@ class _UpdateMultipleChoiceQuestionFormState
         future: questionSnapshot,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Scaffold(body: Text('Something went wrong'));
+            return Scaffold(
+                body: Text('Error loading MCQ question. Try again later.'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -184,15 +185,34 @@ class _UpdateMultipleChoiceQuestionFormState
                             thirdAnswer ?? snapshot.data.data()['answers'][2],
                             fourthAnswer ?? snapshot.data.data()['answers'][3]
                           ];
-                          Navigator.of(context).pop();
-                          _cloudStorer.updateMCQQuestion(
-                              question:
-                                  question ?? snapshot.data.data()['question'],
-                              questionBankId: widget.questionBankId,
-                              questionId: widget.questionId,
-                              answers: answers,
-                              correctAnswer: correctAnswer ??
-                                  snapshot.data.data()['correctAnswer']);
+                          try {
+                            _cloudStorer.updateMCQQuestion(
+                                question: question ??
+                                    snapshot.data.data()['question'],
+                                questionBankId: widget.questionBankId,
+                                questionId: widget.questionId,
+                                answers: answers,
+                                correctAnswer: correctAnswer ??
+                                    snapshot.data.data()['correctAnswer']);
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            Navigator.of(context).pop();
+                            if (Platform.isAndroid) {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                      title: Text('Error'),
+                                      content: Text(
+                                          'The were was an issue updating the MCQ question. Please try again later.')));
+                            } else {
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (_) => CupertinoAlertDialog(
+                                      title: Text('Error'),
+                                      content: Text(
+                                          'There was an issue updating the MCQ question. Please try again later.')));
+                            }
+                          }
                         }
                       },
                       child: Text('Submit'))

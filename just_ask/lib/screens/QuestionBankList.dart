@@ -1,7 +1,7 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/models/QuestionModel.dart';
+import '../models/QuestionModel.dart';
 import 'package:just_ask/screens/question_forms/CreateFillInTheBlankQuestionForm.dart';
 import 'package:just_ask/screens/question_forms/UpdateTrueOrFalseQuestionForm.dart';
 import 'package:just_ask/screens/Loading.dart';
@@ -127,11 +127,10 @@ Widget _buildQuestionList(
       CloudStorer(userID: Provider.of<User>(context).uid);
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
-  return StreamBuilder(
+  return StreamBuilder<dynamic>(
       stream: _cloudStorer.getQuestions(questionBankId: questionBankId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error);
           return Scaffold(body: Text('Error loading questions'));
         }
 
@@ -213,9 +212,27 @@ Widget _buildQuestionTile(
     trailing: IconButton(
         icon: Icon(Icons.delete),
         onPressed: () {
-          CloudStorer _cloudStorer = CloudStorer(
-              userID: Provider.of<User>(context, listen: false).uid);
-          _cloudStorer.deleteQuestion(questionBankId, questionId);
+          try {
+            CloudStorer _cloudStorer = CloudStorer(
+                userID: Provider.of<User>(context, listen: false).uid);
+            _cloudStorer.deleteQuestion(questionBankId, questionId);
+          } catch (e) {
+            if (Platform.isAndroid) {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                      title: Text('Error'),
+                      content: Text(
+                          'The were was an issue deleting the question. Please try again later.')));
+            } else {
+              showCupertinoDialog(
+                  context: context,
+                  builder: (_) => CupertinoAlertDialog(
+                      title: Text('Error'),
+                      content: Text(
+                          'There was an issue deleting the question. Please try again later.')));
+            }
+          }
         }),
     onLongPress: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/models/QuestionModel.dart';
+import 'package:just_ask/models/QuestionModel.dart';
 import 'package:just_ask/models/QuestionBankModel.dart';
 
 class CloudStorer {
@@ -63,8 +63,6 @@ class CloudStorer {
     }
   }
 
-  //TODO: Add questions
-
   Future<void> addMCQQuestion(
       {String question,
       String correctAnswer,
@@ -90,34 +88,42 @@ class CloudStorer {
 
   Future<void> addTFQuestion(
       {String question, String correctAnswer, String questionBankId}) async {
-    await users
-        .doc(userID)
-        .collection('QuestionBanks')
-        .doc(questionBankId)
-        .collection('questions')
-        .add({
-      'question': question,
-      'correctAnswer': correctAnswer,
-      'type': 'T/F',
-      'answers': null,
-      'timestamp': FieldValue.serverTimestamp()
-    });
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .add({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'T/F',
+        'answers': null,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> addFIBQuestion(
       {String question, String correctAnswer, String questionBankId}) async {
-    await users
-        .doc(userID)
-        .collection('QuestionBanks')
-        .doc(questionBankId)
-        .collection('questions')
-        .add({
-      'question': question,
-      'correctAnswer': correctAnswer,
-      'type': 'FIB',
-      'answers': null,
-      'timestamp': FieldValue.serverTimestamp()
-    });
+    try {
+      await users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .add({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'FIB',
+        'answers': null,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   List<QuestionModel> snapshotToQuestionModelList(QuerySnapshot querySnapshot) {
@@ -132,19 +138,14 @@ class CloudStorer {
     }).toList();
   }
 
-  //TODO: Read Questions
   getQuestions({String questionBankId}) {
-    try {
-      return users
-          .doc(userID)
-          .collection('QuestionBanks')
-          .doc(questionBankId)
-          .collection('questions')
-          .snapshots()
-          .map(snapshotToQuestionModelList);
-    } catch (e) {
-      print(e);
-    }
+    return users
+        .doc(userID)
+        .collection('QuestionBanks')
+        .doc(questionBankId)
+        .collection('questions')
+        .snapshots()
+        .map(snapshotToQuestionModelList);
   }
 
   getQuestion({String questionBankId, String questionId}) {
@@ -158,13 +159,12 @@ class CloudStorer {
   }
 
   //TODO: Update Questions
-  // ignore: missing_return
   Future<void> updateMCQQuestion(
       {String question,
       String correctAnswer,
       List<String> answers,
       String questionBankId,
-      String questionId}) {
+      String questionId}) async {
     try {
       users
           .doc(userID)
@@ -180,16 +180,15 @@ class CloudStorer {
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
-      print('Error $e');
+      throw e;
     }
   }
 
-  // ignore: missing_return
   Future<void> updateTFQuestion(
       {String question,
       String correctAnswer,
       String questionBankId,
-      String questionId}) {
+      String questionId}) async {
     try {
       users
           .doc(userID)
@@ -205,29 +204,32 @@ class CloudStorer {
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
-      print(e);
+      throw e;
     }
   }
 
-  // ignore: missing_return
   Future<void> updateFIBQuestion(
       {String question,
       String correctAnswer,
       String questionBankId,
-      String questionId}) {
-    users
-        .doc(userID)
-        .collection('QuestionBanks')
-        .doc(questionBankId)
-        .collection('questions')
-        .doc(questionId)
-        .update({
-      'question': question,
-      'correctAnswer': correctAnswer,
-      'type': 'FIB',
-      'answers': null,
-      'timestamp': FieldValue.serverTimestamp()
-    });
+      String questionId}) async {
+    try {
+      users
+          .doc(userID)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .doc(questionId)
+          .update({
+        'question': question,
+        'correctAnswer': correctAnswer,
+        'type': 'FIB',
+        'answers': null,
+        'timestamp': FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   //TODO: Delete questions
@@ -242,8 +244,7 @@ class CloudStorer {
           .delete();
       print('success');
     } catch (e) {
-      print('das a failure bro');
-      print(e);
+      throw e;
     }
   }
 

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import '../Loading.dart';
+import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
 class UpdateTrueOrFalseQuestionForm extends StatefulWidget {
@@ -42,7 +44,8 @@ class _UpdateTrueOrFalseQuestionFormState
         future: questionSnapshot,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Scaffold(body: Text('Something went wrong'));
+            return Scaffold(
+                body: Text('Error loading TF question. Try again later.'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -104,14 +107,33 @@ class _UpdateTrueOrFalseQuestionFormState
                       onPressed: () async {
                         print(correctAnswer);
                         if (_formKey.currentState.validate()) {
-                          Navigator.of(context).pop();
-                          _cloudStorer.updateTFQuestion(
-                              questionId: widget.questionId,
-                              questionBankId: widget.questionBankId,
-                              question:
-                                  question ?? snapshot.data.data()['question'],
-                              correctAnswer: correctAnswer ??
-                                  snapshot.data.data()['correctAnswer']);
+                          try {
+                            _cloudStorer.updateTFQuestion(
+                                questionId: widget.questionId,
+                                questionBankId: widget.questionBankId,
+                                question: question ??
+                                    snapshot.data.data()['question'],
+                                correctAnswer: correctAnswer ??
+                                    snapshot.data.data()['correctAnswer']);
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            Navigator.of(context).pop();
+                            if (Platform.isAndroid) {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                      title: Text('Error'),
+                                      content: Text(
+                                          'The were was an issue updating the TF question. Please try again later.')));
+                            } else {
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (_) => CupertinoAlertDialog(
+                                      title: Text('Error'),
+                                      content: Text(
+                                          'There was an issue updating the TF question. Please try again later.')));
+                            }
+                          }
                         }
                       },
                       child: Text('Submit'))

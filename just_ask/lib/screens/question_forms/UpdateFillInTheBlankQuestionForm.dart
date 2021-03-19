@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/cloud_storer.dart';
 import 'package:provider/provider.dart';
 import '../Loading.dart';
+import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
 class UpdateFillInTheBlankQuestionForm extends StatefulWidget {
@@ -45,12 +46,13 @@ class _UpdateFillInTheBlankQuestionFormState
       future: documentSnapshot,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Scaffold(body: Text('error loading question'));
+          return Scaffold(body: Text('Error loading FIB. Try again later.'));
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Loading();
         }
+
         return Scaffold(
           appBar: AppBar(
             title: Text('Update The Fill In The Blank Question'),
@@ -99,14 +101,33 @@ class _UpdateFillInTheBlankQuestionFormState
                 ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        Navigator.of(context).pop();
-                        _cloudStorer.updateFIBQuestion(
-                            question:
-                                question ?? snapshot.data.data()['question'],
-                            correctAnswer: correctAnswer ??
-                                snapshot.data.data()['correctAnswer'],
-                            questionBankId: widget.questionBankId,
-                            questionId: widget.questionId);
+                        try {
+                          _cloudStorer.updateFIBQuestion(
+                              question:
+                                  question ?? snapshot.data.data()['question'],
+                              correctAnswer: correctAnswer ??
+                                  snapshot.data.data()['correctAnswer'],
+                              questionBankId: widget.questionBankId,
+                              questionId: widget.questionId);
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          Navigator.of(context).pop();
+                          if (Platform.isAndroid) {
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'The were was an issue updating the FIB question. Please try again later.')));
+                          } else {
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (_) => CupertinoAlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'There was an issue updating the FIB question. Please try again later.')));
+                          }
+                        }
                       }
                     },
                     child: Text('Submit'))
