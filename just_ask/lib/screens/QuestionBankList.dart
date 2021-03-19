@@ -98,11 +98,9 @@ Widget _buildQuestionBankTile(
         onPressed: () async {
           try {
             await CloudStorer(
-                userID: Provider
-                    .of<User>(context, listen: false)
-                    .uid)
+                    userID: Provider.of<User>(context, listen: false).uid)
                 .deleteQuestionBank(questionBankId);
-          } catch (e){
+          } catch (e) {
             if (Platform.isAndroid) {
               showDialog(
                   context: context,
