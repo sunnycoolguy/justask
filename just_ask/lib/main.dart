@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/screens/JustAsk.dart';
 import 'services/Authenticator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package'
-    ''
-    ''
-    '    :provider/provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
