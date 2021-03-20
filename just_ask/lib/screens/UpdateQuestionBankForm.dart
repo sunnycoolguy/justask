@@ -22,7 +22,7 @@ class _UpdateQuestionBankFormState extends State<UpdateQuestionBankForm> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text('Make a new Question Bank'),
+        title: Text('Update question bank name'),
         content: Form(
           key: _formKey,
           child: Column(
