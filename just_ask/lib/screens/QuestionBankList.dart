@@ -66,7 +66,21 @@ class _QuestionBankListState extends State<QuestionBankList> {
                 },
               )
             ]),
-            drawer: Drawer(),
+            drawer: Drawer(
+              child: ListView(
+                children: [
+                  ListTile(
+                    title: Text('My Question Banks'),
+                  ),
+                  ListTile(
+                      title: Text('My Classroom'),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'myclassroom');
+                      }),
+                  ListTile(title: (Text('Join a classroom')), onTap: () {})
+                ],
+              ),
+            ),
             body: Container(
                 child: ListView.separated(
                     itemBuilder: (BuildContext context, int index) {

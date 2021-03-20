@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/JustAsk.dart';
+import 'package:just_ask/screens/QuestionBankList.dart';
+import 'package:just_ask/screens/SignInOrRegister.dart';
 import 'services/Authenticator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,6 @@ class Wrapper extends StatelessWidget {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
-          //Potential error connecting to Firebase
           if (snapshot.hasError) {
             return MaterialApp(
                 home: Scaffold(body: Text('Something went wrong')));
@@ -31,13 +32,17 @@ class Wrapper extends StatelessWidget {
             return StreamProvider<User>.value(
               value: userStateStream,
               child: MaterialApp(
-                title: 'JustAsk',
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                ),
-                home: JustAsk(),
-              ),
+                  title: 'JustAsk',
+                  theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                    visualDensity: VisualDensity.adaptivePlatformDensity,
+                  ),
+                  home: JustAsk(),
+                  routes: {
+                    '/questionbanklist': (_) => QuestionBankList(),
+                    'myclassroom': (_) => Scaffold(body: Text('My classroom!')),
+                    '/signinorregister': (_) => SignInOrRegister()
+                  }),
             );
           }
 
