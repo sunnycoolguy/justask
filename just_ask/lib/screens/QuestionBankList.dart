@@ -5,10 +5,10 @@ import '../models/QuestionModel.dart';
 import 'package:just_ask/screens/question_forms/CreateFillInTheBlankQuestionForm.dart';
 import 'package:just_ask/screens/question_forms/UpdateTrueOrFalseQuestionForm.dart';
 import 'package:just_ask/screens/Loading.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:just_ask/services/authenticator.dart';
+import 'package:just_ask/services/Authenticator.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
 import 'UpdateQuestionBankForm.dart';
 import 'question_forms/CreateMultipleChoiceQuestionForm.dart';
@@ -28,7 +28,7 @@ class _QuestionBankListState extends State<QuestionBankList> {
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
     String currentUserId = currentUser.uid;
-    CloudStorer _cloudStorer = CloudStorer(userID: currentUserId);
+    CloudLiaison _cloudStorer = CloudLiaison(userID: currentUserId);
     return StreamBuilder<dynamic>(
         stream: _cloudStorer.questionBanks,
         builder: (context, snapshot) {
@@ -44,7 +44,25 @@ class _QuestionBankListState extends State<QuestionBankList> {
               IconButton(
                 icon: Icon(Icons.logout),
                 onPressed: () async {
-                  await _authenticator.signOut();
+                  try {
+                    _authenticator.signOut();
+                  } catch (e) {
+                    if (Platform.isAndroid) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'The were was an issue signing out. Please force close the app.')));
+                    } else {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (_) => CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'There was an issue signing out. Please force close the app.')));
+                    }
+                  }
                 },
               )
             ]),
@@ -97,7 +115,7 @@ Widget _buildQuestionBankTile(
         icon: Icon(Icons.delete),
         onPressed: () async {
           try {
-            await CloudStorer(
+            await CloudLiaison(
                     userID: Provider.of<User>(context, listen: false).uid)
                 .deleteQuestionBank(questionBankId);
           } catch (e) {
@@ -123,8 +141,8 @@ Widget _buildQuestionBankTile(
 
 Widget _buildQuestionList(
     BuildContext context, String questionBankId, String questionBankName) {
-  CloudStorer _cloudStorer =
-      CloudStorer(userID: Provider.of<User>(context).uid);
+  CloudLiaison _cloudStorer =
+      CloudLiaison(userID: Provider.of<User>(context).uid);
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
   return StreamBuilder<dynamic>(
@@ -213,7 +231,7 @@ Widget _buildQuestionTile(
         icon: Icon(Icons.delete),
         onPressed: () {
           try {
-            CloudStorer _cloudStorer = CloudStorer(
+            CloudLiaison _cloudStorer = CloudLiaison(
                 userID: Provider.of<User>(context, listen: false).uid);
             _cloudStorer.deleteQuestion(questionBankId, questionId);
           } catch (e) {

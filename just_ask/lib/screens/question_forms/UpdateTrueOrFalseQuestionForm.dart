@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import '../Loading.dart';
 import 'dart:io' show Platform;
 
@@ -33,13 +33,13 @@ class _UpdateTrueOrFalseQuestionFormState
   @override
   void initState() {
     super.initState();
-    questionSnapshot = CloudStorer(userID: widget.userId).getQuestion(
+    questionSnapshot = CloudLiaison(userID: widget.userId).getQuestion(
         questionId: widget.questionId, questionBankId: widget.questionBankId);
   }
 
   @override
   Widget build(BuildContext context) {
-    CloudStorer _cloudStorer = CloudStorer(userID: widget.userId);
+    CloudLiaison _cloudLiaison = CloudLiaison(userID: widget.userId);
     return FutureBuilder(
         future: questionSnapshot,
         builder: (context, snapshot) {
@@ -108,7 +108,7 @@ class _UpdateTrueOrFalseQuestionFormState
                         print(correctAnswer);
                         if (_formKey.currentState.validate()) {
                           try {
-                            _cloudStorer.updateTFQuestion(
+                            _cloudLiaison.updateTFQuestion(
                                 questionId: widget.questionId,
                                 questionBankId: widget.questionBankId,
                                 question: question ??

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
@@ -47,7 +47,7 @@ class _QuestionBankFormState extends State<QuestionBankForm> {
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   try {
-                    await CloudStorer(userID: widget.userID)
+                    await CloudLiaison(userID: widget.userID)
                         .addQuestionBank(questionBankName);
                     Navigator.of(context).pop();
                   } catch (e) {

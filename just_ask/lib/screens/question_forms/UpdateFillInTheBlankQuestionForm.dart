@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import '../Loading.dart';
 import 'dart:io' show Platform;
@@ -34,14 +34,14 @@ class _UpdateFillInTheBlankQuestionFormState
   @override
   void initState() {
     super.initState();
-    documentSnapshot = CloudStorer(userID: widget.userId).getQuestion(
+    documentSnapshot = CloudLiaison(userID: widget.userId).getQuestion(
         questionBankId: widget.questionBankId, questionId: widget.questionId);
   }
 
   @override
   Widget build(BuildContext context) {
-    CloudStorer _cloudStorer =
-        CloudStorer(userID: Provider.of<User>(context).uid);
+    CloudLiaison _cloudLiaison =
+        CloudLiaison(userID: Provider.of<User>(context).uid);
     return FutureBuilder(
       future: documentSnapshot,
       builder: (context, snapshot) {
@@ -102,7 +102,7 @@ class _UpdateFillInTheBlankQuestionFormState
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         try {
-                          _cloudStorer.updateFIBQuestion(
+                          _cloudLiaison.updateFIBQuestion(
                               question:
                                   question ?? snapshot.data.data()['question'],
                               correctAnswer: correctAnswer ??

@@ -10,8 +10,8 @@ class Authenticator {
       UserCredential user = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       return user;
-    } on FirebaseAuthException catch (e) {
-      return null;
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -21,13 +21,17 @@ class Authenticator {
       UserCredential user = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return user;
-    } on FirebaseAuthException catch (e) {
-      return null;
+    } catch (e) {
+      throw e;
     }
   }
 
   Future<void> signOut() async {
-    await auth.signOut();
+    try {
+      auth.signOut();
+    } catch (e) {
+      throw e;
+    }
   }
 
   get userStateStream {

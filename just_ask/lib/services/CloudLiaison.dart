@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:just_ask/models/QuestionModel.dart';
 import 'package:just_ask/models/QuestionBankModel.dart';
 
-class CloudStorer {
+class CloudLiaison {
   String userID;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  CloudStorer({String userID}) {
+  CloudLiaison({String userID}) {
     this.userID = userID;
   }
 
@@ -248,28 +248,21 @@ class CloudStorer {
     }
   }
 
-  Future<void> createTeacherAccount(
+  Future<void> addAccountToFirestore(
       String email, String firstName, String lastName) async {
     print('Creating a teacher account for user $userID');
-    await users.doc(userID).set({
-      'isTeacher': true,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'currentQuestionBank': null,
-      'currentQuestionId': null
-    });
-  }
-
-  Future<void> createStudentAccount(
-      String email, String firstName, String lastName) async {
-    await users.doc(userID).set({
-      'isTeacher': false,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'currentRoom': null,
-    });
+    try {
+      users.doc(userID).set({
+        'isTeacher': true,
+        'email': email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'currentQuestionBank': null,
+        'currentQuestionId': null
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<bool> isTeacher() async {

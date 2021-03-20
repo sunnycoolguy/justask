@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
@@ -31,8 +31,8 @@ class _CreateFillInTheBlankQuestionFormState
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    CloudStorer _cloudStorer =
-        CloudStorer(userID: Provider.of<User>(context).uid);
+    CloudLiaison _cloudLiaison =
+        CloudLiaison(userID: Provider.of<User>(context).uid);
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a Fill In The Blank Question'),
@@ -79,7 +79,7 @@ class _CreateFillInTheBlankQuestionFormState
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     try {
-                      await _cloudStorer.addFIBQuestion(
+                      await _cloudLiaison.addFIBQuestion(
                           question: questionText,
                           correctAnswer: correctAnswer,
                           questionBankId: widget.questionBankId);

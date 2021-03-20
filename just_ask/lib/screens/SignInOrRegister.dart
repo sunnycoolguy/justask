@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/authenticator.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/Authenticator.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
+import 'dart:io' show Platform;
 
 class SignInOrRegister extends StatefulWidget {
   @override
@@ -9,12 +11,10 @@ class SignInOrRegister extends StatefulWidget {
 }
 
 enum FormMode { signIn, signUp }
-enum UserMode { teacher, student }
 
 class _SignInOrRegisterState extends State<SignInOrRegister> {
   Authenticator _authenticator = Authenticator();
   FormMode formMode = FormMode.signIn;
-  UserMode userMode = UserMode.teacher;
   String email;
   String password;
   String firstName;
@@ -124,36 +124,6 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                   },
                 ),
               ),
-              formMode == FormMode.signUp
-                  ? Text("Are you a teacher or student?")
-                  : SizedBox(),
-              formMode == FormMode.signUp
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Radio(
-                          value: UserMode.teacher,
-                          groupValue: userMode,
-                          onChanged: (value) {
-                            setState(() {
-                              userMode = value;
-                            });
-                          },
-                        ),
-                        Text('Teacher'),
-                        Radio(
-                          value: UserMode.student,
-                          groupValue: userMode,
-                          onChanged: (value) {
-                            setState(() {
-                              userMode = value;
-                            });
-                          },
-                        ),
-                        Text('Student')
-                      ],
-                    )
-                  : SizedBox(),
               Text("First time on JustAsk? Sign up."),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -184,26 +154,51 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       if (formMode == FormMode.signIn) {
-                        //Sign the user in
-                        await _authenticator.signIn(
-                            email: email, password: password);
-                        //TODO: What if null is returned??
+                        try {
+                          await _authenticator.signIn(
+                              email: email, password: password);
+                        } catch (e) {
+                          if (Platform.isAndroid) {
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'The were was an issue signing in. Please try again later.')));
+                          } else {
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (_) => CupertinoAlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'There was an issue signing in. Please try again later.')));
+                          }
+                        }
                       } else {
-                        //Sign user up
-                        UserCredential userCredential = await _authenticator
-                            .createAccountWithEmailAndPassword(
-                                email: email, password: password);
-                        //TODO: What if null is returned??
-                        CloudStorer cloudStorer =
-                            CloudStorer(userID: userCredential.user.uid);
-                        //Create corresponding teacher or student document on FireStore
-                        if (userMode == UserMode.teacher) {
-                          //create a teacher account
-                          cloudStorer.createTeacherAccount(
+                        try {
+                          UserCredential userCredential = await _authenticator
+                              .createAccountWithEmailAndPassword(
+                                  email: email, password: password);
+                          CloudLiaison _cloudLiaison =
+                              CloudLiaison(userID: userCredential.user.uid);
+                          _cloudLiaison.addAccountToFirestore(
                               email, firstName, lastName);
-                        } else {
-                          cloudStorer.createStudentAccount(
-                              email, firstName, lastName);
+                        } catch (e) {
+                          if (Platform.isAndroid) {
+                            showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'The were was an issue signing up. Please try again later.')));
+                          } else {
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (_) => CupertinoAlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'There was an issue signing up. Please try again later.')));
+                          }
                         }
                       }
                     }

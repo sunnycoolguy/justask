@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/services/cloud_storer.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
@@ -25,8 +25,8 @@ class _CreateMultipleChoiceQuestionFormState
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    CloudStorer _cloudStorer =
-        CloudStorer(userID: Provider.of<User>(context).uid);
+    CloudLiaison _cloudLiaison =
+        CloudLiaison(userID: Provider.of<User>(context).uid);
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a Multiple Choice Question'),
@@ -139,7 +139,7 @@ class _CreateMultipleChoiceQuestionFormState
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     try {
-                      await _cloudStorer.addMCQQuestion(
+                      await _cloudLiaison.addMCQQuestion(
                           question: questionText,
                           correctAnswer: correctAnswer,
                           answers: [
