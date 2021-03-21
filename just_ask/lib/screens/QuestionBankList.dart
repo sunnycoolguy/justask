@@ -75,9 +75,14 @@ class _QuestionBankListState extends State<QuestionBankList> {
                   ListTile(
                       title: Text('My Classroom'),
                       onTap: () {
-                        Navigator.pushNamed(context, 'myclassroom');
+                        Navigator.pushReplacementNamed(context, '/myclassroom');
                       }),
-                  ListTile(title: (Text('Join a classroom')), onTap: () {})
+                  ListTile(
+                      title: (Text('Join a classroom')),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                            context, '/joinclassroom');
+                      })
                 ],
               ),
             ),

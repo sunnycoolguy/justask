@@ -6,6 +6,8 @@ import 'package:just_ask/screens/SignInOrRegister.dart';
 import 'services/Authenticator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import './screens/MyClassroom.dart';
+import './screens/JoinClassroom.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,8 +42,9 @@ class Wrapper extends StatelessWidget {
                   home: JustAsk(),
                   routes: {
                     '/questionbanklist': (_) => QuestionBankList(),
-                    'myclassroom': (_) => Scaffold(body: Text('My classroom!')),
-                    '/signinorregister': (_) => SignInOrRegister()
+                    '/myclassroom': (_) => MyClassroom(),
+                    '/signinorregister': (_) => SignInOrRegister(),
+                    '/joinclassroom': (_) => JoinClassroom()
                   }),
             );
           }
