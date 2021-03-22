@@ -18,6 +18,10 @@ import 'question_forms/UpdateMultipleChoiceQuestionForm.dart';
 import 'dart:io' show Platform;
 
 class QuestionBankList extends StatefulWidget {
+  String userId;
+  QuestionBankList(String userId) {
+    this.userId = userId;
+  }
   @override
   _QuestionBankListState createState() => _QuestionBankListState();
 }
@@ -26,8 +30,7 @@ class _QuestionBankListState extends State<QuestionBankList> {
   Authenticator _authenticator = Authenticator();
   @override
   Widget build(BuildContext context) {
-    User currentUser = context.watch<User>();
-    String currentUserId = currentUser.uid;
+    String currentUserId = widget.userId;
     CloudLiaison _cloudStorer = CloudLiaison(userID: currentUserId);
     return StreamBuilder<dynamic>(
         stream: _cloudStorer.questionBanks,
@@ -46,6 +49,7 @@ class _QuestionBankListState extends State<QuestionBankList> {
                 onPressed: () async {
                   try {
                     _authenticator.signOut();
+                    Navigator.pushReplacementNamed(context, '/justask');
                   } catch (e) {
                     if (Platform.isAndroid) {
                       showDialog(

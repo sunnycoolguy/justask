@@ -41,10 +41,11 @@ class Wrapper extends StatelessWidget {
                   ),
                   home: JustAsk(),
                   routes: {
-                    '/questionbanklist': (_) => QuestionBankList(),
+                    '/questionbanklist': (_) => JustAsk(),
                     '/myclassroom': (_) => MyClassroom(),
                     '/signinorregister': (_) => SignInOrRegister(),
-                    '/joinclassroom': (_) => JoinClassroom()
+                    '/joinclassroom': (_) => JoinClassroom(),
+                    '/justask': (_) => JustAsk(),
                   }),
             );
           }
