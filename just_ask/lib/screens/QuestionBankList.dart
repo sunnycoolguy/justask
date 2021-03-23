@@ -8,14 +8,11 @@ import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:just_ask/services/Authenticator.dart';
-import 'package:just_ask/screens/QuestionBankForm.dart';
 import 'UpdateQuestionBankForm.dart';
 import 'question_forms/CreateMultipleChoiceQuestionForm.dart';
 import 'question_forms/CreateTrueOrFalseQuestionForm.dart';
 import 'question_forms/UpdateFillInTheBlankQuestionForm.dart';
 import 'question_forms/UpdateMultipleChoiceQuestionForm.dart';
-import '../CurrentPageEnum.dart';
 import 'dart:io' show Platform;
 
 class QuestionBankList extends StatefulWidget {
@@ -24,7 +21,6 @@ class QuestionBankList extends StatefulWidget {
 }
 
 class _QuestionBankListState extends State<QuestionBankList> {
-  Authenticator _authenticator = Authenticator();
   @override
   Widget build(BuildContext context) {
     String currentUserId = context.read<User>().uid;

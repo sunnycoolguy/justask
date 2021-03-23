@@ -10,10 +10,8 @@ import '../services/Authenticator.dart';
 import 'dart:io' show Platform;
 
 class Home extends StatefulWidget {
-  String currentUserId;
-  Home(String currentUserId) {
-    this.currentUserId = currentUserId;
-  }
+  final String currentUserId;
+  Home({this.currentUserId});
   @override
   _HomeState createState() => _HomeState();
 }
