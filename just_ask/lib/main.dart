@@ -32,22 +32,15 @@ class Wrapper extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             Stream<User> userStateStream = Authenticator().userStateStream;
             return StreamProvider<User>.value(
-              value: userStateStream,
-              child: MaterialApp(
+                value: userStateStream,
+                child: MaterialApp(
                   title: 'JustAsk',
                   theme: ThemeData(
                     primarySwatch: Colors.blue,
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                   ),
                   home: JustAsk(),
-                  routes: {
-                    '/questionbanklist': (_) => JustAsk(),
-                    '/myclassroom': (_) => MyClassroom(),
-                    '/signinorregister': (_) => SignInOrRegister(),
-                    '/joinclassroom': (_) => JoinClassroom(),
-                    '/justask': (_) => JustAsk(),
-                  }),
-            );
+                ));
           }
 
           return MaterialApp(home: Scaffold(body: Text('Loading')));

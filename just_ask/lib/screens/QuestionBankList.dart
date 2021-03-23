@@ -15,13 +15,10 @@ import 'question_forms/CreateMultipleChoiceQuestionForm.dart';
 import 'question_forms/CreateTrueOrFalseQuestionForm.dart';
 import 'question_forms/UpdateFillInTheBlankQuestionForm.dart';
 import 'question_forms/UpdateMultipleChoiceQuestionForm.dart';
+import '../CurrentPageEnum.dart';
 import 'dart:io' show Platform;
 
 class QuestionBankList extends StatefulWidget {
-  String userId;
-  QuestionBankList(String userId) {
-    this.userId = userId;
-  }
   @override
   _QuestionBankListState createState() => _QuestionBankListState();
 }
@@ -30,86 +27,30 @@ class _QuestionBankListState extends State<QuestionBankList> {
   Authenticator _authenticator = Authenticator();
   @override
   Widget build(BuildContext context) {
-    String currentUserId = widget.userId;
+    String currentUserId = context.read<User>().uid;
     CloudLiaison _cloudStorer = CloudLiaison(userID: currentUserId);
     return StreamBuilder<dynamic>(
         stream: _cloudStorer.questionBanks,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print(snapshot.error);
-            return Scaffold(body: Text('Error Retrieving Question Banks'));
+            return Text('Error Retrieving Question Banks');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Loading();
+            return Loading(); //TODO: Loading has a full scaffold instead of just a widget
           }
-          return Scaffold(
-            appBar: AppBar(title: Text('JustAsk'), actions: [
-              IconButton(
-                icon: Icon(Icons.logout),
-                onPressed: () async {
-                  try {
-                    _authenticator.signOut();
-                    Navigator.pushReplacementNamed(context, '/justask');
-                  } catch (e) {
-                    if (Platform.isAndroid) {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                              title: Text('Error'),
-                              content: Text(
-                                  'The were was an issue signing out. Please force close the app.')));
-                    } else {
-                      showCupertinoDialog(
-                          context: context,
-                          builder: (_) => CupertinoAlertDialog(
-                              title: Text('Error'),
-                              content: Text(
-                                  'There was an issue signing out. Please force close the app.')));
-                    }
-                  }
-                },
-              )
-            ]),
-            drawer: Drawer(
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('My Question Banks'),
-                  ),
-                  ListTile(
-                      title: Text('My Classroom'),
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, '/myclassroom');
-                      }),
-                  ListTile(
-                      title: (Text('Join a classroom')),
-                      onTap: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/joinclassroom');
-                      })
-                ],
-              ),
-            ),
-            body: Container(
-                child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index) {
-                      return _buildQuestionBankTile(
-                        context,
-                        snapshot.data[index].questionBankId,
-                        snapshot.data[index].questionBankName,
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(),
-                    itemCount: snapshot.data.length)),
-            floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => QuestionBankForm(userID: currentUserId));
-                }),
-          );
+          return Container(
+              child: ListView.separated(
+                  itemBuilder: (BuildContext context, int index) {
+                    return _buildQuestionBankTile(
+                      context,
+                      snapshot.data[index].questionBankId,
+                      snapshot.data[index].questionBankName,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(),
+                  itemCount: snapshot.data.length));
         });
   }
 }
