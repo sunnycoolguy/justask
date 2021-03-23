@@ -9,6 +9,8 @@ class JustAsk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
-    return currentUser == null ? SignInOrRegister() : Home(currentUserId: currentUser.uid);
+    return currentUser == null
+        ? SignInOrRegister()
+        : Home(currentUserId: currentUser.uid);
   }
 }
