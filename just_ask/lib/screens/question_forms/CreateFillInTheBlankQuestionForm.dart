@@ -8,15 +8,9 @@ import 'dart:io' show Platform;
 //ignore: must_be_immutable
 class CreateFillInTheBlankQuestionForm extends StatefulWidget {
   String questionBankId;
-  String questionId;
+
   CreateFillInTheBlankQuestionForm({String questionBankId}) {
     this.questionBankId = questionBankId;
-  }
-
-  CreateFillInTheBlankQuestionForm.update(
-      {String questionBankId, String questionId}) {
-    this.questionBankId = questionBankId;
-    this.questionId = questionId;
   }
 
   @override
@@ -26,8 +20,9 @@ class CreateFillInTheBlankQuestionForm extends StatefulWidget {
 
 class _CreateFillInTheBlankQuestionFormState
     extends State<CreateFillInTheBlankQuestionForm> {
-  String correctAnswer = '';
-  String questionText = '';
+  String correctAnswer;
+  String questionText;
+  double time = 0.0;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -74,6 +69,26 @@ class _CreateFillInTheBlankQuestionFormState
                   correctAnswer = value.toLowerCase();
                 });
               },
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Center(
+                child:
+                    Text("How long do you want this question to be live for?")),
+            Slider.adaptive(
+              value: time,
+              min: 0,
+              max: 60,
+              divisions: 60,
+              onChanged: (newValue) {
+                setState(() {
+                  setState(() {
+                    time = newValue;
+                  });
+                });
+              },
+              label: "${time.toInt()}s",
             ),
             ElevatedButton(
                 onPressed: () async {

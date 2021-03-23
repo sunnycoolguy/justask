@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
-
 import 'QuestionBankList.dart';
 import 'MyClassroom.dart';
 import 'JoinClassroom.dart';
@@ -34,32 +33,7 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: Text(_currentPageTitle), actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              try {
-                _authenticator.signOut();
-              } catch (e) {
-                if (Platform.isAndroid) {
-                  showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                          title: Text('Error'),
-                          content: Text(
-                              'The were was an issue signing out. Please force close the app.')));
-                } else {
-                  showCupertinoDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                          title: Text('Error'),
-                          content: Text(
-                              'There was an issue signing out. Please force close the app.')));
-                }
-              }
-            },
-          )
-        ]),
+        appBar: AppBar(title: Text(_currentPageTitle)),
         body: mainContent,
         drawer: Drawer(
           child: ListView(
@@ -83,14 +57,38 @@ class _HomeState extends State<Home> {
                     Navigator.pop(context);
                   }),
               ListTile(
-                  title: (Text('Join A Classroom')),
+                  title: Text('Join A Classroom'),
                   onTap: () {
                     setState(() {
                       _currentPage = CurrentPage.joinClassroom;
                       _currentPageTitle = "Join A Classroom";
                     });
                     Navigator.pop(context);
-                  })
+                  }),
+              ListTile(
+                title: Text('Log out'),
+                onTap: () async {
+                  try {
+                    _authenticator.signOut();
+                  } catch (e) {
+                    if (Platform.isAndroid) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'The were was an issue signing out. Please force close the app.')));
+                    } else {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (_) => CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'There was an issue signing out. Please force close the app.')));
+                    }
+                  }
+                },
+              ),
             ],
           ),
         ),

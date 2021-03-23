@@ -22,6 +22,7 @@ class _CreateMultipleChoiceQuestionFormState
   String firstAnswer, secondAnswer, thirdAnswer, fourthAnswer;
   String correctAnswer = '';
   String questionText = '';
+  double time = 0.0;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -134,6 +135,27 @@ class _CreateMultipleChoiceQuestionFormState
                   ],
                   textField: 'display',
                   valueField: 'value'),
+            ),
+            SizedBox(height: 20.0),
+            Center(
+                child:
+                    Text("How long do you want this question to be live for?")),
+            Slider.adaptive(
+              value: time,
+              min: 0,
+              max: 60,
+              divisions: 60,
+              onChanged: (newValue) {
+                setState(() {
+                  setState(() {
+                    time = newValue;
+                  });
+                });
+              },
+              label: "${time.toInt()}s",
+            ),
+            SizedBox(
+              height: 20.0,
             ),
             ElevatedButton(
                 onPressed: () async {
