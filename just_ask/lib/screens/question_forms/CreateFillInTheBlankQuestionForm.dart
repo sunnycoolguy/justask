@@ -81,13 +81,15 @@ class _CreateFillInTheBlankQuestionFormState
               ],
               decoration: InputDecoration(
                 labelText:
-                    "How long do you want to ask this question for? (Up to 60s)",
-                hintText: "Enter a number",
+                    "How long do you want to ask this question for (seconds)?",
+                hintText: "Enter a number between 5 and 60s",
               ),
               validator: (String value) {
-                return (int.parse(value) > 60 || int.parse(value) < 0)
-                    ? "Please enter a time in the range of 0 to 60."
-                    : null;
+                return value.length > 0 &&
+                        int.parse(value) <= 60 &&
+                        int.parse(value) >= 5
+                    ? null
+                    : "Please enter a time between 5 and 60s.";
               },
               onChanged: (String value) {
                 setState(() {
@@ -102,6 +104,7 @@ class _CreateFillInTheBlankQuestionFormState
                       await _cloudLiaison.addFIBQuestion(
                           question: questionText,
                           correctAnswer: correctAnswer,
+                          time: time,
                           questionBankId: widget.questionBankId);
                       Navigator.of(context).pop();
                     } catch (e) {

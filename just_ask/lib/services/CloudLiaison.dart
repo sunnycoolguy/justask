@@ -67,7 +67,8 @@ class CloudLiaison {
       {String question,
       String correctAnswer,
       List<String> answers,
-      String questionBankId}) async {
+      String questionBankId,
+      int time}) async {
     try {
       await users
           .doc(userID)
@@ -79,6 +80,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -87,7 +89,10 @@ class CloudLiaison {
   }
 
   Future<void> addTFQuestion(
-      {String question, String correctAnswer, String questionBankId}) async {
+      {String question,
+      String correctAnswer,
+      int time,
+      String questionBankId}) async {
     try {
       await users
           .doc(userID)
@@ -99,6 +104,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -107,7 +113,10 @@ class CloudLiaison {
   }
 
   Future<void> addFIBQuestion(
-      {String question, String correctAnswer, String questionBankId}) async {
+      {String question,
+      String correctAnswer,
+      int time,
+      String questionBankId}) async {
     try {
       await users
           .doc(userID)
@@ -119,6 +128,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -134,6 +144,7 @@ class CloudLiaison {
           question: queryDocumentSnapshot.data()['question'],
           questionType: queryDocumentSnapshot.data()['type'],
           answers: queryDocumentSnapshot.data()['answers'],
+          time: queryDocumentSnapshot.data()['time'],
           questionId: queryDocumentSnapshot.id);
     }).toList();
   }
@@ -158,11 +169,11 @@ class CloudLiaison {
         .get();
   }
 
-  //TODO: Update Questions
   Future<void> updateMCQQuestion(
       {String question,
       String correctAnswer,
       List<String> answers,
+      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -177,6 +188,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -187,6 +199,7 @@ class CloudLiaison {
   Future<void> updateTFQuestion(
       {String question,
       String correctAnswer,
+      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -201,6 +214,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -211,6 +225,7 @@ class CloudLiaison {
   Future<void> updateFIBQuestion(
       {String question,
       String correctAnswer,
+      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -225,6 +240,7 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
+        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -248,6 +264,7 @@ class CloudLiaison {
     }
   }
 
+  //TODO: Remove isTeacher flag and add username??
   Future<void> addAccountToFirestore(
       String email, String firstName, String lastName) async {
     print('Creating a teacher account for user $userID');
