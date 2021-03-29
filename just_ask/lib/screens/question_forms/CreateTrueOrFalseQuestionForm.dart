@@ -1,6 +1,7 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ class _CreateTrueOrFalseQuestionFormState
     extends State<CreateTrueOrFalseQuestionForm> {
   String correctAnswer;
   String question;
-  double time = 0;
+  int time;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -76,22 +77,26 @@ class _CreateTrueOrFalseQuestionFormState
                   valueField: 'value'),
             ),
             SizedBox(height: 20.0),
-            Center(
-                child:
-                    Text("How long do you want this question to be live for?")),
-            Slider.adaptive(
-              value: time,
-              min: 0,
-              max: 60,
-              divisions: 60,
-              onChanged: (newValue) {
+            TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
+              decoration: InputDecoration(
+                labelText:
+                    "How long do you want to ask this question for? (Up to 60s)",
+                hintText: "Enter a number",
+              ),
+              validator: (String value) {
+                return (int.parse(value) > 60 || int.parse(value) < 0)
+                    ? "Please enter a time in the range of 0 to 60."
+                    : null;
+              },
+              onChanged: (String value) {
                 setState(() {
-                  setState(() {
-                    time = newValue;
-                  });
+                  time = int.parse(value);
                 });
               },
-              label: "${time.toInt()}s",
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
