@@ -35,6 +35,7 @@ class _QuestionBankListState extends State<QuestionBankList> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading(); //TODO: Loading has a full scaffold instead of just a widget
           }
+          print("Building list!");
           return Container(
               child: ListView.separated(
                   itemBuilder: (BuildContext context, int index) {

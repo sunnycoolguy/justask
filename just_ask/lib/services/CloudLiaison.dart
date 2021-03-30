@@ -10,6 +10,19 @@ class CloudLiaison {
     this.userID = userID;
   }
 
+  Stream<DocumentSnapshot> getUser(String uid) {
+    return users.doc(userID).snapshots();
+  }
+
+  void openClassroom() {
+    try {
+      print("$userID");
+      users.doc(userID).update({'isClassroomOpen': true});
+    } catch (e) {
+      throw e;
+    }
+  }
+
   List<QuestionBankModel> snapshotToQuestionBankModelList(
       QuerySnapshot querySnapshot) {
     return querySnapshot.docs
@@ -270,7 +283,7 @@ class CloudLiaison {
     print('Creating a teacher account for user $userID');
     try {
       users.doc(userID).set({
-        'isTeacher': true,
+        'isClassroomOpen': false,
         'email': email,
         'firstName': firstName,
         'lastName': lastName,
