@@ -105,40 +105,44 @@ Widget _buildQuestionBankTile(BuildContext context, String questionBankId,
                       ? QuestionListMode.MyQuestionBanks
                       : QuestionListMode.MyClassroom)));
     },
-    onLongPress: () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return UpdateQuestionBankForm(
-              questionBankId: questionBankId,
-            );
-          });
-    },
-    trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () async {
-          try {
-            await CloudLiaison(
-                    userID: Provider.of<User>(context, listen: false).uid)
-                .deleteQuestionBank(questionBankId);
-          } catch (e) {
-            if (Platform.isAndroid) {
-              showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                      title: Text('Error'),
-                      content: Text(
-                          'The were was an issue deleting the question bank. Please try again later.')));
-            } else {
-              showCupertinoDialog(
-                  context: context,
-                  builder: (_) => CupertinoAlertDialog(
-                      title: Text('Error'),
-                      content: Text(
-                          'There was an issue deleting the question bank. Please try again later.')));
-            }
-          }
-        }),
+    onLongPress: questionBankListMode == QuestionBankListMode.MyClassroom
+        ? null
+        : () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return UpdateQuestionBankForm(
+                    questionBankId: questionBankId,
+                  );
+                });
+          },
+    trailing: questionBankListMode == QuestionBankListMode.MyClassroom
+        ? null
+        : IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () async {
+              try {
+                await CloudLiaison(
+                        userID: Provider.of<User>(context, listen: false).uid)
+                    .deleteQuestionBank(questionBankId);
+              } catch (e) {
+                if (Platform.isAndroid) {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'The were was an issue deleting the question bank. Please try again later.')));
+                } else {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'There was an issue deleting the question bank. Please try again later.')));
+                }
+              }
+            }),
   );
 }
 
@@ -173,10 +177,10 @@ Widget _buildQuestionList(BuildContext context, String questionBankId,
                     : ListView.separated(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context, index) => _buildQuestionTile(
-                          context,
-                          snapshot.data[index],
-                          questionBankId,
-                        ),
+                            context,
+                            snapshot.data[index],
+                            questionBankId,
+                            questionListMode),
                         separatorBuilder: (context, index) => Divider(),
                       ),
               ),
@@ -279,8 +283,8 @@ Widget _buildQuestionList(BuildContext context, String questionBankId,
       });
 }
 
-Widget _buildQuestionTile(
-    BuildContext context, QuestionModel questionModel, String questionBankId) {
+Widget _buildQuestionTile(BuildContext context, QuestionModel questionModel,
+    String questionBankId, QuestionListMode questionListMode) {
   String question = questionModel.question;
   String questionType = questionModel.questionType;
   String questionId = questionModel.questionId;
@@ -288,50 +292,54 @@ Widget _buildQuestionTile(
   return ListTile(
     title: Text(question),
     subtitle: Text(questionType),
-    trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () {
-          try {
-            CloudLiaison _cloudStorer = CloudLiaison(
-                userID: Provider.of<User>(context, listen: false).uid);
-            _cloudStorer.deleteQuestion(questionBankId, questionId);
-          } catch (e) {
-            if (Platform.isAndroid) {
-              showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                      title: Text('Error'),
-                      content: Text(
-                          'The were was an issue deleting the question. Please try again later.')));
-            } else {
-              showCupertinoDialog(
-                  context: context,
-                  builder: (_) => CupertinoAlertDialog(
-                      title: Text('Error'),
-                      content: Text(
-                          'There was an issue deleting the question. Please try again later.')));
-            }
-          }
-        }),
-    onLongPress: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        if (questionType == 'MCQ') {
-          return UpdateMultipleChoiceQuestionForm(
-              questionBankId: questionBankId,
-              questionId: questionId,
-              userId: Provider.of<User>(context).uid);
-        } else if (questionType == 'FIB') {
-          return UpdateFillInTheBlankQuestionForm(
-            questionBankId: questionBankId,
-            questionId: questionId,
-            userId: Provider.of<User>(context).uid,
-          );
-        }
-        return UpdateTrueOrFalseQuestionForm(
-            userId: Provider.of<User>(context).uid,
-            questionId: questionId,
-            questionBankId: questionBankId);
-      }));
-    },
+    trailing: questionListMode == QuestionListMode.MyClassroom
+        ? null
+        : IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              try {
+                CloudLiaison _cloudStorer = CloudLiaison(
+                    userID: Provider.of<User>(context, listen: false).uid);
+                _cloudStorer.deleteQuestion(questionBankId, questionId);
+              } catch (e) {
+                if (Platform.isAndroid) {
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'The were was an issue deleting the question. Please try again later.')));
+                } else {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'There was an issue deleting the question. Please try again later.')));
+                }
+              }
+            }),
+    onLongPress: questionListMode == QuestionListMode.MyClassroom
+        ? null
+        : () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              if (questionType == 'MCQ') {
+                return UpdateMultipleChoiceQuestionForm(
+                    questionBankId: questionBankId,
+                    questionId: questionId,
+                    userId: Provider.of<User>(context).uid);
+              } else if (questionType == 'FIB') {
+                return UpdateFillInTheBlankQuestionForm(
+                  questionBankId: questionBankId,
+                  questionId: questionId,
+                  userId: Provider.of<User>(context).uid,
+                );
+              }
+              return UpdateTrueOrFalseQuestionForm(
+                  userId: Provider.of<User>(context).uid,
+                  questionId: questionId,
+                  questionBankId: questionBankId);
+            }));
+          },
   );
 }
