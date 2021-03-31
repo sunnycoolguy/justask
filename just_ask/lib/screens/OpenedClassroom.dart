@@ -19,8 +19,7 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
   @override
   Widget build(BuildContext context) {
     if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestion) {
-      return Text(
-          "Pick a question widget goes here! (After refactoring QBL to be functional stateless.");
+      return QuestionBankList(true);
     } else if (_openedClassroomStatus ==
         OpenedClassroomStatus.QuestionBroadcasting) {
       return Text("The question is currently being broadcast.");

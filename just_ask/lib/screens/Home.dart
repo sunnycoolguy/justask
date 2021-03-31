@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
     Authenticator _authenticator = Authenticator();
 
     if (this._currentPage == CurrentPage.questionBankList) {
-      mainContent = QuestionBankList();
+      mainContent = QuestionBankList(false);
     } else if (this._currentPage == CurrentPage.myClassroom) {
       mainContent = MyClassroom();
     } else {
