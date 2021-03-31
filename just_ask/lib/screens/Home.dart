@@ -4,7 +4,7 @@ import 'QuestionBankList.dart';
 import 'MyClassroom.dart';
 import 'JoinClassroom.dart';
 import 'package:flutter/material.dart';
-import '../CurrentPageEnum.dart';
+import '../enums.dart';
 import '../services/Authenticator.dart';
 import 'dart:io' show Platform;
 
@@ -25,7 +25,8 @@ class _HomeState extends State<Home> {
     Authenticator _authenticator = Authenticator();
 
     if (this._currentPage == CurrentPage.questionBankList) {
-      mainContent = QuestionBankList(false);
+      mainContent =
+          buildQuestionBankList(context, QuestionBankListMode.MyQuestionBanks);
     } else if (this._currentPage == CurrentPage.myClassroom) {
       mainContent = MyClassroom();
     } else {

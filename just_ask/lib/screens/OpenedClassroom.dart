@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_ask/enums.dart';
 import 'package:just_ask/screens/QuestionBankList.dart';
 
 enum OpenedClassroomStatus {
@@ -19,7 +20,7 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
   @override
   Widget build(BuildContext context) {
     if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestion) {
-      return QuestionBankList(true);
+      return buildQuestionBankList(context, QuestionBankListMode.MyClassroom);
     } else if (_openedClassroomStatus ==
         OpenedClassroomStatus.QuestionBroadcasting) {
       return Text("The question is currently being broadcast.");
