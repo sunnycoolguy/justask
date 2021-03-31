@@ -33,6 +33,9 @@ Widget buildQuestionBankList(
 
         return Stack(children: [
           Container(
+              margin: questionBankListMode == QuestionBankListMode.MyClassroom
+                  ? EdgeInsets.only(top: 20.0)
+                  : null,
               child: snapshot.data.length == 0
                   ? Center(
                       child: Text(
@@ -170,6 +173,9 @@ Widget _buildQuestionList(BuildContext context, String questionBankId,
             ),
             body: Stack(children: [
               Container(
+                margin: questionListMode == QuestionListMode.MyClassroom
+                    ? EdgeInsets.only(top: 20.0)
+                    : null,
                 child: snapshot.data.length == 0
                     ? Center(
                         child: Text(
