@@ -16,8 +16,15 @@ class CloudLiaison {
 
   void openClassroom() {
     try {
-      print("$userID");
       users.doc(userID).update({'isClassroomOpen': true});
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  void closeClassroom() {
+    try {
+      users.doc(userID).update({'isClassroomOpen': false});
     } catch (e) {
       throw e;
     }

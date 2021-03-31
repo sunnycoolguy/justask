@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
+import 'package:just_ask/services/CloudLiaison.dart';
 import 'QuestionBankList.dart';
 import 'MyClassroom.dart';
 import 'JoinClassroom.dart';
 import 'package:flutter/material.dart';
 import '../enums.dart';
 import '../services/Authenticator.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
 
 class Home extends StatefulWidget {
@@ -23,6 +26,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Widget mainContent;
     Authenticator _authenticator = Authenticator();
+    CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
     if (this._currentPage == CurrentPage.questionBankList) {
       mainContent =
@@ -34,7 +38,10 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: Text(_currentPageTitle)),
+        appBar: AppBar(
+          title: Text(_currentPageTitle),
+          elevation: 0.0,
+        ),
         body: mainContent,
         drawer: Drawer(
           child: ListView(
@@ -43,6 +50,9 @@ class _HomeState extends State<Home> {
                   title: Text('My Question Banks'),
                   onTap: () {
                     setState(() {
+                      if (_currentPage == CurrentPage.myClassroom) {
+                        _cloudLiaison.closeClassroom();
+                      }
                       _currentPage = CurrentPage.questionBankList;
                       _currentPageTitle = "My Question Banks";
                     });
@@ -61,6 +71,9 @@ class _HomeState extends State<Home> {
                   title: Text('Join A Classroom'),
                   onTap: () {
                     setState(() {
+                      if (_currentPage == CurrentPage.myClassroom) {
+                        _cloudLiaison.closeClassroom();
+                      }
                       _currentPage = CurrentPage.joinClassroom;
                       _currentPageTitle = "Join A Classroom";
                     });

@@ -34,7 +34,9 @@ Widget buildQuestionBankList(
         return Stack(children: [
           Container(
               child: snapshot.data.length == 0
-                  ? Text("You currently have no question banks to choose from!")
+                  ? Center(
+                      child: Text(
+                          "You currently have no question banks to choose from!"))
                   : ListView.separated(
                       itemBuilder: (BuildContext context, int index) {
                         return _buildQuestionBankTile(
@@ -50,17 +52,34 @@ Widget buildQuestionBankList(
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Pick A Question Bank"),
-                    Align(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      child: TextButton(
-                        child: Text(
-                          "Close Classroom",
-                          style: TextStyle(color: Colors.white),
+                    Material(
+                      elevation: 5.0,
+                      child: Container(
+                          width: double.infinity,
+                          color: Colors.blue,
+                          child: Center(
+                            child: Text("Pick A Question Bank",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20.0)),
+                          )),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 30.0),
+                      child: Align(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          textColor: Colors.white,
+                          color: Colors.blue,
+                          child: Text(
+                            "Close Classroom",
+                          ),
+                          elevation: 12.0,
+                          onPressed: () {
+                            _cloudLiaison.closeClassroom();
+                          },
                         ),
-                        onPressed: () {},
-                        style:
-                            TextButton.styleFrom(backgroundColor: Colors.blue),
                       ),
                     ),
                   ],
@@ -143,6 +162,7 @@ Widget _buildQuestionList(BuildContext context, String questionBankId,
         return Scaffold(
             appBar: AppBar(
               title: Text(questionBankName),
+              elevation: 0.0,
             ),
             body: Stack(children: [
               Container(
@@ -164,17 +184,37 @@ Widget _buildQuestionList(BuildContext context, String questionBankId,
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Pick A Question"),
-                        Align(
-                          alignment: AlignmentDirectional.bottomCenter,
-                          child: TextButton(
-                            child: Text(
-                              "Close Classroom",
-                              style: TextStyle(color: Colors.white),
+                        Material(
+                          elevation: 12.0,
+                          child: Container(
+                            width: double.infinity,
+                            color: Colors.blue,
+                            child: Center(
+                              child: Text(
+                                "Pick A Question",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20.0),
+                              ),
                             ),
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.blue),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 30.0),
+                          child: Align(
+                            alignment: AlignmentDirectional.bottomCenter,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              textColor: Colors.white,
+                              color: Colors.blue,
+                              child: Text(
+                                "Close Classroom",
+                              ),
+                              elevation: 12.0,
+                              onPressed: () {
+                                _cloudLiaison.closeClassroom();
+                              },
+                            ),
                           ),
                         ),
                       ],
