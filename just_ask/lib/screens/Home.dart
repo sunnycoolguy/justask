@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
+import 'MyQuestionBanks.dart';
 import 'QuestionBankList.dart';
 import 'MyClassroom.dart';
 import 'JoinClassroom.dart';
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
     if (this._currentPage == CurrentPage.questionBankList) {
-      mainContent = QuestionBankList();
+      mainContent = MyQuestionBanks();
     } else if (this._currentPage == CurrentPage.myClassroom) {
       mainContent = MyClassroom();
     } else {

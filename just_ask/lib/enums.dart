@@ -1,3 +1,8 @@
 enum CurrentPage { questionBankList, joinClassroom, myClassroom }
-enum QuestionBankListMode { MyQuestionBanks, MyClassroom }
-enum QuestionListMode { MyQuestionBanks, MyClassroom }
+enum OpenedClassroomStatus {
+  PickingQuestionBank,
+  PickingQuestion,
+  QuestionBroadcasting,
+  QuestionStats
+}
+enum MyQuestionBanksStatus { PickingQuestionBank, PickingQuestion }

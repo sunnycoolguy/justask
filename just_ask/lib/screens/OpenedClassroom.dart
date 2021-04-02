@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_ask/screens/QuestionBankList.dart';
-
-enum OpenedClassroomStatus {
-  PickingQuestion,
-  QuestionBroadcasting,
-  QuestionStats
-}
+import 'package:just_ask/screens/QuestionList.dart';
+import '../enums.dart';
 
 class OpenedClassroom extends StatefulWidget {
   @override
@@ -14,17 +10,73 @@ class OpenedClassroom extends StatefulWidget {
 
 class _OpenedClassroomState extends State<OpenedClassroom> {
   OpenedClassroomStatus _openedClassroomStatus =
-      OpenedClassroomStatus.PickingQuestion;
+      OpenedClassroomStatus.PickingQuestionBank;
+  String _currentQuestionBankId;
 
-  updateMyClassroomState(OpenedClassroomStatus openedClassroomStatus) {
+  updateMyClassroomState(OpenedClassroomStatus newOpenedClassroomStatus) {
     setState(() {
-      _openedClassroomStatus = openedClassroomStatus;
+      _openedClassroomStatus = newOpenedClassroomStatus;
+    });
+  }
+
+  updateCurrentQuestionBankId(String newQuestionBankId) {
+    setState(() {
+      _currentQuestionBankId = newQuestionBankId;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestion) {
+    Widget _mainContent;
+    if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestionBank) {
+      _mainContent = QuestionBankList(
+          updateMyClassroomState: updateMyClassroomState,
+          updateCurrentQuestionBankId: updateCurrentQuestionBankId);
+    } else if (_openedClassroomStatus ==
+        OpenedClassroomStatus.PickingQuestion) {
+      _mainContent = QuestionList(
+          questionBankId: _currentQuestionBankId,
+          updateMyClassroomState: updateMyClassroomState);
+    } else if (_openedClassroomStatus ==
+        OpenedClassroomStatus.QuestionBroadcasting) {
+      _mainContent = Text("Your Question Has Been Broadcast");
+    }
+
+    return Stack(
+      children: [
+        Container(margin: EdgeInsets.only(top: 20.0), child: _mainContent),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              elevation: 12.0,
+              child: Container(
+                  width: double.infinity,
+                  color: Colors.blue,
+                  child: Center(
+                    child: _openedClassroomStatus !=
+                                OpenedClassroomStatus.PickingQuestion &&
+                            _openedClassroomStatus !=
+                                OpenedClassroomStatus.PickingQuestionBank
+                        ? null
+                        : Text(
+                            _openedClassroomStatus ==
+                                    OpenedClassroomStatus.PickingQuestionBank
+                                ? "Pick A Question Bank"
+                                : "Pick A Question",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20.0)),
+                  )),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+/* build logic to be used later
+*     if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestionBank) {
       return Stack(
         children: [
           Container(
@@ -53,9 +105,9 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
         OpenedClassroomStatus.QuestionBroadcasting) {
       return Text("The question is currently being broadcast.");
     }
-  }
-}
-
+*
+*
+* */
 /* button to use later
 * Container(
               margin: EdgeInsets.only(bottom: 30.0),

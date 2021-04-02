@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_ask/enums.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'QuestionList.dart';
 import 'UpdateQuestionBankForm.dart';
 import 'dart:io' show Platform;
 
 class QuestionBankList extends StatelessWidget {
   final Function updateMyClassroomState;
+  final Function updateCurrentQuestionBankId;
+  final Function updateMyQuestionBanksState;
 
-  QuestionBankList({this.updateMyClassroomState});
+  QuestionBankList(
+      {this.updateMyClassroomState,
+      this.updateCurrentQuestionBankId,
+      this.updateMyQuestionBanksState});
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +41,10 @@ class QuestionBankList extends StatelessWidget {
                   : ListView.separated(
                       itemBuilder: (BuildContext context, int index) {
                         return _buildQuestionBankTile(
-                            context,
-                            snapshot.data[index].questionBankId,
-                            snapshot.data[index].questionBankName,
-                            this.updateMyClassroomState == null
-                                ? null
-                                : this.updateMyClassroomState);
+                          context,
+                          snapshot.data[index].questionBankId,
+                          snapshot.data[index].questionBankName,
+                        );
                       },
                       separatorBuilder: (BuildContext context, int index) =>
                           Divider(),
@@ -49,19 +52,13 @@ class QuestionBankList extends StatelessWidget {
         });
   }
 
-  Widget _buildQuestionBankTile(BuildContext context, String questionBankId,
-      String questionBankName, Function updateMyClassroomState) {
+  Widget _buildQuestionBankTile(
+      BuildContext context, String questionBankId, String questionBankName) {
     return ListTile(
       title: Text(questionBankName),
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => QuestionList(
-                      questionBankName: questionBankName,
-                      questionBankId: questionBankId,
-                      updateMyClassroomState: updateMyClassroomState,
-                    )));
+        updateCurrentQuestionBankId(questionBankId);
+        updateMyClassroomState(OpenedClassroomStatus.PickingQuestion);
       },
       onLongPress: updateMyClassroomState != null
           ? null

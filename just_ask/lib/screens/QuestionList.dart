@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import '../enums.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,14 +16,10 @@ import '../services/CloudLiaison.dart';
 import 'Loading.dart';
 
 class QuestionList extends StatelessWidget {
-  final String questionBankName;
   final String questionBankId;
   final Function updateMyClassroomState;
 
-  QuestionList(
-      {this.questionBankName,
-      this.questionBankId,
-      this.updateMyClassroomState});
+  QuestionList({this.questionBankId, this.updateMyClassroomState});
 
   @override
   Widget build(BuildContext context) {
@@ -34,110 +30,27 @@ class QuestionList extends StatelessWidget {
         stream: _cloudLiaison.getQuestions(questionBankId: questionBankId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Scaffold(body: Text('Error loading questions'));
+            return Text('Error loading questions');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
 
-          return Scaffold(
-              appBar: AppBar(
-                title: Text(questionBankName),
-                elevation: 0.0,
-              ),
-              body: Stack(children: [
-                Container(
-                  margin: this.updateMyClassroomState != null
-                      ? EdgeInsets.only(top: 20.0)
-                      : null,
-                  child: snapshot.data.length == 0
-                      ? Center(
-                          child: Text(
-                              "You currently have no questions to choose from!"))
-                      : ListView.separated(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) => _buildQuestionTile(
-                              context, snapshot.data[index], questionBankId),
-                          separatorBuilder: (context, index) => Divider(),
-                        ),
-                ),
-                this.updateMyClassroomState != null
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Material(
-                            elevation: 12.0,
-                            child: Container(
-                              width: double.infinity,
-                              color: Colors.blue,
-                              child: Center(
-                                child: Text(
-                                  "Pick A Question",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox()
-              ]),
-              floatingActionButton: this.updateMyClassroomState != null
-                  ? null
-                  : FabCircularMenu(
-                      fabOpenIcon: Icon(Icons.add, color: Colors.white),
-                      fabCloseIcon: Icon(Icons.close, color: Colors.white),
-                      key: fabKey,
-                      children: [
-                          TextButton(
-                            child: Text('MCQ',
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.white)),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateMultipleChoiceQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'T/F',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateTrueOrFalseQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'FIB',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateFillInTheBlankQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                        ]));
+          return Stack(children: [
+            Container(
+              child: snapshot.data.length == 0
+                  ? Center(
+                      child: Text(
+                          "You currently have no questions to choose from!"))
+                  : ListView.separated(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => _buildQuestionTile(
+                          context, snapshot.data[index], questionBankId),
+                      separatorBuilder: (context, index) => Divider(),
+                    ),
+            ),
+          ]);
         });
   }
 
@@ -154,6 +67,8 @@ class QuestionList extends StatelessWidget {
       onTap: updateMyClassroomState != null
           ? () {
               _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
+              updateMyClassroomState(
+                  OpenedClassroomStatus.QuestionBroadcasting);
             }
           : null,
       trailing: updateMyClassroomState != null
@@ -207,4 +122,62 @@ class QuestionList extends StatelessWidget {
             },
     );
   }
+
+/*
+this.updateMyClassroomState != null
+                  ? null
+                  : FabCircularMenu(
+                      fabOpenIcon: Icon(Icons.add, color: Colors.white),
+                      fabCloseIcon: Icon(Icons.close, color: Colors.white),
+                      key: fabKey,
+                      children: [
+                          TextButton(
+                            child: Text('MCQ',
+                                style: TextStyle(
+                                    fontSize: 20.0, color: Colors.white)),
+                            onPressed: () {
+                              fabKey.currentState.close();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CreateMultipleChoiceQuestionForm(
+                                  questionBankId: questionBankId,
+                                ),
+                              ));
+                            },
+                          ),
+                          TextButton(
+                            child: Text(
+                              'T/F',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0),
+                            ),
+                            onPressed: () {
+                              fabKey.currentState.close();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CreateTrueOrFalseQuestionForm(
+                                  questionBankId: questionBankId,
+                                ),
+                              ));
+                            },
+                          ),
+                          TextButton(
+                            child: Text(
+                              'FIB',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0),
+                            ),
+                            onPressed: () {
+                              fabKey.currentState.close();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CreateFillInTheBlankQuestionForm(
+                                  questionBankId: questionBankId,
+                                ),
+                              ));
+                            },
+                          ),
+                        ]));
+*/
+
 }
