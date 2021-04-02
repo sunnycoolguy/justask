@@ -10,10 +10,12 @@ class CloudLiaison {
     this.userID = userID;
   }
 
+  //TODO: HANDLE ASYNC ERROR IF YOU CAN
   Stream<DocumentSnapshot> getUser(String uid) {
     return users.doc(userID).snapshots();
   }
 
+  //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void openClassroom() {
     try {
       users.doc(userID).update({'isClassroomOpen': true});
@@ -22,9 +24,22 @@ class CloudLiaison {
     }
   }
 
+  //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void closeClassroom() {
     try {
       users.doc(userID).update({'isClassroomOpen': false});
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //TODO: HANDLE ASYNC ERROR IF YOU CAN
+  void setCurrentQuestion(String questionBankId, String questionId) {
+    try {
+      users.doc(userID).update({
+        'currentQuestionBank': questionBankId,
+        'currentQuestionId': questionId
+      });
     } catch (e) {
       throw e;
     }

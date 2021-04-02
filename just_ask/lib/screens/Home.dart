@@ -9,6 +9,7 @@ import '../enums.dart';
 import '../services/Authenticator.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../screens/QuestionBankList.dart';
 import 'dart:io' show Platform;
 
 class Home extends StatefulWidget {
@@ -29,8 +30,7 @@ class _HomeState extends State<Home> {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
     if (this._currentPage == CurrentPage.questionBankList) {
-      mainContent =
-          buildQuestionBankList(context, QuestionBankListMode.MyQuestionBanks);
+      mainContent = QuestionBankList();
     } else if (this._currentPage == CurrentPage.myClassroom) {
       mainContent = MyClassroom();
     } else {
