@@ -1,13 +1,9 @@
 import 'dart:io';
 import '../enums.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/models/QuestionModel.dart';
-import 'package:just_ask/screens/question_forms/CreateFillInTheBlankQuestionForm.dart';
-import 'package:just_ask/screens/question_forms/CreateMultipleChoiceQuestionForm.dart';
-import 'package:just_ask/screens/question_forms/CreateTrueOrFalseQuestionForm.dart';
 import 'package:just_ask/screens/question_forms/UpdateFillInTheBlankQuestionForm.dart';
 import 'package:just_ask/screens/question_forms/UpdateMultipleChoiceQuestionForm.dart';
 import 'package:just_ask/screens/question_forms/UpdateTrueOrFalseQuestionForm.dart';
@@ -18,14 +14,18 @@ import 'Loading.dart';
 class QuestionList extends StatelessWidget {
   final String questionBankId;
   final Function updateMyClassroomState;
-
-  QuestionList({this.questionBankId, this.updateMyClassroomState});
+  final Function updateMyQuestionBanksState;
+  final Function updateFABState;
+  QuestionList(
+      {this.questionBankId,
+      this.updateMyClassroomState,
+      this.updateMyQuestionBanksState,
+      this.updateFABState});
 
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaison =
         CloudLiaison(userID: Provider.of<User>(context).uid);
-    final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
     return StreamBuilder<dynamic>(
         stream: _cloudLiaison.getQuestions(questionBankId: questionBankId),
         builder: (context, snapshot) {
@@ -49,6 +49,21 @@ class QuestionList extends StatelessWidget {
                           context, snapshot.data[index], questionBankId),
                       separatorBuilder: (context, index) => Divider(),
                     ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: TextButton(
+                  onPressed: () {
+                    if (updateMyClassroomState != null) {
+                      updateMyClassroomState(
+                          OpenedClassroomStatus.PickingQuestionBank);
+                    } else {
+                      updateFABState(FABStatus.questionBankList);
+                      updateMyQuestionBanksState(
+                          MyQuestionBanksStatus.PickingQuestionBank);
+                    }
+                  },
+                  child: Text("Back To Question Bank List")),
             ),
           ]);
         });

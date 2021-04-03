@@ -5,8 +5,13 @@ import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/screens/OpenedClassroom.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
+import '../enums.dart';
 
 class MyClassroom extends StatelessWidget {
+  final Function updateFABState;
+
+  MyClassroom({this.updateFABState});
+
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
@@ -21,9 +26,8 @@ class MyClassroom extends StatelessWidget {
           }
 
           if (snapshot.data.data()['isClassroomOpen'] == false) {
-            return ClosedClassroom(currentUser.uid);
+            return ClosedClassroom(userID: currentUser.uid);
           }
-
           return OpenedClassroom();
         });
   }

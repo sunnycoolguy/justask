@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_ask/screens/QuestionBankForm.dart';
+import 'package:just_ask/screens/question_forms/CreateFillInTheBlankQuestionForm.dart';
+import 'package:just_ask/screens/question_forms/CreateMultipleChoiceQuestionForm.dart';
+import 'package:just_ask/screens/question_forms/CreateTrueOrFalseQuestionForm.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'MyQuestionBanks.dart';
-import 'QuestionBankList.dart';
 import 'MyClassroom.dart';
 import 'JoinClassroom.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,8 @@ import '../enums.dart';
 import '../services/Authenticator.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screens/QuestionBankList.dart';
 import 'dart:io' show Platform;
+import 'package:flutter_boom_menu/flutter_boom_menu.dart';
 
 class Home extends StatefulWidget {
   final String currentUserId;
@@ -23,19 +25,88 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   CurrentPage _currentPage = CurrentPage.questionBankList;
   String _currentPageTitle = "My Question Banks";
+  FABStatus _fabStatus = FABStatus.questionBankList;
+
+  updateFABState(FABStatus newFABState) {
+    setState(() {
+      _fabStatus = newFABState;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget mainContent;
+    Widget _mainContent;
+    Widget _pageActions;
     Authenticator _authenticator = Authenticator();
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
+    //Set body of scaffold through _mainContent
     if (this._currentPage == CurrentPage.questionBankList) {
-      mainContent = MyQuestionBanks();
+      _mainContent = MyQuestionBanks(
+        updateFABState: updateFABState,
+      );
     } else if (this._currentPage == CurrentPage.myClassroom) {
-      mainContent = MyClassroom();
+      _mainContent = MyClassroom(updateFABState: updateFABState);
     } else {
-      mainContent = JoinClassroom();
+      _mainContent = JoinClassroom();
+    }
+
+    //Set FAB of scaffold through _pageActions
+    if (this._fabStatus == FABStatus.questionBankList) {
+      print("OMG");
+      _pageActions = FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (_) => QuestionBankForm(userID: widget.currentUserId));
+          });
+    } else if (this._fabStatus == FABStatus.questionList) {
+      _pageActions = BoomMenu(
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          overlayColor: Colors.black,
+          overlayOpacity: 0.7,
+          children: [
+            MenuItem(
+                child: Text(
+                  "MCQ",
+                  style: TextStyle(color: Colors.white),
+                ),
+                title: "Multiple Choice Question",
+                titleColor: Colors.white,
+                subtitle: "Create a Multiple Choice Question",
+                subTitleColor: Colors.white,
+                backgroundColor: Colors.blue,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreateMultipleChoiceQuestionForm()))),
+            MenuItem(
+                child: Text(
+                  "T/F",
+                  style: TextStyle(color: Colors.white),
+                ),
+                title: "True Or False",
+                titleColor: Colors.white,
+                subtitle: "Create a True or False Question",
+                subTitleColor: Colors.white,
+                backgroundColor: Colors.blue,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreateTrueOrFalseQuestionForm()))),
+            MenuItem(
+                child: Text(
+                  "FIB",
+                  style: TextStyle(color: Colors.white),
+                ),
+                title: "Fill In The Blank",
+                titleColor: Colors.white,
+                subtitle: "Create a Fill In The Blank Question",
+                subTitleColor: Colors.white,
+                backgroundColor: Colors.blue,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreateFillInTheBlankQuestionForm())))
+          ]);
+    } else {
+      _pageActions = null;
     }
 
     return Scaffold(
@@ -43,7 +114,7 @@ class _HomeState extends State<Home> {
           title: Text(_currentPageTitle),
           elevation: 0.0,
         ),
-        body: mainContent,
+        body: _mainContent,
         drawer: Drawer(
           child: ListView(
             children: [
@@ -65,6 +136,7 @@ class _HomeState extends State<Home> {
                     setState(() {
                       _currentPage = CurrentPage.myClassroom;
                       _currentPageTitle = "My Classroom";
+                      _fabStatus = FABStatus.myClassroom;
                     });
                     Navigator.pop(context);
                   }),
@@ -77,6 +149,7 @@ class _HomeState extends State<Home> {
                       }
                       _currentPage = CurrentPage.joinClassroom;
                       _currentPageTitle = "Join A Classroom";
+                      _fabStatus = FABStatus.joinClassroom;
                     });
                     Navigator.pop(context);
                   }),
@@ -107,15 +180,6 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        floatingActionButton: _currentPage == CurrentPage.questionBankList
-            ? FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) =>
-                          QuestionBankForm(userID: widget.currentUserId));
-                })
-            : null);
+        floatingActionButton: _pageActions);
   }
 }

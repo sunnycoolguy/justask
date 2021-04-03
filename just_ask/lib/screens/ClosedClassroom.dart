@@ -3,7 +3,8 @@ import 'package:just_ask/services/CloudLiaison.dart';
 
 class ClosedClassroom extends StatelessWidget {
   final String userID;
-  ClosedClassroom(this.userID);
+
+  ClosedClassroom({this.userID});
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaision = CloudLiaison(userID: userID);

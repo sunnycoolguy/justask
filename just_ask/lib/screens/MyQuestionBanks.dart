@@ -5,6 +5,8 @@ import 'package:just_ask/screens/QuestionList.dart';
 import 'QuestionBankList.dart';
 
 class MyQuestionBanks extends StatefulWidget {
+  final Function updateFABState;
+  MyQuestionBanks({this.updateFABState});
   @override
   _MyQuestionBanksState createState() => _MyQuestionBanksState();
 }
@@ -12,6 +14,13 @@ class MyQuestionBanks extends StatefulWidget {
 class _MyQuestionBanksState extends State<MyQuestionBanks> {
   MyQuestionBanksStatus _myQuestionBanksStatus =
       MyQuestionBanksStatus.PickingQuestionBank;
+  String _currentQuestionBankId;
+  updateMyCurrentQuestionBankId(String newQuestionBankId) {
+    setState(() {
+      _currentQuestionBankId = newQuestionBankId;
+    });
+  }
+
   updateMyQuestionBanksState(MyQuestionBanksStatus myNewQuestionBanksStatus) {
     setState(() {
       _myQuestionBanksStatus = myNewQuestionBanksStatus;
@@ -25,9 +34,15 @@ class _MyQuestionBanksState extends State<MyQuestionBanks> {
     if (_myQuestionBanksStatus == MyQuestionBanksStatus.PickingQuestionBank) {
       _mainContent = QuestionBankList(
         updateMyQuestionBanksState: updateMyQuestionBanksState,
+        updateCurrentQuestionBankId: updateMyCurrentQuestionBankId,
+        updateFABState: widget.updateFABState,
       );
     } else {
-      _mainContent = QuestionList();
+      _mainContent = QuestionList(
+        questionBankId: _currentQuestionBankId,
+        updateMyQuestionBanksState: updateMyQuestionBanksState,
+        updateFABState: widget.updateFABState,
+      );
     }
     return _mainContent;
   }

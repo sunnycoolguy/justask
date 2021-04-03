@@ -12,16 +12,19 @@ class QuestionBankList extends StatelessWidget {
   final Function updateMyClassroomState;
   final Function updateCurrentQuestionBankId;
   final Function updateMyQuestionBanksState;
+  final Function updateFABState;
 
   QuestionBankList(
       {this.updateMyClassroomState,
       this.updateCurrentQuestionBankId,
-      this.updateMyQuestionBanksState});
+      this.updateMyQuestionBanksState,
+      this.updateFABState});
 
   @override
   Widget build(BuildContext context) {
     String currentUserId = context.read<User>().uid;
     CloudLiaison _cloudLiaison = CloudLiaison(userID: currentUserId);
+
     return StreamBuilder<dynamic>(
         stream: _cloudLiaison.questionBanks,
         builder: (context, snapshot) {
@@ -41,10 +44,10 @@ class QuestionBankList extends StatelessWidget {
                   : ListView.separated(
                       itemBuilder: (BuildContext context, int index) {
                         return _buildQuestionBankTile(
-                          context,
-                          snapshot.data[index].questionBankId,
-                          snapshot.data[index].questionBankName,
-                        );
+                            context,
+                            snapshot.data[index].questionBankId,
+                            snapshot.data[index].questionBankName,
+                            updateFABState);
                       },
                       separatorBuilder: (BuildContext context, int index) =>
                           Divider(),
@@ -52,13 +55,21 @@ class QuestionBankList extends StatelessWidget {
         });
   }
 
-  Widget _buildQuestionBankTile(
-      BuildContext context, String questionBankId, String questionBankName) {
+  Widget _buildQuestionBankTile(BuildContext context, String questionBankId,
+      String questionBankName, Function updateFABState) {
     return ListTile(
       title: Text(questionBankName),
       onTap: () {
         updateCurrentQuestionBankId(questionBankId);
-        updateMyClassroomState(OpenedClassroomStatus.PickingQuestion);
+        //If this question bank tile is being rendered in My Classroom
+        if (updateMyClassroomState != null &&
+            updateCurrentQuestionBankId != null) {
+          updateMyClassroomState(OpenedClassroomStatus.PickingQuestion);
+        } else if (updateMyQuestionBanksState != null) {
+          //If this question bank tile is being rendered in My Question Banks
+          updateMyQuestionBanksState(MyQuestionBanksStatus.PickingQuestion);
+          updateFABState(FABStatus.questionList);
+        }
       },
       onLongPress: updateMyClassroomState != null
           ? null
