@@ -20,7 +20,9 @@ class MyClassroom extends StatelessWidget {
         stream: CloudLiaison(userID: currentUser.uid).getUser(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            Text("Could not obtain classroom status. Please try again later.");
+            Center(
+                child: Text(
+                    "Could not obtain classroom status. Please try again later."));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();

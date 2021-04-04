@@ -6,4 +6,5 @@ enum OpenedClassroomStatus {
   QuestionBroadcasting,
   QuestionStats
 }
+enum JoinClassroomStatus { joinClassroomForm, liveQuestion }
 enum MyQuestionBanksStatus { PickingQuestionBank, PickingQuestion }

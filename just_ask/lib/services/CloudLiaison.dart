@@ -49,6 +49,17 @@ class CloudLiaison {
     }
   }
 
+  //TODO: Handle async
+  joinClassroom(String hostEmail) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await users.where('email', isEqualTo: hostEmail).get();
+      return querySnapshot;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   List<QuestionBankModel> snapshotToQuestionBankModelList(
       QuerySnapshot querySnapshot) {
     return querySnapshot.docs
