@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 
+import 'LiveQuestion.dart';
+import 'Loading.dart';
+
 class JoinClassroom extends StatefulWidget {
   @override
   _JoinClassroomState createState() => _JoinClassroomState();
@@ -103,6 +106,74 @@ class _JoinClassroomState extends State<JoinClassroom> {
           ),
         ],
       );
+    } else {
+      return StreamBuilder(
+          stream: _cloudLiaison.getUser(_hostId),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Column(
+                children: [
+                  Center(
+                    child: Text(
+                        "There was an error connecting to the classroom please try again later."),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          _hostId = null;
+                        });
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text(
+                        "Try Another Host e-mail",
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Loading();
+            } else if (snapshot.data.data()["currentQuestionBankId"] == null &&
+                snapshot.data.data()["currentQuestionId"] == null) {
+              return Column(
+                children: [
+                  Center(
+                    child: Text("The classroom is currently closed."),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          _hostId = null;
+                        });
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text(
+                        "Try Another Host e-mail",
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else if (snapshot.data.data()["currentQuestionBankId"] == 'TBD' &&
+                snapshot.data.data()["currentQuestionId"] == 'TBD') {
+              return Center(
+                child: Text("Please wait while the host picks a question..."),
+              );
+            }
+            return LiveQuestion(
+                hostId: _hostId,
+                hostQuestionBankId:
+                    snapshot.data.data()['currentQuestionBankId'],
+                hostQuestionId: snapshot.data.data()['currentQuestionId']);
+          });
     }
     return _mainContent;
   }

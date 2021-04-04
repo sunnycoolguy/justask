@@ -15,7 +15,7 @@ class ActiveClassroom extends StatelessWidget {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
     print("The current user ID is ${context.read<User>().uid}");
     return StreamBuilder(
-        stream: _cloudLiaison.getQuestion(
+        stream: _cloudLiaison.getQuestionStream(
             questionId: currentQuestionId,
             questionBankId: currentQuestionBankId),
         builder: (context, snapshot) {

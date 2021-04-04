@@ -210,7 +210,7 @@ class CloudLiaison {
   }
 
   //TODO: Handle async error
-  getQuestion({String questionBankId, String questionId}) {
+  getQuestionStream({String questionBankId, String questionId}) {
     print(
         "The questionbankid is ${questionBankId} and the question id is ${questionId}");
     return users
@@ -220,6 +220,21 @@ class CloudLiaison {
         .collection('questions')
         .doc(questionId)
         .snapshots();
+  }
+
+  //TODO: Handle async error
+  getQuestion({String userId, String questionBankId, String questionId}) async {
+    try {
+      return await users
+          .doc(userId)
+          .collection('QuestionBanks')
+          .doc(questionBankId)
+          .collection('questions')
+          .doc(questionId)
+          .get();
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> updateMCQQuestion(
