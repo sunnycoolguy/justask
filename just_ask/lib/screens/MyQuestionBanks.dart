@@ -6,7 +6,10 @@ import 'QuestionBankList.dart';
 
 class MyQuestionBanks extends StatefulWidget {
   final Function updateFABState;
-  MyQuestionBanks({this.updateFABState});
+  final Function updateCurrentQuestionBankIdForActionListInHome;
+  MyQuestionBanks(
+      {this.updateFABState,
+      this.updateCurrentQuestionBankIdForActionListInHome});
   @override
   _MyQuestionBanksState createState() => _MyQuestionBanksState();
 }
@@ -33,10 +36,11 @@ class _MyQuestionBanksState extends State<MyQuestionBanks> {
 
     if (_myQuestionBanksStatus == MyQuestionBanksStatus.PickingQuestionBank) {
       _mainContent = QuestionBankList(
-        updateMyQuestionBanksState: updateMyQuestionBanksState,
-        updateCurrentQuestionBankId: updateMyCurrentQuestionBankId,
-        updateFABState: widget.updateFABState,
-      );
+          updateMyQuestionBanksState: updateMyQuestionBanksState,
+          updateCurrentQuestionBankId: updateMyCurrentQuestionBankId,
+          updateFABState: widget.updateFABState,
+          updateCurrentQuestionBankIdForActionListInHome:
+              widget.updateCurrentQuestionBankIdForActionListInHome);
     } else {
       _mainContent = QuestionList(
         questionBankId: _currentQuestionBankId,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:just_ask/screens/ActiveClassroom.dart';
 import 'package:just_ask/screens/ClosedClassroom.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/screens/OpenedClassroom.dart';
@@ -25,10 +26,19 @@ class MyClassroom extends StatelessWidget {
             return Loading();
           }
 
-          if (snapshot.data.data()['isClassroomOpen'] == false) {
+          if (snapshot.data.data()['currentQuestionBankId'] == null &&
+              snapshot.data.data()['currentQuestionId'] == null) {
             return ClosedClassroom(userID: currentUser.uid);
+          } else if (snapshot.data.data()['currentQuestionBankId'] == 'TBD' &&
+              snapshot.data.data()['currentQuestionId'] == 'TBD') {
+            return OpenedClassroom();
           }
-          return OpenedClassroom();
+
+          return ActiveClassroom(
+            currentQuestionBankId:
+                snapshot.data.data()['currentQuestionBankId'],
+            currentQuestionId: snapshot.data.data()['currentQuestionId'],
+          );
         });
   }
 }

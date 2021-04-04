@@ -13,12 +13,14 @@ class QuestionBankList extends StatelessWidget {
   final Function updateCurrentQuestionBankId;
   final Function updateMyQuestionBanksState;
   final Function updateFABState;
+  final Function updateCurrentQuestionBankIdForActionListInHome;
 
   QuestionBankList(
       {this.updateMyClassroomState,
       this.updateCurrentQuestionBankId,
       this.updateMyQuestionBanksState,
-      this.updateFABState});
+      this.updateFABState,
+      this.updateCurrentQuestionBankIdForActionListInHome});
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,7 @@ class QuestionBankList extends StatelessWidget {
     return ListTile(
       title: Text(questionBankName),
       onTap: () {
+        //update local question bank id to switch to question list
         updateCurrentQuestionBankId(questionBankId);
         //If this question bank tile is being rendered in My Classroom
         if (updateMyClassroomState != null &&
@@ -69,6 +72,7 @@ class QuestionBankList extends StatelessWidget {
           //If this question bank tile is being rendered in My Question Banks
           updateMyQuestionBanksState(MyQuestionBanksStatus.PickingQuestion);
           updateFABState(FABStatus.questionList);
+          updateCurrentQuestionBankIdForActionListInHome(questionBankId);
         }
       },
       onLongPress: updateMyClassroomState != null

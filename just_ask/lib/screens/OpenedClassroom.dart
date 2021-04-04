@@ -37,9 +37,6 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
       _mainContent = QuestionList(
           questionBankId: _currentQuestionBankId,
           updateMyClassroomState: updateMyClassroomState);
-    } else if (_openedClassroomStatus ==
-        OpenedClassroomStatus.QuestionBroadcasting) {
-      _mainContent = Text("Your Question Has Been Broadcast");
     }
 
     return Stack(

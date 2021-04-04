@@ -26,6 +26,13 @@ class _HomeState extends State<Home> {
   CurrentPage _currentPage = CurrentPage.questionBankList;
   String _currentPageTitle = "My Question Banks";
   FABStatus _fabStatus = FABStatus.questionBankList;
+  String _currentQuestionBankId;
+
+  updateCurrentQuestionBankId(String newQuestionBankId) {
+    setState(() {
+      _currentQuestionBankId = newQuestionBankId;
+    });
+  }
 
   updateFABState(FABStatus newFABState) {
     setState(() {
@@ -43,8 +50,9 @@ class _HomeState extends State<Home> {
     //Set body of scaffold through _mainContent
     if (this._currentPage == CurrentPage.questionBankList) {
       _mainContent = MyQuestionBanks(
-        updateFABState: updateFABState,
-      );
+          updateFABState: updateFABState,
+          updateCurrentQuestionBankIdForActionListInHome:
+              updateCurrentQuestionBankId);
     } else if (this._currentPage == CurrentPage.myClassroom) {
       _mainContent = MyClassroom(updateFABState: updateFABState);
     } else {
@@ -53,7 +61,6 @@ class _HomeState extends State<Home> {
 
     //Set FAB of scaffold through _pageActions
     if (this._fabStatus == FABStatus.questionBankList) {
-      print("OMG");
       _pageActions = FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -79,7 +86,9 @@ class _HomeState extends State<Home> {
                 subTitleColor: Colors.white,
                 backgroundColor: Colors.blue,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreateMultipleChoiceQuestionForm()))),
+                    builder: (context) => CreateMultipleChoiceQuestionForm(
+                          questionBankId: _currentQuestionBankId,
+                        )))),
             MenuItem(
                 child: Text(
                   "T/F",
@@ -91,7 +100,9 @@ class _HomeState extends State<Home> {
                 subTitleColor: Colors.white,
                 backgroundColor: Colors.blue,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreateTrueOrFalseQuestionForm()))),
+                    builder: (context) => CreateTrueOrFalseQuestionForm(
+                          questionBankId: _currentQuestionBankId,
+                        )))),
             MenuItem(
                 child: Text(
                   "FIB",
@@ -103,7 +114,9 @@ class _HomeState extends State<Home> {
                 subTitleColor: Colors.white,
                 backgroundColor: Colors.blue,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreateFillInTheBlankQuestionForm())))
+                    builder: (context) => CreateFillInTheBlankQuestionForm(
+                          questionBankId: _currentQuestionBankId,
+                        ))))
           ]);
     } else {
       _pageActions = null;

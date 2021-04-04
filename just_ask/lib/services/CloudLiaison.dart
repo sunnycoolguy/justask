@@ -18,7 +18,9 @@ class CloudLiaison {
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void openClassroom() {
     try {
-      users.doc(userID).update({'isClassroomOpen': true});
+      users
+          .doc(userID)
+          .update({'currentQuestionBankId': 'TBD', 'currentQuestionId': 'TBD'});
     } catch (e) {
       throw e;
     }
@@ -27,7 +29,9 @@ class CloudLiaison {
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void closeClassroom() {
     try {
-      users.doc(userID).update({'isClassroomOpen': false});
+      users
+          .doc(userID)
+          .update({'currentQuestionBankId': null, 'currentQuestionId': null});
     } catch (e) {
       throw e;
     }
@@ -37,7 +41,7 @@ class CloudLiaison {
   void setCurrentQuestion(String questionBankId, String questionId) {
     try {
       users.doc(userID).update({
-        'currentQuestionBank': questionBankId,
+        'currentQuestionBankId': questionBankId,
         'currentQuestionId': questionId
       });
     } catch (e) {
@@ -194,14 +198,17 @@ class CloudLiaison {
         .map(snapshotToQuestionModelList);
   }
 
+  //TODO: Handle async error
   getQuestion({String questionBankId, String questionId}) {
+    print(
+        "The questionbankid is ${questionBankId} and the question id is ${questionId}");
     return users
         .doc(userID)
         .collection('QuestionBanks')
         .doc(questionBankId)
         .collection('questions')
         .doc(questionId)
-        .get();
+        .snapshots();
   }
 
   Future<void> updateMCQQuestion(
@@ -302,14 +309,13 @@ class CloudLiaison {
   //TODO: Remove isTeacher flag and add username??
   Future<void> addAccountToFirestore(
       String email, String firstName, String lastName) async {
-    print('Creating a teacher account for user $userID');
+    print('Creating an account for user $userID');
     try {
       users.doc(userID).set({
-        'isClassroomOpen': false,
         'email': email,
         'firstName': firstName,
         'lastName': lastName,
-        'currentQuestionBank': null,
+        'currentQuestionBankId': null,
         'currentQuestionId': null
       });
     } catch (e) {

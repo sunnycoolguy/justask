@@ -81,9 +81,9 @@ class QuestionList extends StatelessWidget {
       subtitle: Text(questionType),
       onTap: updateMyClassroomState != null
           ? () {
+              print(
+                  "Hi senay :) Love u bro. The current question bank id is $questionBankId and the question id is $questionId");
               _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
-              updateMyClassroomState(
-                  OpenedClassroomStatus.QuestionBroadcasting);
             }
           : null,
       trailing: updateMyClassroomState != null
