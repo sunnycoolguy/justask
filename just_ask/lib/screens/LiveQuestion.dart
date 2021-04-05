@@ -20,22 +20,29 @@ class LiveQuestion extends StatelessWidget {
             questionBankId: hostQuestionBankId,
             questionId: hostQuestionId),
         builder: (context, snapshot) {
-          if(snapshot.hasError){
-            return Center(child: Text("Error generating the live question. Try again later."),);
+          if (snapshot.hasError) {
+            return Center(
+              child:
+                  Text("Error generating the live question. Try again later."),
+            );
           }
-          if(snapshot.connectionState == ConnectionState.waiting){
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
 
-          if(snapshot.data.data["type"] == "MCQ"){
-            return LiveMCQQuestion(hostId: hostId, hostQuestionBankId: hostQuestionBankId, hostQuestionId:hostQuestionId , question: snapshot.data.data()['question'],answers: snapshot.data.data()['answers'], correctAnswer: snapshot.data.data()['correctAnswer']);
-          } else if(snapshot.data.data()['type'] == 'FIB'){
+          if (snapshot.data.data["type"] == "MCQ") {
+            return LiveMCQQuestion(
+                hostId: hostId,
+                hostQuestionBankId: hostQuestionBankId,
+                hostQuestionId: hostQuestionId,
+                question: snapshot.data.data()['question'],
+                answers: snapshot.data.data()['answers'],
+                correctAnswer: snapshot.data.data()['correctAnswer']);
+          } else if (snapshot.data.data()['type'] == 'FIB') {
             //return LiveFIBQuestion(hostId: hostId, hostQuestionBankId: hostQuestionBankId, hostQuestionId: hostQuestionId, question: snapshot.data.data()['question'], correctAnswer: snapshot.data.data()['correctAnswer']);
           }
 
           //return LiveTFQuestion(hostId: hostId, hostQuestionBankId: hostQuestionBankId, hostQuestionId: hostQuestionId, question: snapshot.data.data()['answer'], correctAnswer: snapshot.data.data()['correctAnswer']);
-
-
         });
   }
 }

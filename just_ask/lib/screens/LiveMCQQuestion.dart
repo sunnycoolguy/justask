@@ -26,46 +26,45 @@ class LiveMCQQuestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaison =
-    CloudLiaison(userID: Provider.of<User>(context).uid);
+        CloudLiaison(userID: Provider.of<User>(context).uid);
     return Container(
-        padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(children: [
-            Container(child: Text("$question")),
-            ListTile(title: Text("${answers[0]}")),
-            ListTile(title: Text("${answers[1]}")),
-            ListTile(title: Text("${answers[2]}")),
-            ListTile(title: Text("${answers[3]}")),
-
-            ElevatedButton(
-                onPressed: () async {
-                  if (true) {
-                    try {
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      Navigator.of(context).pop();
-                      if (Platform.isAndroid) {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                title: Text('Error'),
-                                content: Text(
-                                    'The were was an issue adding the MCQ question. Please try again later.')));
-                      } else {
-                        showCupertinoDialog(
-                            context: context,
-                            builder: (_) => CupertinoAlertDialog(
-                                title: Text('Error'),
-                                content: Text(
-                                    'There was an issue adding the MCQ question bank. Please try again later.')));
-                      }
+      padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+      child: Form(
+        key: _formKey,
+        child: ListView(children: [
+          Container(child: Text("$question")),
+          ListTile(title: Text("${answers[0]}")),
+          ListTile(title: Text("${answers[1]}")),
+          ListTile(title: Text("${answers[2]}")),
+          ListTile(title: Text("${answers[3]}")),
+          ElevatedButton(
+              onPressed: () async {
+                if (true) {
+                  try {
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    Navigator.of(context).pop();
+                    if (Platform.isAndroid) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'The were was an issue adding the MCQ question. Please try again later.')));
+                    } else {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (_) => CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content: Text(
+                                  'There was an issue adding the MCQ question bank. Please try again later.')));
                     }
                   }
-                },
-                child: Text('Submit'))
-          ]),
-        ),
-      );
+                }
+              },
+              child: Text('Submit'))
+        ]),
+      ),
+    );
   }
 }
