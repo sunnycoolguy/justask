@@ -30,7 +30,7 @@ class LiveQuestion extends StatelessWidget {
             return Loading();
           }
 
-          if (snapshot.data.data["type"] == "MCQ") {
+          if (snapshot.data.data()["type"] == "MCQ") {
             return LiveMCQQuestion(
                 hostId: hostId,
                 hostQuestionBankId: hostQuestionBankId,

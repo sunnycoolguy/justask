@@ -17,7 +17,8 @@ class MyClassroom extends StatelessWidget {
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
     return StreamBuilder(
-        stream: CloudLiaison(userID: currentUser.uid).getUser(currentUser.uid),
+        stream:
+            CloudLiaison(userID: currentUser.uid).getHostInfo(currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             Center(

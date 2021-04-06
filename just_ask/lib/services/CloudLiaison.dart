@@ -11,8 +11,12 @@ class CloudLiaison {
   }
 
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
-  Stream<DocumentSnapshot> getUser(String uid) {
-    return users.doc(userID).snapshots();
+  Stream<DocumentSnapshot> getHostInfo(String uid) {
+    try {
+      return users.doc(uid).snapshots();
+    } catch (e) {
+      throw e;
+    }
   }
 
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
@@ -58,6 +62,42 @@ class CloudLiaison {
     } catch (e) {
       throw e;
     }
+  }
+
+  //TODO: Handle async
+  incrementAnswerCounter(String hostId, String hostQuestionBankId,
+      String hostQuestionId, bool correct) {
+    DocumentReference documentReference = users
+        .doc(hostId)
+        .collection('QuestionBanks')
+        .doc(hostQuestionBankId)
+        .collection('questions')
+        .doc(hostQuestionId);
+    return FirebaseFirestore.instance
+        .runTransaction((transaction) async {
+          //Get the document
+          DocumentSnapshot snapshot = await transaction.get(documentReference);
+          if (!snapshot.exists) {
+            throw Exception("User does not exist!");
+          }
+
+          //update the relevant counts
+          if (correct) {
+            int newTotalRightCount = snapshot.data()['totalCorrect'] + 1;
+            transaction.update(
+                documentReference, {'totalCorrect': newTotalRightCount});
+          } else {
+            print("Adding to incorrect counter BRO!");
+            print("${snapshot.data()}");
+            int newTotalIncorrect = snapshot.data()['totalIncorrect'] + 1;
+            transaction.update(
+                documentReference, {'totalIncorrect': newTotalIncorrect});
+          }
+
+          return true;
+        })
+        .then((value) => print("Success updating the relevant stat."))
+        .catchError((error) => throw Exception(error.toString()));
   }
 
   List<QuestionBankModel> snapshotToQuestionBankModelList(

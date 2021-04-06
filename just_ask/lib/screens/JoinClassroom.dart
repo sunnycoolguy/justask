@@ -108,7 +108,7 @@ class _JoinClassroomState extends State<JoinClassroom> {
       );
     } else {
       return StreamBuilder(
-          stream: _cloudLiaison.getUser(_hostId),
+          stream: _cloudLiaison.getHostInfo(_hostId),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Column(
@@ -139,6 +139,13 @@ class _JoinClassroomState extends State<JoinClassroom> {
               return Loading();
             } else if (snapshot.data.data()["currentQuestionBankId"] == null &&
                 snapshot.data.data()["currentQuestionId"] == null) {
+              print("Hello there!");
+              print(snapshot.data.data());
+              print("${_hostId} is the current host id.");
+              print(
+                  "${snapshot.data.data()["currentQuestionBankId"]} is the current bank id");
+              print(
+                  "${snapshot.data.data()["currentQuestionId"]} is the current question id");
               return Column(
                 children: [
                   Center(
