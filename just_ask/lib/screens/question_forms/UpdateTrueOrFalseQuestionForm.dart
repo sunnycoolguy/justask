@@ -35,8 +35,10 @@ class _UpdateTrueOrFalseQuestionFormState
   @override
   void initState() {
     super.initState();
-    questionSnapshot = CloudLiaison(userID: widget.userId).getQuestionStream(
-        questionId: widget.questionId, questionBankId: widget.questionBankId);
+    questionSnapshot = CloudLiaison(userID: widget.userId).getQuestion(
+        userId: widget.userId,
+        questionId: widget.questionId,
+        questionBankId: widget.questionBankId);
   }
 
   @override

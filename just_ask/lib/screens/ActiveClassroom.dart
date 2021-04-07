@@ -35,8 +35,8 @@ class ActiveClassroom extends StatelessWidget {
                 Text("${snapshot.data.data()['question']}"),
                 Text("is being broadcast!"),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text("Current right: --"),
-                  Text("Current wrong: --")
+                  Text("Current right: ${snapshot.data.data()["totalCorrect"]}"),
+                  Text("Current wrong: ${snapshot.data.data()["totalIncorrect"]}")
                 ]),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

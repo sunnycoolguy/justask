@@ -263,15 +263,26 @@ class CloudLiaison {
   }
 
   //TODO: Handle async error
-  getQuestion({String userId, String questionBankId, String questionId}) async {
+  Future<DocumentSnapshot> getQuestion(
+      {String userId, String questionBankId, String questionId}) async {
     try {
-      return await users
+      /*
+      print(userId);
+      print(questionBankId);
+      print(questionId);
+      print("Cmlx2V0446lksQuaGtKF");
+      print(questionId == 'Cmlx2V0446lksQuaGtKF');
+       */
+      DocumentSnapshot documentSnapshot = await users
           .doc(userId)
           .collection('QuestionBanks')
           .doc(questionBankId)
           .collection('questions')
           .doc(questionId)
           .get();
+
+      //print("Here is the data ${documentSnapshot.exists}");
+      return documentSnapshot;
     } catch (e) {
       throw e;
     }

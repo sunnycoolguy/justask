@@ -175,11 +175,18 @@ class _JoinClassroomState extends State<JoinClassroom> {
                 child: Text("Please wait while the host picks a question..."),
               );
             }
+            print(
+                "Preparing live question with question id: ${snapshot.data.data()['currentQuestionId']}");
+            print("Cmlx2V0446lksQuaGtKF");
+
             return LiveQuestion(
                 hostId: _hostId,
                 hostQuestionBankId:
                     snapshot.data.data()['currentQuestionBankId'],
-                hostQuestionId: snapshot.data.data()['currentQuestionId']);
+                hostQuestionId: snapshot.data
+                    .data()['currentQuestionId']
+                    .toString()
+                    .trim());
           });
     }
     return _mainContent;

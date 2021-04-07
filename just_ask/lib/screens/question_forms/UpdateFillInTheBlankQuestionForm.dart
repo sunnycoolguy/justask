@@ -36,8 +36,10 @@ class _UpdateFillInTheBlankQuestionFormState
   @override
   void initState() {
     super.initState();
-    documentSnapshot = CloudLiaison(userID: widget.userId).getQuestionStream(
-        questionBankId: widget.questionBankId, questionId: widget.questionId);
+    documentSnapshot = CloudLiaison(userID: widget.userId).getQuestion(
+        userId: widget.userId,
+        questionBankId: widget.questionBankId,
+        questionId: widget.questionId);
   }
 
   @override

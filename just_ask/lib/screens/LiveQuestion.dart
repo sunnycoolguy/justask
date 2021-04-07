@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:just_ask/screens/LiveFIBQuestion.dart';
+import 'LiveTFQuestion.dart';
 import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 
@@ -14,6 +16,9 @@ class LiveQuestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: hostId);
+    //print("Host id: ${hostId}");
+    //print("Host question bank id: ${hostQuestionBankId}");
+    //print("Host question id: ${hostQuestionId}");
     return FutureBuilder(
         future: _cloudLiaison.getQuestion(
             userId: hostId,
@@ -29,7 +34,7 @@ class LiveQuestion extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
-
+          //print(snapshot.data.data());
           if (snapshot.data.data()["type"] == "MCQ") {
             return LiveMCQQuestion(
                 hostId: hostId,
@@ -39,10 +44,22 @@ class LiveQuestion extends StatelessWidget {
                 answers: snapshot.data.data()['answers'],
                 correctAnswer: snapshot.data.data()['correctAnswer']);
           } else if (snapshot.data.data()['type'] == 'FIB') {
-            //return LiveFIBQuestion(hostId: hostId, hostQuestionBankId: hostQuestionBankId, hostQuestionId: hostQuestionId, question: snapshot.data.data()['question'], correctAnswer: snapshot.data.data()['correctAnswer']);
+            return LiveFIBQuestion(
+                hostId: hostId,
+                hostQuestionBankId: hostQuestionBankId,
+                hostQuestionId: hostQuestionId,
+                question: snapshot.data.data()['question'],
+                answers: snapshot.data.data()['answers'],
+                correctAnswer: snapshot.data.data()['correctAnswer']);
           }
 
-          //return LiveTFQuestion(hostId: hostId, hostQuestionBankId: hostQuestionBankId, hostQuestionId: hostQuestionId, question: snapshot.data.data()['answer'], correctAnswer: snapshot.data.data()['correctAnswer']);
+          return LiveTFQuestion(
+              hostId: hostId,
+              hostQuestionBankId: hostQuestionBankId,
+              hostQuestionId: hostQuestionId,
+              question: snapshot.data.data()['question'],
+              answers: snapshot.data.data()['answers'],
+              correctAnswer: snapshot.data.data()['correctAnswer']);
         });
   }
 }
