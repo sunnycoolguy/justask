@@ -177,9 +177,7 @@ class CloudLiaison {
   }
 
   Future<void> addTFQuestion(
-      {String question,
-      String correctAnswer,
-      String questionBankId}) async {
+      {String question, String correctAnswer, String questionBankId}) async {
     try {
       await users
           .doc(userID)
