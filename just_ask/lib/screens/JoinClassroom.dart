@@ -141,7 +141,7 @@ class _JoinClassroomState extends State<JoinClassroom> {
                 snapshot.data.data()["currentQuestionId"] == null) {
               print("Hello there!");
               print(snapshot.data.data());
-              print("${_hostId} is the current host id.");
+              print("$_hostId is the current host id.");
               print(
                   "${snapshot.data.data()["currentQuestionBankId"]} is the current bank id");
               print(

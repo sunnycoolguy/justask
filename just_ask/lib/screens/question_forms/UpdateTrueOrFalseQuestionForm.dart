@@ -28,7 +28,6 @@ class _UpdateTrueOrFalseQuestionFormState
     extends State<UpdateTrueOrFalseQuestionForm> {
   String correctAnswer;
   String question;
-  int time;
   final _formKey = GlobalKey<FormState>();
   Future<DocumentSnapshot> questionSnapshot;
 
@@ -107,45 +106,19 @@ class _UpdateTrueOrFalseQuestionFormState
                         textField: 'display',
                         valueField: 'value'),
                   ),
-                  TextFormField(
-                    initialValue: time == null
-                        ? snapshot.data.data()['time'].toString()
-                        : time.toString(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      labelText:
-                          "How long do you want to ask this question for (seconds)?",
-                      hintText: "Enter a number between 5 and 60s",
-                    ),
-                    validator: (String value) {
-                      return value.length > 0 &&
-                              int.parse(value) <= 60 &&
-                              int.parse(value) >= 5
-                          ? null
-                          : "Please enter a time between 5 and 60s.";
-                    },
-                    onChanged: (String value) {
-                      setState(() {
-                        time = int.parse(value);
-                      });
-                    },
-                  ),
                   ElevatedButton(
                       onPressed: () async {
                         print(correctAnswer);
                         if (_formKey.currentState.validate()) {
                           try {
                             _cloudLiaison.updateTFQuestion(
-                                questionId: widget.questionId,
-                                questionBankId: widget.questionBankId,
-                                question: question ??
-                                    snapshot.data.data()['question'],
-                                correctAnswer: correctAnswer ??
-                                    snapshot.data.data()['correctAnswer'],
-                                time: time ?? snapshot.data.data()['time']);
+                              questionId: widget.questionId,
+                              questionBankId: widget.questionBankId,
+                              question:
+                                  question ?? snapshot.data.data()['question'],
+                              correctAnswer: correctAnswer ??
+                                  snapshot.data.data()['correctAnswer'],
+                            );
                             Navigator.of(context).pop();
                           } catch (e) {
                             Navigator.of(context).pop();

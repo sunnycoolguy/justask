@@ -157,8 +157,7 @@ class CloudLiaison {
       {String question,
       String correctAnswer,
       List<String> answers,
-      String questionBankId,
-      int time}) async {
+      String questionBankId}) async {
     try {
       await users
           .doc(userID)
@@ -170,7 +169,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -181,7 +179,6 @@ class CloudLiaison {
   Future<void> addTFQuestion(
       {String question,
       String correctAnswer,
-      int time,
       String questionBankId}) async {
     try {
       await users
@@ -194,7 +191,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -218,7 +214,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -292,7 +287,6 @@ class CloudLiaison {
       {String question,
       String correctAnswer,
       List<String> answers,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -307,7 +301,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -318,7 +311,6 @@ class CloudLiaison {
   Future<void> updateTFQuestion(
       {String question,
       String correctAnswer,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -333,7 +325,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -344,7 +335,6 @@ class CloudLiaison {
   Future<void> updateFIBQuestion(
       {String question,
       String correctAnswer,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -359,7 +349,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
