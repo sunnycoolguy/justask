@@ -30,7 +30,7 @@ class _JoinClassroomState extends State<JoinClassroom> {
     if (_hostId == null) {
       _mainContent = Container(
           padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-          child: Column(children: [
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextField(
               decoration: InputDecoration(
                   hintText: 'Enter the e-mail address of the host',
