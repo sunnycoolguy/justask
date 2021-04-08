@@ -17,6 +17,7 @@ class JoinClassroom extends StatefulWidget {
 class _JoinClassroomState extends State<JoinClassroom> {
   String _hostId;
   String _hostEmail;
+  bool _showButton;
   final _formKey = GlobalKey<FormState>();
 
   Widget _mainContent;
@@ -28,62 +29,53 @@ class _JoinClassroomState extends State<JoinClassroom> {
 
     if (_hostId == null) {
       _mainContent = Container(
-        padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(children: [
-            TextFormField(
+          padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+          child: Column(children: [
+            TextField(
               decoration: InputDecoration(
                   hintText: 'Enter the e-mail address of the host',
                   labelText: 'Host e-mail'),
-              validator: (String value) {
-                if (value.length == 0) {
-                  return 'You must provide a host email';
-                }
-                return null;
-              },
               onChanged: (value) {
                 setState(() {
                   _hostEmail = value;
+                  _showButton = _hostEmail.length == 0 ? false : true;
                 });
               },
             ),
             SizedBox(
               height: 15.0,
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    try {
-                      dynamic hostDoc =
-                          await _cloudLiaison.joinClassroom(_hostEmail);
-                      setState(() {
-                        _hostId = hostDoc.docs[0].id;
-                      });
-                    } catch (e) {
-                      print(e);
-                      if (Platform.isAndroid) {
-                        showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                title: Text('Error'),
-                                content: Text(
-                                    'The were was an error joining the classroom. Please try again later.')));
-                      } else {
-                        showCupertinoDialog(
-                            context: context,
-                            builder: (_) => CupertinoAlertDialog(
-                                title: Text('Error'),
-                                content: Text(
-                                    'The were was an error joining the classroom. Please try again later.')));
+            _showButton == true
+                ? ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        dynamic hostDoc =
+                            await _cloudLiaison.joinClassroom(_hostEmail);
+                        setState(() {
+                          _hostId = hostDoc.docs[0].id;
+                        });
+                      } catch (e) {
+                        print(e);
+                        if (Platform.isAndroid) {
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text(
+                                      'The were was an error joining the classroom. Please try again later.')));
+                        } else {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (_) => CupertinoAlertDialog(
+                                  title: Text('Error'),
+                                  content: Text(
+                                      'The were was an error joining the classroom. Please try again later.')));
+                        }
                       }
-                    }
-                  }
-                },
-                child: Text('Submit'))
-          ]),
-        ),
-      );
+                    },
+                    child: Text('Submit'))
+                : SizedBox()
+          ]));
     } else if (_hostId == _currentUserId) {
       _mainContent = Column(
         children: [
