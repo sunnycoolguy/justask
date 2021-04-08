@@ -147,10 +147,9 @@ class _JoinClassroomState extends State<JoinClassroom> {
               print(
                   "${snapshot.data.data()["currentQuestionId"]} is the current question id");
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Text("The classroom is currently closed."),
-                  ),
+                  Center(child: Text("The classroom is currently closed.")),
                   Container(
                     child: RaisedButton(
                       onPressed: () {
@@ -175,9 +174,6 @@ class _JoinClassroomState extends State<JoinClassroom> {
                 child: Text("Please wait while the host picks a question..."),
               );
             }
-            print(
-                "Preparing live question with question id: ${snapshot.data.data()['currentQuestionId']}");
-            print("Cmlx2V0446lksQuaGtKF");
 
             return LiveQuestion(
                 hostId: _hostId,
