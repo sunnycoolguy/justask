@@ -18,7 +18,6 @@ class _JoinClassroomState extends State<JoinClassroom> {
   String _hostId;
   String _hostEmail;
   bool _showButton;
-  final _formKey = GlobalKey<FormState>();
 
   Widget _mainContent;
 

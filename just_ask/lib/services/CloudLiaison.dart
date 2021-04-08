@@ -245,7 +245,7 @@ class CloudLiaison {
   //TODO: Handle async error
   getQuestionStream({String questionBankId, String questionId}) {
     print(
-        "The questionbankid is ${questionBankId} and the question id is ${questionId}");
+        "The questionbankid is $questionBankId and the question id is $questionId");
     return users
         .doc(userID)
         .collection('QuestionBanks')
