@@ -42,6 +42,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print(_fabStatus);
     Widget _mainContent;
     Widget _pageActions;
     Authenticator _authenticator = Authenticator();
@@ -140,6 +141,7 @@ class _HomeState extends State<Home> {
                       }
                       _currentPage = CurrentPage.questionBankList;
                       _currentPageTitle = "My Question Banks";
+                      _fabStatus = FABStatus.questionBankList;
                     });
                     Navigator.pop(context);
                   }),
