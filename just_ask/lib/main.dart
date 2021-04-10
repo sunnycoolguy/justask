@@ -32,7 +32,9 @@ class Wrapper extends StatelessWidget {
                 child: MaterialApp(
                   title: 'JustAsk',
                   theme: ThemeData(
-                    primarySwatch: Colors.blue,
+                    primaryColor: Color.fromRGBO(255, 153, 0, 1),
+                    accentColor: Color.fromRGBO(255, 166, 0, 1),
+                    fontFamily: 'JosefinSans',
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                   ),
                   home: JustAsk(),
