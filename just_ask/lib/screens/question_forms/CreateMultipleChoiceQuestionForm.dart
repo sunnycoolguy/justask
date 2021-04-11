@@ -60,6 +60,7 @@ class _CreateMultipleChoiceQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 15.0),
             TextFormField(
               decoration: InputDecoration(
                   hintText: 'What is the first answer?', labelText: 'A'),
@@ -74,6 +75,7 @@ class _CreateMultipleChoiceQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 15.0),
             TextFormField(
               decoration: InputDecoration(
                   hintText: 'What is the second answer?', labelText: 'B'),
@@ -88,6 +90,7 @@ class _CreateMultipleChoiceQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 15.0),
             TextFormField(
               decoration: InputDecoration(
                   hintText: 'What is the third answer?', labelText: 'C'),
@@ -102,6 +105,7 @@ class _CreateMultipleChoiceQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 15.0),
             TextFormField(
               decoration: InputDecoration(
                   hintText: 'What is the fourth answer?', labelText: 'D'),
@@ -116,6 +120,7 @@ class _CreateMultipleChoiceQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 15.0),
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: DropDownFormField(
@@ -144,10 +149,7 @@ class _CreateMultipleChoiceQuestionFormState
                   textField: 'display',
                   valueField: 'value'),
             ),
-            SizedBox(height: 20.0),
-            SizedBox(
-              height: 20.0,
-            ),
+            SizedBox(height: 15.0),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     padding:

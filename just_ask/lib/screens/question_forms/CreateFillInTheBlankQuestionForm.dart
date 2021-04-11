@@ -54,7 +54,7 @@ class _CreateFillInTheBlankQuestionFormState
                 if (value.length == 0) {
                   return 'You must provide a question to ask';
                 } else if (!value.contains('_')) {
-                  return 'Your question must provide an underscore for the missing term';
+                  return 'You must provide an underscore for the blank ';
                 }
                 return null;
               },
@@ -64,6 +64,7 @@ class _CreateFillInTheBlankQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 20.0),
             TextFormField(
               decoration: InputDecoration(
                   hintText: 'What is the actual answer to the question?',
@@ -79,9 +80,7 @@ class _CreateFillInTheBlankQuestionFormState
                 });
               },
             ),
-            SizedBox(
-              height: 15.0,
-            ),
+            SizedBox(height: 20.0),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     padding:

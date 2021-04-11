@@ -61,6 +61,7 @@ class _CreateTrueOrFalseQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 30.0),
             Text('Is the statement true or false?'),
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -85,7 +86,7 @@ class _CreateTrueOrFalseQuestionFormState
                   textField: 'display',
                   valueField: 'value'),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 30.0),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     padding:
