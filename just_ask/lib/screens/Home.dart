@@ -81,14 +81,14 @@ class _HomeState extends State<Home> {
           children: [
             MenuItem(
                 child: Text(
-                  "MCQ",
+                  "MC",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'JosefinSans',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                title: "Multiple Choice Question",
+                title: "Multiple Choice",
                 titleColor: Colors.white,
                 subtitle: "Create a Multiple Choice Question",
                 subTitleColor: Colors.white,

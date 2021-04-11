@@ -26,6 +26,7 @@ class _UpdateQuestionBankFormState extends State<UpdateQuestionBankForm> {
         content: Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Enter the new name of your question bank.'),
               TextFormField(
@@ -46,7 +47,14 @@ class _UpdateQuestionBankFormState extends State<UpdateQuestionBankForm> {
         ),
         actions: [
           TextButton(
-              child: Text('Update'),
+              child: Text(
+                'Update',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "JosefinSans",
+                    color: Color.fromRGBO(255, 158, 0, 1)),
+              ),
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   try {

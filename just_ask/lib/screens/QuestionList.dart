@@ -144,7 +144,7 @@ class QuestionList extends StatelessWidget {
           question,
           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
         ),
-        subtitle: Text(questionType),
+        subtitle: Text(questionType == "MCQ" ? "MC" : questionType),
         onTap: updateMyClassroomState != null
             ? () {
                 _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
