@@ -149,87 +149,104 @@ class _HomeState extends State<Home> {
         ),
         body: _mainContent,
         drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                child: Container(
-                  margin: EdgeInsets.only(top: 30.0),
-                  child: Text(
-                    'Hello, ${Provider.of<User>(context).email}',
-                    style: TextStyle(
-                      fontFamily: 'JosefinSans',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 25.0,
-                      color: Colors.white,
+          child: Container(
+            color: Color.fromRGBO(255, 158, 0, 1),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                Container(
+                  color: Color.fromRGBO(255, 153, 0, 1),
+                  padding: EdgeInsets.only(top: 30.0),
+                  child: DrawerHeader(
+                    child: Text(
+                      'Hello, ${Provider.of<User>(context).email}',
+                      style: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 25.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 153, 0, 1),
-                ),
-              ),
-              ListTile(
-                  title: Text('My Question Banks'),
-                  onTap: () {
-                    setState(() {
-                      if (_currentPage == CurrentPage.myClassroom) {
-                        _cloudLiaison.closeClassroom();
+                ListTile(
+                    title: Text('My Question Banks',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600)),
+                    onTap: () {
+                      setState(() {
+                        if (_currentPage == CurrentPage.myClassroom) {
+                          _cloudLiaison.closeClassroom();
+                        }
+                        _currentPage = CurrentPage.questionBankList;
+                        _currentPageTitle = "My Question Banks";
+                        _fabStatus = FABStatus.questionBankList;
+                      });
+                      Navigator.pop(context);
+                    }),
+                ListTile(
+                    title: Text('My Classroom',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600)),
+                    onTap: () {
+                      setState(() {
+                        _currentPage = CurrentPage.myClassroom;
+                        _currentPageTitle = "My Classroom";
+                        _fabStatus = FABStatus.myClassroom;
+                      });
+                      Navigator.pop(context);
+                    }),
+                ListTile(
+                    title: Text('Join A Classroom',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600)),
+                    onTap: () {
+                      setState(() {
+                        if (_currentPage == CurrentPage.myClassroom) {
+                          _cloudLiaison.closeClassroom();
+                        }
+                        _currentPage = CurrentPage.joinClassroom;
+                        _currentPageTitle = "Join A Classroom";
+                        _fabStatus = FABStatus.joinClassroom;
+                      });
+                      Navigator.pop(context);
+                    }),
+                ListTile(
+                  title: Text('Log out',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
+                  onTap: () async {
+                    try {
+                      _authenticator.signOut();
+                    } catch (e) {
+                      if (Platform.isAndroid) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'The were was an issue signing out. Please force close the app.')));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'There was an issue signing out. Please force close the app.')));
                       }
-                      _currentPage = CurrentPage.questionBankList;
-                      _currentPageTitle = "My Question Banks";
-                      _fabStatus = FABStatus.questionBankList;
-                    });
-                    Navigator.pop(context);
-                  }),
-              ListTile(
-                  title: Text('My Classroom'),
-                  onTap: () {
-                    setState(() {
-                      _currentPage = CurrentPage.myClassroom;
-                      _currentPageTitle = "My Classroom";
-                      _fabStatus = FABStatus.myClassroom;
-                    });
-                    Navigator.pop(context);
-                  }),
-              ListTile(
-                  title: Text('Join A Classroom'),
-                  onTap: () {
-                    setState(() {
-                      if (_currentPage == CurrentPage.myClassroom) {
-                        _cloudLiaison.closeClassroom();
-                      }
-                      _currentPage = CurrentPage.joinClassroom;
-                      _currentPageTitle = "Join A Classroom";
-                      _fabStatus = FABStatus.joinClassroom;
-                    });
-                    Navigator.pop(context);
-                  }),
-              ListTile(
-                title: Text('Log out'),
-                onTap: () async {
-                  try {
-                    _authenticator.signOut();
-                  } catch (e) {
-                    if (Platform.isAndroid) {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                              title: Text('Error'),
-                              content: Text(
-                                  'The were was an issue signing out. Please force close the app.')));
-                    } else {
-                      showCupertinoDialog(
-                          context: context,
-                          builder: (_) => CupertinoAlertDialog(
-                              title: Text('Error'),
-                              content: Text(
-                                  'There was an issue signing out. Please force close the app.')));
                     }
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: _pageActions);
