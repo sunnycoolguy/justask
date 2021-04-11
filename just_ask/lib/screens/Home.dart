@@ -82,7 +82,11 @@ class _HomeState extends State<Home> {
             MenuItem(
                 child: Text(
                   "MCQ",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 title: "Multiple Choice Question",
                 titleColor: Colors.white,
@@ -96,7 +100,11 @@ class _HomeState extends State<Home> {
             MenuItem(
                 child: Text(
                   "T/F",
-                  style: TextStyle(color: Colors.white, fontFamily: 'Jose'),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 title: "True Or False",
                 titleColor: Colors.white,
@@ -110,7 +118,11 @@ class _HomeState extends State<Home> {
             MenuItem(
                 child: Text(
                   "FIB",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 title: "Fill In The Blank",
                 titleColor: Colors.white,
