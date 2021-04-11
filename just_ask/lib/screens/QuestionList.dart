@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import '../enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,13 +45,10 @@ class QuestionList extends StatelessWidget {
                   ? Center(
                       child: Text(
                           "You currently have no questions to choose from!"))
-                  : ListView.separated(
+                  : ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) => _buildQuestionTile(
                           context, snapshot.data[index], questionBankId),
-                      separatorBuilder: (context, index) => Divider(
-                        color: Colors.black,
-                      ),
                     ),
             ),
             Align(
@@ -78,65 +77,77 @@ class QuestionList extends StatelessWidget {
     String questionId = questionModel.questionId;
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
-    return ListTile(
-      title: Text(question),
-      subtitle: Text(questionType),
-      onTap: updateMyClassroomState != null
-          ? () {
-              print(
-                  "Hi senay :) Love u bro. The current question bank id is $questionBankId and the question id is $questionId");
-              _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
-            }
-          : null,
-      trailing: updateMyClassroomState != null
-          ? null
-          : IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                try {
-                  CloudLiaison _cloudStorer = CloudLiaison(
-                      userID: Provider.of<User>(context, listen: false).uid);
-                  _cloudStorer.deleteQuestion(questionBankId, questionId);
-                } catch (e) {
-                  if (Platform.isAndroid) {
-                    showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                            title: Text('Error'),
-                            content: Text(
-                                'The were was an issue deleting the question. Please try again later.')));
-                  } else {
-                    showCupertinoDialog(
-                        context: context,
-                        builder: (_) => CupertinoAlertDialog(
-                            title: Text('Error'),
-                            content: Text(
-                                'There was an issue deleting the question. Please try again later.')));
-                  }
-                }
-              }),
-      onLongPress: updateMyClassroomState != null
-          ? null
-          : () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                if (questionType == 'MCQ') {
-                  return UpdateMultipleChoiceQuestionForm(
-                      questionBankId: questionBankId,
-                      questionId: questionId,
-                      userId: Provider.of<User>(context).uid);
-                } else if (questionType == 'FIB') {
-                  return UpdateFillInTheBlankQuestionForm(
-                    questionBankId: questionBankId,
-                    questionId: questionId,
-                    userId: Provider.of<User>(context).uid,
-                  );
-                }
-                return UpdateTrueOrFalseQuestionForm(
-                    userId: Provider.of<User>(context).uid,
-                    questionId: questionId,
-                    questionBankId: questionBankId);
-              }));
-            },
+    return Slidable(
+      actionPane: SlidableScrollActionPane(),
+      actions: [
+        IconSlideAction(
+            color: Color.fromRGBO(255, 173, 38, 1),
+            caption: 'Delete',
+            icon: Icons.delete,
+            onTap: updateMyClassroomState != null
+                ? null
+                : () {
+                    try {
+                      CloudLiaison _cloudStorer = CloudLiaison(
+                          userID:
+                              Provider.of<User>(context, listen: false).uid);
+                      _cloudStorer.deleteQuestion(questionBankId, questionId);
+                    } catch (e) {
+                      if (Platform.isAndroid) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'The were was an issue deleting the question. Please try again later.')));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'There was an issue deleting the question. Please try again later.')));
+                      }
+                    }
+                  }),
+        IconSlideAction(
+          color: Color.fromRGBO(255, 173, 38, 1),
+          caption: 'Update',
+          icon: Icons.update,
+          onTap: updateMyClassroomState != null
+              ? null
+              : () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    if (questionType == 'MCQ') {
+                      return UpdateMultipleChoiceQuestionForm(
+                          questionBankId: questionBankId,
+                          questionId: questionId,
+                          userId: Provider.of<User>(context).uid);
+                    } else if (questionType == 'FIB') {
+                      return UpdateFillInTheBlankQuestionForm(
+                        questionBankId: questionBankId,
+                        questionId: questionId,
+                        userId: Provider.of<User>(context).uid,
+                      );
+                    }
+                    return UpdateTrueOrFalseQuestionForm(
+                        userId: Provider.of<User>(context).uid,
+                        questionId: questionId,
+                        questionBankId: questionBankId);
+                  }));
+                },
+        ),
+      ],
+      child: ListTile(
+        title: Text(question),
+        subtitle: Text(questionType),
+        onTap: updateMyClassroomState != null
+            ? () {
+                _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
+              }
+            : null,
+      ),
     );
   }
 
