@@ -33,8 +33,9 @@ class Wrapper extends StatelessWidget {
                   title: 'JustAsk',
                   theme: ThemeData(
                     primaryColor: Color.fromRGBO(255, 153, 0, 1),
-                    accentColor: Color.fromRGBO(255, 166, 0, 1),
-                    fontFamily: 'JosefinSans',
+                    accentColor: Color.fromRGBO(255, 158, 0, 1),
+                    scaffoldBackgroundColor: Colors.white,
+                    fontFamily: 'Roboto',
                     visualDensity: VisualDensity.adaptivePlatformDensity,
                   ),
                   home: JustAsk(),

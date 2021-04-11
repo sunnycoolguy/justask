@@ -52,7 +52,9 @@ class QuestionBankList extends StatelessWidget {
                             updateFABState);
                       },
                       separatorBuilder: (BuildContext context, int index) =>
-                          Divider(),
+                          Divider(
+                            color: Colors.grey,
+                          ),
                       itemCount: snapshot.data.length));
         });
   }
@@ -60,7 +62,10 @@ class QuestionBankList extends StatelessWidget {
   Widget _buildQuestionBankTile(BuildContext context, String questionBankId,
       String questionBankName, Function updateFABState) {
     return ListTile(
-      title: Text(questionBankName),
+      title: Text(
+        questionBankName,
+        style: TextStyle(fontWeight: FontWeight.w500),
+      ),
       onTap: () {
         //update local question bank id to switch to question list
         updateCurrentQuestionBankId(questionBankId);

@@ -47,6 +47,8 @@ class _HomeState extends State<Home> {
     Widget _pageActions;
     Authenticator _authenticator = Authenticator();
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
+    final GlobalKey<ScaffoldState> _scaffoldKey =
+        new GlobalKey<ScaffoldState>();
 
     //Set body of scaffold through _mainContent
     if (this._currentPage == CurrentPage.questionBankList) {
@@ -63,7 +65,10 @@ class _HomeState extends State<Home> {
     //Set FAB of scaffold through _pageActions
     if (this._fabStatus == FABStatus.questionBankList) {
       _pageActions = FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
           onPressed: () {
             showDialog(
                 context: context,
@@ -72,7 +77,7 @@ class _HomeState extends State<Home> {
     } else if (this._fabStatus == FABStatus.questionList) {
       _pageActions = BoomMenu(
           animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
+          animatedIconTheme: IconThemeData(size: 22.0, color: Colors.white),
           overlayColor: Colors.black,
           overlayOpacity: 0.7,
           children: [
@@ -85,7 +90,7 @@ class _HomeState extends State<Home> {
                 titleColor: Colors.white,
                 subtitle: "Create a Multiple Choice Question",
                 subTitleColor: Colors.white,
-                backgroundColor: Colors.blue,
+                backgroundColor: Color.fromRGBO(255, 158, 0, 1),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreateMultipleChoiceQuestionForm(
                           questionBankId: _currentQuestionBankId,
@@ -93,13 +98,13 @@ class _HomeState extends State<Home> {
             MenuItem(
                 child: Text(
                   "T/F",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontFamily: 'Jose'),
                 ),
                 title: "True Or False",
                 titleColor: Colors.white,
                 subtitle: "Create a True or False Question",
                 subTitleColor: Colors.white,
-                backgroundColor: Colors.blue,
+                backgroundColor: Color.fromRGBO(255, 158, 0, 1),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreateTrueOrFalseQuestionForm(
                           questionBankId: _currentQuestionBankId,
@@ -113,7 +118,7 @@ class _HomeState extends State<Home> {
                 titleColor: Colors.white,
                 subtitle: "Create a Fill In The Blank Question",
                 subTitleColor: Colors.white,
-                backgroundColor: Colors.blue,
+                backgroundColor: Color.fromRGBO(255, 158, 0, 1),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreateFillInTheBlankQuestionForm(
                           questionBankId: _currentQuestionBankId,
@@ -124,14 +129,46 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(_currentPageTitle),
+          leading: IconButton(
+            icon: Icon(Icons.menu, color: Colors.white),
+            onPressed: () {
+              _scaffoldKey.currentState.openDrawer();
+            },
+          ),
+          title: Text(
+            _currentPageTitle,
+            style: TextStyle(
+                fontFamily: 'JosefinSans',
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
           elevation: 0.0,
         ),
         body: _mainContent,
         drawer: Drawer(
           child: ListView(
+            padding: EdgeInsets.zero,
             children: [
+              DrawerHeader(
+                child: Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  child: Text(
+                    'Hello, ${Provider.of<User>(context).email}',
+                    style: TextStyle(
+                      fontFamily: 'JosefinSans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 25.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 153, 0, 1),
+                ),
+              ),
               ListTile(
                   title: Text('My Question Banks'),
                   onTap: () {

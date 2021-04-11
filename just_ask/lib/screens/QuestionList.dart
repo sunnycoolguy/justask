@@ -47,12 +47,14 @@ class QuestionList extends StatelessWidget {
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) => _buildQuestionTile(
                           context, snapshot.data[index], questionBankId),
-                      separatorBuilder: (context, index) => Divider(),
+                      separatorBuilder: (context, index) => Divider(
+                        color: Colors.black,
+                      ),
                     ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: TextButton(
+              child: IconButton(
                   onPressed: () {
                     if (updateMyClassroomState != null) {
                       updateMyClassroomState(
@@ -63,7 +65,7 @@ class QuestionList extends StatelessWidget {
                           MyQuestionBanksStatus.PickingQuestionBank);
                     }
                   },
-                  child: Text("Back To Question Bank List")),
+                  icon: Icon(Icons.arrow_back)),
             ),
           ]);
         });
