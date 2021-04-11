@@ -114,7 +114,7 @@ class QuestionBankList extends StatelessWidget {
         child: ListTile(
           title: Text(
             questionBankName,
-            style: TextStyle(fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 20.0),
           ),
           onTap: () {
             //update local question bank id to switch to question list

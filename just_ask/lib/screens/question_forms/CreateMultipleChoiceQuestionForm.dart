@@ -29,7 +29,16 @@ class _CreateMultipleChoiceQuestionFormState
         CloudLiaison(userID: Provider.of<User>(context).uid);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a Multiple Choice Question'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          'Create a Multiple Choice Question',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'JosefinSans',
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+          ),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
@@ -140,6 +149,16 @@ class _CreateMultipleChoiceQuestionFormState
               height: 20.0,
             ),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    primary: Color.fromRGBO(255, 158, 0, 1),
+                    textStyle: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     try {

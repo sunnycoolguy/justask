@@ -32,22 +32,7 @@ class _MyQuestionBanksState extends State<MyQuestionBanks> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("BEING CREATED BRO.");
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    print("Being disposed :(");
-  }
-
-  @override
   Widget build(BuildContext context) {
-    print("$_myQuestionBanksStatus YOOOOOOOOOOOO");
     Widget _mainContent;
 
     if (_myQuestionBanksStatus == MyQuestionBanksStatus.PickingQuestionBank ||

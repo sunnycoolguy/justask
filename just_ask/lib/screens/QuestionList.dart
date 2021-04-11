@@ -140,7 +140,10 @@ class QuestionList extends StatelessWidget {
         ),
       ],
       child: ListTile(
-        title: Text(question),
+        title: Text(
+          question,
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+        ),
         subtitle: Text(questionType),
         onTap: updateMyClassroomState != null
             ? () {
@@ -150,62 +153,4 @@ class QuestionList extends StatelessWidget {
       ),
     );
   }
-
-/*
-this.updateMyClassroomState != null
-                  ? null
-                  : FabCircularMenu(
-                      fabOpenIcon: Icon(Icons.add, color: Colors.white),
-                      fabCloseIcon: Icon(Icons.close, color: Colors.white),
-                      key: fabKey,
-                      children: [
-                          TextButton(
-                            child: Text('MCQ',
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.white)),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateMultipleChoiceQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'T/F',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateTrueOrFalseQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'FIB',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateFillInTheBlankQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                        ]));
-*/
-
 }
