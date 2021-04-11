@@ -42,13 +42,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print(_fabStatus);
+    //print(_fabStatus);
     Widget _mainContent;
     Widget _pageActions;
     Authenticator _authenticator = Authenticator();
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
-    final GlobalKey<ScaffoldState> _scaffoldKey =
-        new GlobalKey<ScaffoldState>();
 
     //Set body of scaffold through _mainContent
     if (this._currentPage == CurrentPage.questionBankList) {
@@ -129,14 +127,8 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
-        key: _scaffoldKey,
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-          ),
+          iconTheme: IconThemeData(color: Colors.white),
           title: Text(
             _currentPageTitle,
             style: TextStyle(
@@ -150,7 +142,7 @@ class _HomeState extends State<Home> {
         body: _mainContent,
         drawer: Drawer(
           child: Container(
-            color: Color.fromRGBO(255, 158, 0, 1),
+            color: Color.fromRGBO(255, 153, 0, 1),
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -172,6 +164,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                     title: Text('My Question Banks',
                         style: TextStyle(
+                            fontFamily: 'JosefinSans',
                             fontSize: 20.0,
                             color: Colors.white,
                             fontWeight: FontWeight.w600)),
@@ -189,6 +182,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                     title: Text('My Classroom',
                         style: TextStyle(
+                            fontFamily: 'JosefinSans',
                             fontSize: 20.0,
                             color: Colors.white,
                             fontWeight: FontWeight.w600)),
@@ -203,6 +197,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                     title: Text('Join A Classroom',
                         style: TextStyle(
+                            fontFamily: 'JosefinSans',
                             fontSize: 20.0,
                             color: Colors.white,
                             fontWeight: FontWeight.w600)),
@@ -220,6 +215,7 @@ class _HomeState extends State<Home> {
                 ListTile(
                   title: Text('Log out',
                       style: TextStyle(
+                          fontFamily: 'JosefinSans',
                           fontSize: 20.0,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),

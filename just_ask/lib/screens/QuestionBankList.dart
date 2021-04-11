@@ -52,9 +52,7 @@ class QuestionBankList extends StatelessWidget {
                             updateFABState);
                       },
                       separatorBuilder: (BuildContext context, int index) =>
-                          Divider(
-                            color: Colors.grey,
-                          ),
+                          Divider(),
                       itemCount: snapshot.data.length));
         });
   }
@@ -75,6 +73,7 @@ class QuestionBankList extends StatelessWidget {
           updateMyClassroomState(OpenedClassroomStatus.PickingQuestion);
         } else if (updateMyQuestionBanksState != null) {
           //If this question bank tile is being rendered in My Question Banks
+          print("Updating question bank state!");
           updateMyQuestionBanksState(MyQuestionBanksStatus.PickingQuestion);
           updateFABState(FABStatus.questionList);
           updateCurrentQuestionBankIdForActionListInHome(questionBankId);

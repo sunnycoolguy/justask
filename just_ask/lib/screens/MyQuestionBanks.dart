@@ -15,8 +15,7 @@ class MyQuestionBanks extends StatefulWidget {
 }
 
 class _MyQuestionBanksState extends State<MyQuestionBanks> {
-  MyQuestionBanksStatus _myQuestionBanksStatus =
-      MyQuestionBanksStatus.PickingQuestionBank;
+  MyQuestionBanksStatus _myQuestionBanksStatus;
   String _currentQuestionBankId;
   updateMyCurrentQuestionBankId(String newQuestionBankId) {
     setState(() {
@@ -25,16 +24,34 @@ class _MyQuestionBanksState extends State<MyQuestionBanks> {
   }
 
   updateMyQuestionBanksState(MyQuestionBanksStatus myNewQuestionBanksStatus) {
+    print("Turning ${_myQuestionBanksStatus} to ${myNewQuestionBanksStatus}");
     setState(() {
       _myQuestionBanksStatus = myNewQuestionBanksStatus;
     });
+    print("The new MyQuestionBankStatus is ${_myQuestionBanksStatus}");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("BEING CREATED BRO.");
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("Being disposed :(");
   }
 
   @override
   Widget build(BuildContext context) {
+    print("$_myQuestionBanksStatus YOOOOOOOOOOOO");
     Widget _mainContent;
 
-    if (_myQuestionBanksStatus == MyQuestionBanksStatus.PickingQuestionBank) {
+    if (_myQuestionBanksStatus == MyQuestionBanksStatus.PickingQuestionBank ||
+        _myQuestionBanksStatus == null) {
       _mainContent = QuestionBankList(
           updateMyQuestionBanksState: updateMyQuestionBanksState,
           updateCurrentQuestionBankId: updateMyCurrentQuestionBankId,
