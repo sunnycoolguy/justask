@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import '../enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,11 +19,12 @@ class QuestionList extends StatelessWidget {
   final Function updateMyClassroomState;
   final Function updateMyQuestionBanksState;
   final Function updateFABState;
-  QuestionList(
-      {this.questionBankId,
-      this.updateMyClassroomState,
-      this.updateMyQuestionBanksState,
-      this.updateFABState});
+  QuestionList({
+    this.questionBankId,
+    this.updateMyClassroomState,
+    this.updateMyQuestionBanksState,
+    this.updateFABState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +47,15 @@ class QuestionList extends StatelessWidget {
                   ? Center(
                       child: Text(
                           "You currently have no questions to choose from!"))
-                  : ListView.separated(
+                  : ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) => _buildQuestionTile(
                           context, snapshot.data[index], questionBankId),
-                      separatorBuilder: (context, index) => Divider(),
                     ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: TextButton(
+              child: IconButton(
                   onPressed: () {
                     if (updateMyClassroomState != null) {
                       updateMyClassroomState(
@@ -63,7 +66,7 @@ class QuestionList extends StatelessWidget {
                           MyQuestionBanksStatus.PickingQuestionBank);
                     }
                   },
-                  child: Text("Back To Question Bank List")),
+                  icon: Icon(Icons.arrow_back)),
             ),
           ]);
         });
@@ -76,123 +79,105 @@ class QuestionList extends StatelessWidget {
     String questionId = questionModel.questionId;
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
-    return ListTile(
-      title: Text(question),
-      subtitle: Text(questionType),
-      onTap: updateMyClassroomState != null
-          ? () {
-              print(
-                  "Hi senay :) Love u bro. The current question bank id is $questionBankId and the question id is $questionId");
-              _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
-            }
-          : null,
-      trailing: updateMyClassroomState != null
-          ? null
-          : IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                try {
-                  CloudLiaison _cloudStorer = CloudLiaison(
-                      userID: Provider.of<User>(context, listen: false).uid);
-                  _cloudStorer.deleteQuestion(questionBankId, questionId);
-                } catch (e) {
-                  if (Platform.isAndroid) {
-                    showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                            title: Text('Error'),
-                            content: Text(
-                                'The were was an issue deleting the question. Please try again later.')));
-                  } else {
-                    showCupertinoDialog(
-                        context: context,
-                        builder: (_) => CupertinoAlertDialog(
-                            title: Text('Error'),
-                            content: Text(
-                                'There was an issue deleting the question. Please try again later.')));
-                  }
-                }
-              }),
-      onLongPress: updateMyClassroomState != null
-          ? null
-          : () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                if (questionType == 'MCQ') {
-                  return UpdateMultipleChoiceQuestionForm(
-                      questionBankId: questionBankId,
-                      questionId: questionId,
-                      userId: Provider.of<User>(context).uid);
-                } else if (questionType == 'FIB') {
-                  return UpdateFillInTheBlankQuestionForm(
-                    questionBankId: questionBankId,
-                    questionId: questionId,
-                    userId: Provider.of<User>(context).uid,
-                  );
-                }
-                return UpdateTrueOrFalseQuestionForm(
-                    userId: Provider.of<User>(context).uid,
-                    questionId: questionId,
-                    questionBankId: questionBankId);
-              }));
-            },
+    return Slidable(
+      actionPane: SlidableScrollActionPane(),
+      actions: [
+        IconSlideAction(
+            color: Color.fromRGBO(255, 173, 38, 1),
+            caption: 'Delete',
+            icon: Icons.delete,
+            onTap: updateMyClassroomState != null
+                ? null
+                : () {
+                    try {
+                      CloudLiaison _cloudStorer = CloudLiaison(
+                          userID:
+                              Provider.of<User>(context, listen: false).uid);
+                      _cloudStorer.deleteQuestion(questionBankId, questionId);
+                    } catch (e) {
+                      if (Platform.isAndroid) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'The were was an issue deleting the question. Please try again later.')));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'There was an issue deleting the question. Please try again later.')));
+                      }
+                    }
+                  }),
+        IconSlideAction(
+          color: Color.fromRGBO(255, 173, 38, 1),
+          caption: 'Update',
+          icon: Icons.update,
+          onTap: updateMyClassroomState != null
+              ? null
+              : () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    if (questionType == 'MCQ') {
+                      return UpdateMultipleChoiceQuestionForm(
+                          questionBankId: questionBankId,
+                          questionId: questionId,
+                          userId: Provider.of<User>(context).uid);
+                    } else if (questionType == 'FIB') {
+                      return UpdateFillInTheBlankQuestionForm(
+                        questionBankId: questionBankId,
+                        questionId: questionId,
+                        userId: Provider.of<User>(context).uid,
+                      );
+                    }
+                    return UpdateTrueOrFalseQuestionForm(
+                        userId: Provider.of<User>(context).uid,
+                        questionId: questionId,
+                        questionBankId: questionBankId);
+                  }));
+                },
+        ),
+      ],
+      child: ListTile(
+        title: Text(
+          question,
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+        ),
+        subtitle: Text(questionType == "MCQ" ? "MC" : questionType),
+        onTap: updateMyClassroomState != null
+            ? () async {
+                _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
+              }
+            : null,
+      ),
     );
   }
 
-/*
-this.updateMyClassroomState != null
-                  ? null
-                  : FabCircularMenu(
-                      fabOpenIcon: Icon(Icons.add, color: Colors.white),
-                      fabCloseIcon: Icon(Icons.close, color: Colors.white),
-                      key: fabKey,
-                      children: [
-                          TextButton(
-                            child: Text('MCQ',
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.white)),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateMultipleChoiceQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'T/F',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateTrueOrFalseQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'FIB',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            onPressed: () {
-                              fabKey.currentState.close();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateFillInTheBlankQuestionForm(
-                                  questionBankId: questionBankId,
-                                ),
-                              ));
-                            },
-                          ),
-                        ]));
-*/
+  /*
+  _buildTileDetails(int totalCorrect, int totalIncorrect, String questionType) {
+    String formattedQuestionType = questionType == "MCQ" ? "MC" : questionType;
+    int totalAnswers = totalCorrect + totalIncorrect;
+    String percentCorrect = (totalCorrect / totalAnswers).toStringAsFixed(2);
+    String percentIncorrect = (totalIncorrect / totalAnswers).toStringAsFixed(2);
 
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(child: Text(formattedQuestionType)),
+        Container(child: Row(
+          children: [
+            Icon(Icons.done),
+            Text(" : "),
+            Text("$totalCorrect ($percentCorrect)")
+          ],
+        ),),
+        Container()
+      ],
+
+    );
+  }
+  */ //TODO: Introduce in patch
 }

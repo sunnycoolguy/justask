@@ -23,6 +23,7 @@ class _QuestionBankFormState extends State<QuestionBankForm> {
         content: Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Enter the name of your new question bank.'),
               TextFormField(
@@ -43,7 +44,14 @@ class _QuestionBankFormState extends State<QuestionBankForm> {
         ),
         actions: [
           TextButton(
-              child: Text('Add'),
+              child: Text(
+                'Add',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    fontFamily: "JosefinSans",
+                    color: Color.fromRGBO(255, 158, 0, 1)),
+              ),
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   try {

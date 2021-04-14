@@ -12,13 +12,22 @@ class ClosedClassroom extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Your classroom is currently closed."),
+          Text(
+            "Your classroom is currently closed.",
+            style: TextStyle(fontSize: 15.0),
+          ),
           TextButton(
               onPressed: () {
-                //TODO: Add async switch to flip classroom
                 _cloudLiaision.openClassroom();
               },
-              child: Text("Open Classroom"))
+              child: Text(
+                "Open Classroom",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "JosefinSans",
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(255, 158, 0, 1)),
+              ))
         ],
       ),
     );

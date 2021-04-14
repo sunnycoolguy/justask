@@ -77,7 +77,11 @@ class _LiveTFQuestionState extends State<LiveTFQuestion> {
                   ? ElevatedButton(
                       onPressed: () async {
                         try {
-                          _cloudLiaison.incrementAnswerCounter(
+                          _cloudLiaison.incrementAnswerCounterInUserDoc(
+                              widget.hostId,
+                              widget.hostQuestionBankId,
+                              _myAnswer == widget.correctAnswer);
+                          _cloudLiaison.incrementAnswerCounterInQuestionDoc(
                               widget.hostId,
                               widget.hostQuestionBankId,
                               widget.hostQuestionId,

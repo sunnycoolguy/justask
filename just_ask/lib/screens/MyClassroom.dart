@@ -6,16 +6,21 @@ import 'package:just_ask/screens/Loading.dart';
 import 'package:just_ask/screens/OpenedClassroom.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
-import '../enums.dart';
 
-class MyClassroom extends StatelessWidget {
+class MyClassroom extends StatefulWidget {
   final Function updateFABState;
 
   MyClassroom({this.updateFABState});
 
   @override
+  _MyClassroomState createState() => _MyClassroomState();
+}
+
+class _MyClassroomState extends State<MyClassroom> {
+  @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
+
     return StreamBuilder(
         stream:
             CloudLiaison(userID: currentUser.uid).getHostInfo(currentUser.uid),

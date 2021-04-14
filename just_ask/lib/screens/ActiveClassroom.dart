@@ -8,8 +8,14 @@ import 'Loading.dart';
 class ActiveClassroom extends StatelessWidget {
   final String currentQuestionBankId;
   final String currentQuestionId;
+  final int totalCorrect;
+  final int totalIncorrect;
 
-  ActiveClassroom({this.currentQuestionBankId, this.currentQuestionId});
+  ActiveClassroom(
+      {this.currentQuestionBankId,
+      this.currentQuestionId,
+      this.totalCorrect,
+      this.totalIncorrect});
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
@@ -20,7 +26,7 @@ class ActiveClassroom extends StatelessWidget {
             questionBankId: currentQuestionBankId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error Retrieving Question Banks');
+            return Text('Error retreiving question information');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
@@ -28,18 +34,44 @@ class ActiveClassroom extends StatelessWidget {
           print(snapshot.data.exists);
           return SizedBox.expand(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("The ${snapshot.data.data()["type"]} question: "),
-                Text("${snapshot.data.data()['question']}"),
-                Text("is being broadcast!"),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                      "Current right: ${snapshot.data.data()["totalCorrect"]}"),
-                  Text(
-                      "Current wrong: ${snapshot.data.data()["totalIncorrect"]}")
-                ]),
+                Text(
+                  "The ${snapshot.data.data()["type"] == "MCQ" ? "MC" : snapshot.data.data()["type"]} question: \"${snapshot.data.data()['question']}\" is being broadcast!",
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                StreamBuilder(
+                    stream: _cloudLiaison.getHostInfo(context.read<User>().uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text(
+                          "Error fetching question statistics.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Text(
+                          "Fetching question statistics.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        );
+                      }
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Current right: ${snapshot.data.data()["currentCorrect"]}   Current wrong: ${snapshot.data.data()["currentIncorrect"]}",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ]);
+                    }),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -51,9 +83,13 @@ class ActiveClassroom extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: Color.fromRGBO(255, 158, 0, 1),
                         child: Text(
                           "Close Classroom",
+                          style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: "JosefinSans",
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -65,9 +101,13 @@ class ActiveClassroom extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: Color.fromRGBO(255, 158, 0, 1),
                         child: Text(
                           "Pick Another Question",
+                          style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: "JosefinSans",
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import '../Loading.dart';
@@ -29,7 +28,6 @@ class _UpdateMultipleChoiceQuestionFormState
   String firstAnswer, secondAnswer, thirdAnswer, fourthAnswer;
   String correctAnswer;
   String question;
-  int time;
   final _formKey = GlobalKey<FormState>();
   Future<DocumentSnapshot> questionSnapshot;
 
@@ -59,7 +57,16 @@ class _UpdateMultipleChoiceQuestionFormState
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Update a Multiple Choice Question'),
+              iconTheme: IconThemeData(color: Colors.white),
+              title: Text(
+                'Update a Multiple Choice Question',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'JosefinSans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25.0,
+                ),
+              ),
             ),
             body: Container(
               padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
@@ -84,6 +91,7 @@ class _UpdateMultipleChoiceQuestionFormState
                       });
                     },
                   ),
+                  SizedBox(height: 15.0),
                   TextFormField(
                     initialValue: snapshot.data.data()['answers'][0],
                     decoration: InputDecoration(
@@ -100,6 +108,7 @@ class _UpdateMultipleChoiceQuestionFormState
                       });
                     },
                   ),
+                  SizedBox(height: 15.0),
                   TextFormField(
                     initialValue: snapshot.data.data()['answers'][1],
                     decoration: InputDecoration(
@@ -117,6 +126,7 @@ class _UpdateMultipleChoiceQuestionFormState
                       });
                     },
                   ),
+                  SizedBox(height: 15.0),
                   TextFormField(
                     initialValue: snapshot.data.data()['answers'][2],
                     decoration: InputDecoration(
@@ -134,6 +144,7 @@ class _UpdateMultipleChoiceQuestionFormState
                       });
                     },
                   ),
+                  SizedBox(height: 15.0),
                   TextFormField(
                     initialValue: snapshot.data.data()['answers'][3],
                     decoration: InputDecoration(
@@ -151,6 +162,7 @@ class _UpdateMultipleChoiceQuestionFormState
                       });
                     },
                   ),
+                  SizedBox(height: 15.0),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: DropDownFormField(
@@ -180,33 +192,18 @@ class _UpdateMultipleChoiceQuestionFormState
                         textField: 'display',
                         valueField: 'value'),
                   ),
-                  TextFormField(
-                    initialValue: time == null
-                        ? snapshot.data.data()['time'].toString()
-                        : time.toString(),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    decoration: InputDecoration(
-                      labelText:
-                          "How long do you want to ask this question for (seconds)?",
-                      hintText: "Enter a number between 5 and 60s",
-                    ),
-                    validator: (String value) {
-                      return value.length > 0 &&
-                              int.parse(value) <= 60 &&
-                              int.parse(value) >= 5
-                          ? null
-                          : "Please enter a time between 5 and 60s.";
-                    },
-                    onChanged: (String value) {
-                      setState(() {
-                        time = int.parse(value);
-                      });
-                    },
-                  ),
+                  SizedBox(height: 15.0),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 15.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          primary: Color.fromRGBO(255, 158, 0, 1),
+                          textStyle: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           List<String> answers = [
@@ -219,7 +216,6 @@ class _UpdateMultipleChoiceQuestionFormState
                             _cloudLiaison.updateMCQQuestion(
                                 question: question ??
                                     snapshot.data.data()['question'],
-                                time: time ?? snapshot.data.data()['time'],
                                 questionBankId: widget.questionBankId,
                                 questionId: widget.questionId,
                                 answers: answers,

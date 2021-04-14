@@ -1,7 +1,6 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +21,6 @@ class _CreateTrueOrFalseQuestionFormState
     extends State<CreateTrueOrFalseQuestionForm> {
   String correctAnswer;
   String question;
-  int time;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,18 @@ class _CreateTrueOrFalseQuestionFormState
         CloudLiaison(userID: Provider.of<User>(context).uid);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a True or False Question'),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Container(
+          child: Text(
+            'Create a True or False Question',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'JosefinSans',
+              fontWeight: FontWeight.bold,
+              fontSize: 25.0,
+            ),
+          ),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
@@ -52,6 +61,7 @@ class _CreateTrueOrFalseQuestionFormState
                 });
               },
             ),
+            SizedBox(height: 30.0),
             Text('Is the statement true or false?'),
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -76,39 +86,24 @@ class _CreateTrueOrFalseQuestionFormState
                   textField: 'display',
                   valueField: 'value'),
             ),
-            SizedBox(height: 20.0),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ],
-              decoration: InputDecoration(
-                labelText:
-                    "How long do you want to ask this question for (seconds)?",
-                hintText: "Enter a number between 5 and 60s",
-              ),
-              validator: (String value) {
-                return value.length > 0 &&
-                        int.parse(value) <= 60 &&
-                        int.parse(value) >= 5
-                    ? null
-                    : "Please enter a time between 5 and 60s.";
-              },
-              onChanged: (String value) {
-                setState(() {
-                  time = int.parse(value);
-                });
-              },
-            ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 30.0),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    primary: Color.fromRGBO(255, 158, 0, 1),
+                    textStyle: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     try {
                       await _cloudLiaison.addTFQuestion(
                           question: question,
                           correctAnswer: correctAnswer,
-                          time: time,
                           questionBankId: widget.questionBankId);
                       Navigator.of(context).pop();
                     } catch (e) {

@@ -22,9 +22,12 @@ class CloudLiaison {
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void openClassroom() {
     try {
-      users
-          .doc(userID)
-          .update({'currentQuestionBankId': 'TBD', 'currentQuestionId': 'TBD'});
+      users.doc(userID).update({
+        'currentQuestionBankId': 'TBD',
+        'currentQuestionId': 'TBD',
+        'currentCorrect': 'TBD',
+        'currentIncorrect': 'TBD'
+      });
     } catch (e) {
       throw e;
     }
@@ -33,9 +36,12 @@ class CloudLiaison {
   //TODO: HANDLE ASYNC ERROR IF YOU CAN
   void closeClassroom() {
     try {
-      users
-          .doc(userID)
-          .update({'currentQuestionBankId': null, 'currentQuestionId': null});
+      users.doc(userID).update({
+        'currentQuestionBankId': null,
+        'currentQuestionId': null,
+        'currentCorrect': null,
+        'currentIncorrect': null
+      });
     } catch (e) {
       throw e;
     }
@@ -46,7 +52,9 @@ class CloudLiaison {
     try {
       users.doc(userID).update({
         'currentQuestionBankId': questionBankId,
-        'currentQuestionId': questionId
+        'currentQuestionId': questionId,
+        'currentCorrect': 0,
+        'currentIncorrect': 0,
       });
     } catch (e) {
       throw e;
@@ -65,7 +73,7 @@ class CloudLiaison {
   }
 
   //TODO: Handle async
-  incrementAnswerCounter(String hostId, String hostQuestionBankId,
+  incrementAnswerCounterInQuestionDoc(String hostId, String hostQuestionBankId,
       String hostQuestionId, bool correct) {
     DocumentReference documentReference = users
         .doc(hostId)
@@ -92,6 +100,38 @@ class CloudLiaison {
             int newTotalIncorrect = snapshot.data()['totalIncorrect'] + 1;
             transaction.update(
                 documentReference, {'totalIncorrect': newTotalIncorrect});
+          }
+
+          return true;
+        })
+        .then((value) => print("Success updating the relevant stat."))
+        .catchError((error) => throw Exception(error.toString()));
+  }
+
+  //TODO: Handle async
+  incrementAnswerCounterInUserDoc(
+      String hostId, String hostQuestionBankId, bool correct) {
+    DocumentReference documentReference = users.doc(hostId);
+
+    return FirebaseFirestore.instance
+        .runTransaction((transaction) async {
+          //Get the document
+          DocumentSnapshot snapshot = await transaction.get(documentReference);
+          if (!snapshot.exists) {
+            throw Exception("User does not exist!");
+          }
+
+          //update the relevant counts
+          if (correct) {
+            int newCurrentRightCount = snapshot.data()['currentCorrect'] + 1;
+            transaction.update(
+                documentReference, {'currentCorrect': newCurrentRightCount});
+          } else {
+            print("Adding to incorrect counter BRO!");
+            print("${snapshot.data()}");
+            int newCurrentIncorrect = snapshot.data()['currentIncorrect'] + 1;
+            transaction.update(
+                documentReference, {'currentIncorrect': newCurrentIncorrect});
           }
 
           return true;
@@ -157,8 +197,7 @@ class CloudLiaison {
       {String question,
       String correctAnswer,
       List<String> answers,
-      String questionBankId,
-      int time}) async {
+      String questionBankId}) async {
     try {
       await users
           .doc(userID)
@@ -170,7 +209,8 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
-        'time': time,
+        'totalCorrect': 0,
+        'totalIncorrect': 0,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -179,10 +219,7 @@ class CloudLiaison {
   }
 
   Future<void> addTFQuestion(
-      {String question,
-      String correctAnswer,
-      int time,
-      String questionBankId}) async {
+      {String question, String correctAnswer, String questionBankId}) async {
     try {
       await users
           .doc(userID)
@@ -194,7 +231,8 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
-        'time': time,
+        'totalCorrect': 0,
+        'totalIncorrect': 0,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -218,7 +256,8 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
-        'time': time,
+        'totalCorrect': 0,
+        'totalIncorrect': 0,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -252,7 +291,7 @@ class CloudLiaison {
   //TODO: Handle async error
   getQuestionStream({String questionBankId, String questionId}) {
     print(
-        "The questionbankid is ${questionBankId} and the question id is ${questionId}");
+        "The questionbankid is $questionBankId and the question id is $questionId");
     return users
         .doc(userID)
         .collection('QuestionBanks')
@@ -292,7 +331,6 @@ class CloudLiaison {
       {String question,
       String correctAnswer,
       List<String> answers,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -307,7 +345,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'MCQ',
         'answers': answers,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -318,7 +355,6 @@ class CloudLiaison {
   Future<void> updateTFQuestion(
       {String question,
       String correctAnswer,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -333,7 +369,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'T/F',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -344,7 +379,6 @@ class CloudLiaison {
   Future<void> updateFIBQuestion(
       {String question,
       String correctAnswer,
-      int time,
       String questionBankId,
       String questionId}) async {
     try {
@@ -359,7 +393,6 @@ class CloudLiaison {
         'correctAnswer': correctAnswer,
         'type': 'FIB',
         'answers': null,
-        'time': time,
         'timestamp': FieldValue.serverTimestamp()
       });
     } catch (e) {
@@ -393,7 +426,9 @@ class CloudLiaison {
         'firstName': firstName,
         'lastName': lastName,
         'currentQuestionBankId': null,
-        'currentQuestionId': null
+        'currentQuestionId': null,
+        'currentCorrect': null,
+        'currentIncorrect': null
       });
     } catch (e) {
       throw e;

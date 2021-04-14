@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
     return Scaffold(
         body: Center(
       child: SpinKitWave(
-        color: Colors.blue,
+        color: Color.fromRGBO(255, 158, 0, 1),
       ),
     ));
   }
