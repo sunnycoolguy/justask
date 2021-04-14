@@ -151,9 +151,7 @@ class _JoinClassroomState extends State<JoinClassroom> {
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             } else if (snapshot.data.data()["currentQuestionBankId"] == null &&
-                snapshot.data.data()["currentQuestionId"] == null &&
-                snapshot.data.data()["currentCorrect"] == null &&
-                snapshot.data.data()["currentIncorrect"] == null) {
+                snapshot.data.data()["currentQuestionId"] == null) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -183,9 +181,7 @@ class _JoinClassroomState extends State<JoinClassroom> {
                 ],
               );
             } else if (snapshot.data.data()["currentQuestionBankId"] == 'TBD' &&
-                snapshot.data.data()["currentQuestionId"] == 'TBD' &&
-                snapshot.data.data()["currentCorrect"] == 'TBD' &&
-                snapshot.data.data()["currentIncorrect"] == 'TBD') {
+                snapshot.data.data()["currentQuestionId"] == 'TBD') {
               return Center(
                 child: Text(
                   "Please wait while the host picks a question...",

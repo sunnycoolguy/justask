@@ -31,7 +31,7 @@ class ActiveClassroom extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
-          print(snapshot.data.exists);
+          print("${snapshot.data.data()["totalCorrect"]} - $totalCorrect = ${snapshot.data.data()["totalCorrect"] - totalCorrect}");
           return SizedBox.expand(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
