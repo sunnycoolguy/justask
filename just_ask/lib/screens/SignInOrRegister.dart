@@ -19,8 +19,30 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
   String password;
   String firstName;
   String lastName;
+  bool _obscureText = true;
+
+  toggleObscureText() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   final _formKey = GlobalKey<FormState>();
+
+  String validatePassword(String value) {
+    Pattern pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regex = new RegExp(pattern);
+    print(value);
+    if (value.isEmpty) {
+      return 'Please enter a password';
+    } else {
+      if (!regex.hasMatch(value))
+        return """Password needs \n - At least one upper case letter \n - At least one lower case letter \n - At least one digit. \n - At least one special character (!,@, #, \$, &, *, ~)""";
+      else
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +149,11 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
                   child: TextFormField(
+                    obscureText: _obscureText,
                     decoration: InputDecoration(
+                        errorText: null,
                         suffix: InkWell(
+                          onTap: toggleObscureText,
                           child: Icon(
                             Icons.visibility,
                             color: Colors.black,
@@ -138,10 +163,13 @@ class _SignInOrRegisterState extends State<SignInOrRegister> {
                         labelText: 'Enter your password',
                         border: OutlineInputBorder()),
                     validator: (value) {
-                      if (value.length < 6) {
-                        return 'Please enter a password that is at least 6 characters or longer.';
+                      if (formMode == FormMode.signUp) {
+                        return validatePassword(value);
                       }
-                      return null;
+
+                      return value.length < 8
+                          ? 'Please enter a password'
+                          : null;
                     },
                     onChanged: (text) {
                       setState(() {
