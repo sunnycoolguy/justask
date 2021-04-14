@@ -50,10 +50,14 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                   margin: EdgeInsets.only(bottom: 10.0),
                   child: Text(
                     "${widget.question}",
-                    style: TextStyle(fontSize: 25.0),
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                   )),
+              SizedBox(height: 15.0),
               Card(
-                  color: _myAnswer == "A" ? Colors.blue : Colors.white,
+                  color: _myAnswer == "A"
+                      ? Color.fromRGBO(255, 153, 0, 1)
+                      : Colors.white,
                   child: RadioListTile<String>(
                     controlAffinity: ListTileControlAffinity.trailing,
                     secondary: Text(
@@ -61,7 +65,7 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       style: TextStyle(fontSize: 20.0),
                     ),
                     value: "A",
-                    activeColor: Colors.pink,
+                    activeColor: Colors.black,
                     groupValue: _myAnswer,
                     title: Text("${widget.answers[0]}"),
                     onChanged: (String value) {
@@ -71,8 +75,11 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       });
                     },
                   )),
+              SizedBox(height: 15.0),
               Card(
-                  color: _myAnswer == "B" ? Colors.blue : Colors.white,
+                  color: _myAnswer == "B"
+                      ? Color.fromRGBO(255, 153, 0, 1)
+                      : Colors.white,
                   child: RadioListTile<String>(
                     controlAffinity: ListTileControlAffinity.trailing,
                     secondary: Text(
@@ -80,7 +87,7 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       style: TextStyle(fontSize: 20.0),
                     ),
                     value: "B",
-                    activeColor: Colors.pink,
+                    activeColor: Colors.black,
                     groupValue: _myAnswer,
                     title: Text("${widget.answers[1]}"),
                     onChanged: (String value) {
@@ -90,8 +97,11 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       });
                     },
                   )),
+              SizedBox(height: 15.0),
               Card(
-                  color: _myAnswer == "C" ? Colors.blue : Colors.white,
+                  color: _myAnswer == "C"
+                      ? Color.fromRGBO(255, 153, 0, 1)
+                      : Colors.white,
                   child: RadioListTile<String>(
                     value: "C",
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -99,7 +109,7 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       "C",
                       style: TextStyle(fontSize: 20.0),
                     ),
-                    activeColor: Colors.pink,
+                    activeColor: Colors.black,
                     groupValue: _myAnswer,
                     title: Text("${widget.answers[2]}"),
                     onChanged: (String value) {
@@ -109,8 +119,11 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       });
                     },
                   )),
+              SizedBox(height: 15.0),
               Card(
-                  color: _myAnswer == "D" ? Colors.blue : Colors.white,
+                  color: _myAnswer == "D"
+                      ? Color.fromRGBO(255, 153, 0, 1)
+                      : Colors.white,
                   child: RadioListTile<String>(
                     value: "D",
                     controlAffinity: ListTileControlAffinity.trailing,
@@ -118,7 +131,7 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       "D",
                       style: TextStyle(fontSize: 20.0),
                     ),
-                    activeColor: Colors.pink,
+                    activeColor: Colors.black,
                     groupValue: _myAnswer,
                     title: Text("${widget.answers[3]}"),
                     onChanged: (String value) {

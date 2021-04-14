@@ -34,7 +34,7 @@ class LiveQuestion extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
-          //print(snapshot.data.data());
+          print(snapshot.data.data());
           if (snapshot.data.data()["type"] == "MCQ") {
             return LiveMCQQuestion(
                 hostId: hostId,
