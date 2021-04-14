@@ -22,6 +22,7 @@ class _MyClassroomState extends State<MyClassroom> {
 
   updateInitialQuestionStats(int initialTotalCorrect, initialTotalIncorrect) {
     setState(() {
+      print("UPDATING ${this.initialTotalCorrect} to $initialTotalCorrect NRPOJKFP[DSAIOFJPOQAW[EIEJF");
       this.initialTotalCorrect = initialTotalCorrect;
       this.initialTotalIncorrect = initialTotalIncorrect;
     });
@@ -55,7 +56,7 @@ class _MyClassroomState extends State<MyClassroom> {
 
           return ActiveClassroom(
             totalIncorrect: initialTotalIncorrect,
-            totalCorrect: initialTotalIncorrect,
+            totalCorrect: initialTotalCorrect,
             currentQuestionBankId:
                 snapshot.data.data()['currentQuestionBankId'],
             currentQuestionId: snapshot.data.data()['currentQuestionId'],

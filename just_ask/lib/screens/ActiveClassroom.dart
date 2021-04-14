@@ -18,6 +18,7 @@ class ActiveClassroom extends StatelessWidget {
       this.totalIncorrect});
   @override
   Widget build(BuildContext context) {
+    print("My initial totalCorrect is $totalCorrect");
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
 
     return StreamBuilder(
@@ -31,7 +32,8 @@ class ActiveClassroom extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           }
-          print("${snapshot.data.data()["totalCorrect"]} - $totalCorrect = ${snapshot.data.data()["totalCorrect"] - totalCorrect}");
+
+          //print("${snapshot.data.data()["totalCorrect"]} - $totalCorrect = ${snapshot.data.data()["totalCorrect"] - totalCorrect}");
           return SizedBox.expand(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,7 +52,7 @@ class ActiveClassroom extends StatelessWidget {
                     "Current right: ${snapshot.data.data()["totalCorrect"] - totalCorrect}   Current wrong: ${snapshot.data.data()["totalIncorrect"] - totalIncorrect}",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
-                ]),
+              ]),
                 SizedBox(
                   height: 20.0,
                 ),
