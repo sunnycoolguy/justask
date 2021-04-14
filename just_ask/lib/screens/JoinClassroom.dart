@@ -32,12 +32,13 @@ class _JoinClassroomState extends State<JoinClassroom> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextField(
               decoration: InputDecoration(
+                  focusColor: Color.fromRGBO(255, 158, 0, 1),
                   hintText: 'Enter the e-mail address of the host',
                   labelText: 'Host e-mail'),
               onChanged: (value) {
                 setState(() {
                   _hostEmail = value;
-                  _showButton = _hostEmail.length == 0 ? false : true;
+                  _showButton = value.length > 0 ? true : false;
                 });
               },
             ),
@@ -45,7 +46,11 @@ class _JoinClassroomState extends State<JoinClassroom> {
               height: 15.0,
             ),
             _showButton == true
-                ? ElevatedButton(
+                ? RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    textColor: Colors.white,
+                    color: Color.fromRGBO(255, 158, 0, 1),
                     onPressed: () async {
                       try {
                         dynamic hostDoc =
@@ -72,27 +77,42 @@ class _JoinClassroomState extends State<JoinClassroom> {
                         }
                       }
                     },
-                    child: Text('Submit'))
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          fontFamily: "JosefinSans",
+                          fontWeight: FontWeight.bold),
+                    ))
                 : SizedBox()
           ]));
     } else if (_hostId == _currentUserId) {
       _mainContent = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(child: Text("That was your e-mail silly goose  ;)")),
+          SizedBox(
+            height: 10.0,
+          ),
           Container(
             child: RaisedButton(
               onPressed: () {
                 setState(() {
+                  print(_showButton);
                   _hostId = null;
+                  //_hostEmail = '';
+                  _showButton = false;
                 });
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               textColor: Colors.white,
-              color: Colors.blue,
-              child: Text(
-                "Try Another Host e-mail",
-              ),
+              color: Color.fromRGBO(255, 158, 0, 1),
+              child: Text("Try another host e-mail",
+                  style: TextStyle(
+                      fontSize: 17.0,
+                      fontFamily: "JosefinSans",
+                      fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -108,19 +128,21 @@ class _JoinClassroomState extends State<JoinClassroom> {
                     child: Text(
                         "There was an error connecting to the classroom please try again later."),
                   ),
-                  Container(
-                    child: RaisedButton(
-                      onPressed: () {
-                        setState(() {
-                          _hostId = null;
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      textColor: Colors.white,
-                      color: Colors.blue,
-                      child: Text(
-                        "Try Another Host e-mail",
+                  Center(
+                    child: Container(
+                      child: RaisedButton(
+                        onPressed: () {
+                          setState(() {
+                            _hostId = null;
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        textColor: Colors.white,
+                        color: Color.fromRGBO(255, 158, 0, 1),
+                        child: Text(
+                          "Try another host e-mail",
+                        ),
                       ),
                     ),
                   ),
@@ -129,18 +151,16 @@ class _JoinClassroomState extends State<JoinClassroom> {
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             } else if (snapshot.data.data()["currentQuestionBankId"] == null &&
-                snapshot.data.data()["currentQuestionId"] == null) {
-              print("Hello there!");
-              print(snapshot.data.data());
-              print("$_hostId is the current host id.");
-              print(
-                  "${snapshot.data.data()["currentQuestionBankId"]} is the current bank id");
-              print(
-                  "${snapshot.data.data()["currentQuestionId"]} is the current question id");
+                snapshot.data.data()["currentQuestionId"] == null &&
+                snapshot.data.data()["currentCorrect"] == null &&
+                snapshot.data.data()["currentIncorrect"] == null) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(child: Text("The classroom is currently closed.")),
+                  SizedBox(
+                    height: 15.0,
+                  ),
                   Container(
                     child: RaisedButton(
                       onPressed: () {
@@ -152,15 +172,19 @@ class _JoinClassroomState extends State<JoinClassroom> {
                           borderRadius: BorderRadius.circular(20.0)),
                       textColor: Colors.white,
                       color: Colors.blue,
-                      child: Text(
-                        "Try Another Host e-mail",
-                      ),
+                      child: Text("Try Another Host e-mail",
+                          style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: "JosefinSans",
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
               );
             } else if (snapshot.data.data()["currentQuestionBankId"] == 'TBD' &&
-                snapshot.data.data()["currentQuestionId"] == 'TBD') {
+                snapshot.data.data()["currentQuestionId"] == 'TBD' &&
+                snapshot.data.data()["currentCorrect"] == 'TBD' &&
+                snapshot.data.data()["currentIncorrect"] == 'TBD') {
               return Center(
                 child: Text("Please wait while the host picks a question..."),
               );

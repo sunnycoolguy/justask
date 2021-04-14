@@ -49,7 +49,7 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
               elevation: 12.0,
               child: Container(
                   width: double.infinity,
-                  color: Colors.blue,
+                  color: Color.fromRGBO(255, 153, 0, 1),
                   child: Center(
                     child: _openedClassroomStatus !=
                                 OpenedClassroomStatus.PickingQuestion &&
@@ -61,8 +61,10 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
                                     OpenedClassroomStatus.PickingQuestionBank
                                 ? "Pick A Question Bank"
                                 : "Pick A Question",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20.0)),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontFamily: 'JosefinSans')),
                   )),
             ),
           ],
@@ -71,54 +73,3 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
     );
   }
 }
-
-/* build logic to be used later
-*     if (_openedClassroomStatus == OpenedClassroomStatus.PickingQuestionBank) {
-      return Stack(
-        children: [
-          Container(
-              margin: EdgeInsets.only(top: 20.0),
-              child: QuestionBankList(
-                  updateMyClassroomState: updateMyClassroomState)),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Material(
-                elevation: 12.0,
-                child: Container(
-                    width: double.infinity,
-                    color: Colors.blue,
-                    child: Center(
-                      child: Text("Pick A Question Bank",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 20.0)),
-                    )),
-              ),
-            ],
-          )
-        ],
-      );
-    } else if (_openedClassroomStatus ==
-        OpenedClassroomStatus.QuestionBroadcasting) {
-      return Text("The question is currently being broadcast.");
-    }
-*
-*
-* */
-/* button to use later
-* Container(
-              margin: EdgeInsets.only(bottom: 30.0),
-              child: Align(
-                alignment: AlignmentDirectional.bottomCenter,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  textColor: Colors.white,
-                  color: Colors.blue,
-                  child: Text(
-                    "Close Classroom",
-                  ),
-                  elevation: 12.0,
-                  onPressed: () {},
-                )
-* */

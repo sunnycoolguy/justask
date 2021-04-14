@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../enums.dart';
@@ -18,11 +19,12 @@ class QuestionList extends StatelessWidget {
   final Function updateMyClassroomState;
   final Function updateMyQuestionBanksState;
   final Function updateFABState;
-  QuestionList(
-      {this.questionBankId,
-      this.updateMyClassroomState,
-      this.updateMyQuestionBanksState,
-      this.updateFABState});
+  QuestionList({
+    this.questionBankId,
+    this.updateMyClassroomState,
+    this.updateMyQuestionBanksState,
+    this.updateFABState,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +148,36 @@ class QuestionList extends StatelessWidget {
         ),
         subtitle: Text(questionType == "MCQ" ? "MC" : questionType),
         onTap: updateMyClassroomState != null
-            ? () {
+            ? () async {
                 _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
               }
             : null,
       ),
     );
   }
+
+  /*
+  _buildTileDetails(int totalCorrect, int totalIncorrect, String questionType) {
+    String formattedQuestionType = questionType == "MCQ" ? "MC" : questionType;
+    int totalAnswers = totalCorrect + totalIncorrect;
+    String percentCorrect = (totalCorrect / totalAnswers).toStringAsFixed(2);
+    String percentIncorrect = (totalIncorrect / totalAnswers).toStringAsFixed(2);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(child: Text(formattedQuestionType)),
+        Container(child: Row(
+          children: [
+            Icon(Icons.done),
+            Text(" : "),
+            Text("$totalCorrect ($percentCorrect)")
+          ],
+        ),),
+        Container()
+      ],
+
+    );
+  }
+  */ //TODO: Introduce in patch
 }
