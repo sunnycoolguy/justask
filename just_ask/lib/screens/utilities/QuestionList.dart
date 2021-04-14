@@ -2,16 +2,16 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../enums.dart';
+import '../../enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/models/QuestionModel.dart';
-import 'package:just_ask/screens/question_forms/UpdateFillInTheBlankQuestionForm.dart';
-import 'package:just_ask/screens/question_forms/UpdateMultipleChoiceQuestionForm.dart';
-import 'package:just_ask/screens/question_forms/UpdateTrueOrFalseQuestionForm.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/my_question_banks/question_forms/UpdateFillInTheBlankQuestionForm.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/my_question_banks/question_forms/UpdateMultipleChoiceQuestionForm.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/my_question_banks/question_forms/UpdateTrueOrFalseQuestionForm.dart';
 import 'package:provider/provider.dart';
-import '../services/CloudLiaison.dart';
+import '../../services/CloudLiaison.dart';
 import 'Loading.dart';
 
 class QuestionList extends StatelessWidget {

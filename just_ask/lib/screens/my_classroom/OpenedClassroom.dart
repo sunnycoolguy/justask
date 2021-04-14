@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/QuestionBankList.dart';
-import 'package:just_ask/screens/QuestionList.dart';
-import '../enums.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/utilities/QuestionBankList.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/utilities/QuestionList.dart';
+import '../../enums.dart';
 
 class OpenedClassroom extends StatefulWidget {
   final Function updateInitialQuestionStats;

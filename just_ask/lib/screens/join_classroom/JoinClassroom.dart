@@ -5,9 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
-
-import 'LiveQuestion.dart';
-import 'Loading.dart';
+import './LiveQuestion.dart';
+import '../utilities/Loading.dart';
 
 class JoinClassroom extends StatefulWidget {
   @override

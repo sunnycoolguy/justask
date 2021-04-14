@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/Correct.dart';
-import 'package:just_ask/screens/Incorrect.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/join_classroom/Correct.dart';
+import './Incorrect.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 

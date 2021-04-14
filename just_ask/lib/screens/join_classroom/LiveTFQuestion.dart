@@ -1,14 +1,15 @@
 import 'dart:io';
 
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_ask/screens/Correct.dart';
-import 'package:just_ask/screens/Incorrect.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/join_classroom/Correct.dart';
+import './Incorrect.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 
-class LiveFIBQuestion extends StatefulWidget {
+class LiveTFQuestion extends StatefulWidget {
   final List<dynamic> answers;
   final String correctAnswer;
   final String question;
@@ -16,7 +17,7 @@ class LiveFIBQuestion extends StatefulWidget {
   final String hostQuestionBankId;
   final String hostQuestionId;
 
-  LiveFIBQuestion(
+  LiveTFQuestion(
       {this.hostQuestionBankId,
       this.hostQuestionId,
       this.hostId,
@@ -25,10 +26,10 @@ class LiveFIBQuestion extends StatefulWidget {
       this.question});
 
   @override
-  _LiveFIBQuestionState createState() => _LiveFIBQuestionState();
+  _LiveTFQuestionState createState() => _LiveTFQuestionState();
 }
 
-class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
+class _LiveTFQuestionState extends State<LiveTFQuestion> {
   String _myAnswer;
   bool _showButton = false;
   bool _isAnswered = false;
@@ -41,18 +42,10 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
 
   @override
   Widget build(BuildContext context) {
-    print("building");
-    print(_isAnswered);
     CloudLiaison _cloudLiaison =
-        CloudLiaison(userID: Provider.of<User>(context, listen: false).uid);
+        CloudLiaison(userID: Provider.of<User>(context).uid);
     return _isAnswered == false
         ? GestureDetector(
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
-            },
             child: Container(
                 padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
                 child: ListView(children: [
@@ -62,23 +55,27 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                         "${widget.question}",
                         style: TextStyle(fontSize: 25.0),
                       )),
-                  SizedBox(
-                    height: 30.0,
+                  SizedBox(height: 30.0),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: DropDownFormField(
+                        value: _myAnswer,
+                        titleText: 'Answer',
+                        hintText: 'Is the answer true or false?',
+                        onChanged: (value) {
+                          setState(() {
+                            _myAnswer = value;
+                            _showButton = _myAnswer.length != 0 ? true : false;
+                          });
+                        },
+                        dataSource: [
+                          {"display": "True", "value": "true"},
+                          {"display": "False", "value": "false"}
+                        ],
+                        textField: 'display',
+                        valueField: 'value'),
                   ),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: 'What is the answer to the question?',
-                        labelText: 'Answer'),
-                    onChanged: (value) {
-                      setState(() {
-                        _myAnswer = value.toLowerCase();
-                        _showButton = value.length == 0 ? false : true;
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
+                  SizedBox(height: 30.0),
                   _showButton == true
                       ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -100,13 +97,10 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                                   _myAnswer == widget.correctAnswer);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      _myAnswer.toLowerCase() !=
-                                              widget.correctAnswer.toLowerCase()
+                                      _myAnswer != widget.correctAnswer
                                           ? Incorrect()
                                           : Correct()));
-                              setState(() {
-                                _isAnswered = true;
-                              });
+                              updateIsAnswered();
                             } catch (e) {
                               if (Platform.isAndroid) {
                                 showDialog(
@@ -130,6 +124,7 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                 ])),
           )
         : Center(
-            child: Text("Please wait while the host picks another question."));
+            child: Text("Please wait while the host picks a new question."),
+          );
   }
 }

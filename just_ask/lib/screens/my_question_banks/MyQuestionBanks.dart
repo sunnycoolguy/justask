@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:just_ask/enums.dart';
-import 'package:just_ask/screens/QuestionList.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/utilities/QuestionList.dart';
 
-import 'QuestionBankList.dart';
+import '../utilities/QuestionBankList.dart';
 
 class MyQuestionBanks extends StatefulWidget {
   final Function updateFABState;
@@ -24,11 +24,9 @@ class _MyQuestionBanksState extends State<MyQuestionBanks> {
   }
 
   updateMyQuestionBanksState(MyQuestionBanksStatus myNewQuestionBanksStatus) {
-    print("Turning ${_myQuestionBanksStatus} to ${myNewQuestionBanksStatus}");
     setState(() {
       _myQuestionBanksStatus = myNewQuestionBanksStatus;
     });
-    print("The new MyQuestionBankStatus is ${_myQuestionBanksStatus}");
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 
-import 'Loading.dart';
+import '../utilities/Loading.dart';
 
 class ActiveClassroom extends StatelessWidget {
   final String currentQuestionBankId;

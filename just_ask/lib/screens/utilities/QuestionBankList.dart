@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/enums.dart';
-import 'package:just_ask/screens/Loading.dart';
+import 'file:///C:/Users/senay/Documents/JustAsk/just_ask/lib/screens/utilities/Loading.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'UpdateQuestionBankForm.dart';
+import '../my_question_banks/UpdateQuestionBankForm.dart';
 import 'dart:io' show Platform;
 import 'package:flutter_slidable/flutter_slidable.dart';
 

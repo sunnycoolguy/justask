@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_ask/services/CloudLiaison.dart';
 import 'package:provider/provider.dart';
-import '../Loading.dart';
+import '../../utilities/Loading.dart';
 import 'dart:io' show Platform;
 
 //ignore: must_be_immutable
