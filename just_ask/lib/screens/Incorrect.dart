@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Incorrect extends StatelessWidget {
-  final Function updateIsAnswered;
-
-  Incorrect({this.updateIsAnswered});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

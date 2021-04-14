@@ -17,6 +17,16 @@ class MyClassroom extends StatefulWidget {
 }
 
 class _MyClassroomState extends State<MyClassroom> {
+  int initialTotalCorrect;
+  int initialTotalIncorrect;
+
+  updateInitialQuestionStats(int initialTotalCorrect, initialTotalIncorrect) {
+    setState(() {
+      this.initialTotalCorrect = initialTotalCorrect;
+      this.initialTotalIncorrect = initialTotalIncorrect;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     User currentUser = context.watch<User>();
@@ -39,10 +49,13 @@ class _MyClassroomState extends State<MyClassroom> {
             return ClosedClassroom(userID: currentUser.uid);
           } else if (snapshot.data.data()['currentQuestionBankId'] == 'TBD' &&
               snapshot.data.data()['currentQuestionId'] == 'TBD') {
-            return OpenedClassroom();
+            return OpenedClassroom(
+                updateInitialQuestionStats: updateInitialQuestionStats);
           }
 
           return ActiveClassroom(
+            totalIncorrect: initialTotalIncorrect,
+            totalCorrect: initialTotalIncorrect,
             currentQuestionBankId:
                 snapshot.data.data()['currentQuestionBankId'],
             currentQuestionId: snapshot.data.data()['currentQuestionId'],

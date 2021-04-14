@@ -40,9 +40,18 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("bro im getting disposed what.");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("building");
+    print(_isAnswered);
     CloudLiaison _cloudLiaison =
-        CloudLiaison(userID: Provider.of<User>(context).uid);
+        CloudLiaison(userID: Provider.of<User>(context, listen: false).uid);
     return _isAnswered == false
         ? Container(
             padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
@@ -53,6 +62,9 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                     "${widget.question}",
                     style: TextStyle(fontSize: 25.0),
                   )),
+              SizedBox(
+                height: 30.0,
+              ),
               TextField(
                 decoration: InputDecoration(
                     hintText: 'What is the answer to the question?',
@@ -64,26 +76,36 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                   });
                 },
               ),
+              SizedBox(
+                height: 30.0,
+              ),
               _showButton == true
                   ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 15.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          primary: Color.fromRGBO(255, 158, 0, 1),
+                          textStyle: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)),
                       onPressed: () async {
                         try {
-                          _cloudLiaison.incrementAnswerCounterInUserDoc(
-                              widget.hostId,
-                              widget.hostQuestionBankId,
-                              _myAnswer == widget.correctAnswer);
                           _cloudLiaison.incrementAnswerCounterInQuestionDoc(
                               widget.hostId,
                               widget.hostQuestionBankId,
                               widget.hostQuestionId,
                               _myAnswer == widget.correctAnswer);
-                          print("hello there");
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  _myAnswer != widget.correctAnswer
-                                      ? Incorrect()
-                                      : Correct()));
-                          updateIsAnswered();
+                              builder: (context) => _myAnswer.toLowerCase() !=
+                                      widget.correctAnswer.toLowerCase()
+                                  ? Incorrect()
+                                  : Correct()));
+                          setState(() {
+                            _isAnswered = true;
+                          });
                         } catch (e) {
                           if (Platform.isAndroid) {
                             showDialog(
@@ -106,7 +128,6 @@ class _LiveFIBQuestionState extends State<LiveFIBQuestion> {
                   : SizedBox()
             ]))
         : Center(
-            child: Text("Please wait while the host picks a new question."),
-          );
+            child: Text("Please wait while the host picks another question."));
   }
 }

@@ -19,12 +19,13 @@ class QuestionList extends StatelessWidget {
   final Function updateMyClassroomState;
   final Function updateMyQuestionBanksState;
   final Function updateFABState;
-  QuestionList({
-    this.questionBankId,
-    this.updateMyClassroomState,
-    this.updateMyQuestionBanksState,
-    this.updateFABState,
-  });
+  final Function updateInitialQuestionStats;
+  QuestionList(
+      {this.questionBankId,
+      this.updateMyClassroomState,
+      this.updateMyQuestionBanksState,
+      this.updateFABState,
+      this.updateInitialQuestionStats});
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +150,15 @@ class QuestionList extends StatelessWidget {
         subtitle: Text(questionType == "MCQ" ? "MC" : questionType),
         onTap: updateMyClassroomState != null
             ? () async {
+                //get question stats for teacher in order to prevent race
+                DocumentSnapshot questionSnapshot =
+                    await _cloudLiaison.getQuestion(
+                        userId: context.read<User>().uid,
+                        questionId: questionId,
+                        questionBankId: questionBankId);
+                updateInitialQuestionStats(
+                    questionSnapshot.data()['totalCorrect'],
+                    questionSnapshot.data()['totalIncorrect']);
                 _cloudLiaison.setCurrentQuestion(questionBankId, questionId);
               }
             : null,

@@ -25,8 +25,6 @@ class CloudLiaison {
       users.doc(userID).update({
         'currentQuestionBankId': 'TBD',
         'currentQuestionId': 'TBD',
-        'currentCorrect': 'TBD',
-        'currentIncorrect': 'TBD'
       });
     } catch (e) {
       throw e;
@@ -39,8 +37,6 @@ class CloudLiaison {
       users.doc(userID).update({
         'currentQuestionBankId': null,
         'currentQuestionId': null,
-        'currentCorrect': null,
-        'currentIncorrect': null
       });
     } catch (e) {
       throw e;
@@ -53,8 +49,6 @@ class CloudLiaison {
       users.doc(userID).update({
         'currentQuestionBankId': questionBankId,
         'currentQuestionId': questionId,
-        'currentCorrect': 0,
-        'currentIncorrect': 0,
       });
     } catch (e) {
       throw e;
@@ -95,8 +89,6 @@ class CloudLiaison {
             transaction.update(
                 documentReference, {'totalCorrect': newTotalRightCount});
           } else {
-            print("Adding to incorrect counter BRO!");
-            print("${snapshot.data()}");
             int newTotalIncorrect = snapshot.data()['totalIncorrect'] + 1;
             transaction.update(
                 documentReference, {'totalIncorrect': newTotalIncorrect});
@@ -104,39 +96,7 @@ class CloudLiaison {
 
           return true;
         })
-        .then((value) => print("Success updating the relevant stat."))
-        .catchError((error) => throw Exception(error.toString()));
-  }
-
-  //TODO: Handle async
-  incrementAnswerCounterInUserDoc(
-      String hostId, String hostQuestionBankId, bool correct) {
-    DocumentReference documentReference = users.doc(hostId);
-
-    return FirebaseFirestore.instance
-        .runTransaction((transaction) async {
-          //Get the document
-          DocumentSnapshot snapshot = await transaction.get(documentReference);
-          if (!snapshot.exists) {
-            throw Exception("User does not exist!");
-          }
-
-          //update the relevant counts
-          if (correct) {
-            int newCurrentRightCount = snapshot.data()['currentCorrect'] + 1;
-            transaction.update(
-                documentReference, {'currentCorrect': newCurrentRightCount});
-          } else {
-            print("Adding to incorrect counter BRO!");
-            print("${snapshot.data()}");
-            int newCurrentIncorrect = snapshot.data()['currentIncorrect'] + 1;
-            transaction.update(
-                documentReference, {'currentIncorrect': newCurrentIncorrect});
-          }
-
-          return true;
-        })
-        .then((value) => print("Success updating the relevant stat."))
+        .then((value) => true)
         .catchError((error) => throw Exception(error.toString()));
   }
 
@@ -427,8 +387,6 @@ class CloudLiaison {
         'lastName': lastName,
         'currentQuestionBankId': null,
         'currentQuestionId': null,
-        'currentCorrect': null,
-        'currentIncorrect': null
       });
     } catch (e) {
       throw e;

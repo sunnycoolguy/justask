@@ -128,20 +128,26 @@ class _LiveMCQQuestionState extends State<LiveMCQQuestion> {
                       });
                     },
                   )),
+              SizedBox(height: 30.0),
               _showButton == true
                   ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 15.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          primary: Color.fromRGBO(255, 158, 0, 1),
+                          textStyle: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)),
                       onPressed: () async {
                         try {
-                          _cloudLiaison.incrementAnswerCounterInUserDoc(
-                              widget.hostId,
-                              widget.hostQuestionBankId,
-                              _myAnswer == widget.correctAnswer);
                           _cloudLiaison.incrementAnswerCounterInQuestionDoc(
                               widget.hostId,
                               widget.hostQuestionBankId,
                               widget.hostQuestionId,
                               _myAnswer == widget.correctAnswer);
-                          print("hello there");
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   _myAnswer != widget.correctAnswer
