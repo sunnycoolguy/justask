@@ -54,6 +54,7 @@ class _LiveTFQuestionState extends State<LiveTFQuestion> {
                     "${widget.question}",
                     style: TextStyle(fontSize: 25.0),
                   )),
+              SizedBox(height: 30.0),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: DropDownFormField(
@@ -73,14 +74,21 @@ class _LiveTFQuestionState extends State<LiveTFQuestion> {
                     textField: 'display',
                     valueField: 'value'),
               ),
+              SizedBox(height: 30.0),
               _showButton == true
                   ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 15.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
+                          primary: Color.fromRGBO(255, 158, 0, 1),
+                          textStyle: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)),
                       onPressed: () async {
                         try {
-                          _cloudLiaison.incrementAnswerCounterInUserDoc(
-                              widget.hostId,
-                              widget.hostQuestionBankId,
-                              _myAnswer == widget.correctAnswer);
                           _cloudLiaison.incrementAnswerCounterInQuestionDoc(
                               widget.hostId,
                               widget.hostQuestionBankId,

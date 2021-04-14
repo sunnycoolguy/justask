@@ -19,7 +19,7 @@ class ActiveClassroom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CloudLiaison _cloudLiaison = CloudLiaison(userID: context.read<User>().uid);
-    print("The current user ID is ${context.read<User>().uid}");
+
     return StreamBuilder(
         stream: _cloudLiaison.getQuestionStream(
             questionId: currentQuestionId,
@@ -45,30 +45,12 @@ class ActiveClassroom extends StatelessWidget {
                 SizedBox(
                   height: 15.0,
                 ),
-                StreamBuilder(
-                    stream: _cloudLiaison.getHostInfo(context.read<User>().uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text(
-                          "Error fetching question statistics.",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Text(
-                          "Fetching question statistics.",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        );
-                      }
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Current right: ${snapshot.data.data()["currentCorrect"]}   Current wrong: ${snapshot.data.data()["currentIncorrect"]}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ]);
-                    }),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    "Current right: ${snapshot.data.data()["totalCorrect"] - totalCorrect}   Current wrong: ${snapshot.data.data()["totalIncorrect"] - totalIncorrect}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ]),
                 SizedBox(
                   height: 20.0,
                 ),

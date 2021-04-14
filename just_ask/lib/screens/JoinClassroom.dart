@@ -166,12 +166,13 @@ class _JoinClassroomState extends State<JoinClassroom> {
                       onPressed: () {
                         setState(() {
                           _hostId = null;
+                          _showButton = false;
                         });
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0)),
                       textColor: Colors.white,
-                      color: Colors.blue,
+                      color: Color.fromRGBO(255, 158, 0, 1),
                       child: Text("Try Another Host e-mail",
                           style: TextStyle(
                               fontSize: 17.0,
@@ -186,7 +187,9 @@ class _JoinClassroomState extends State<JoinClassroom> {
                 snapshot.data.data()["currentCorrect"] == 'TBD' &&
                 snapshot.data.data()["currentIncorrect"] == 'TBD') {
               return Center(
-                child: Text("Please wait while the host picks a question..."),
+                child: Text(
+                  "Please wait while the host picks a question...",
+                ),
               );
             }
 

@@ -4,6 +4,9 @@ import 'package:just_ask/screens/QuestionList.dart';
 import '../enums.dart';
 
 class OpenedClassroom extends StatefulWidget {
+  final Function updateInitialQuestionStats;
+
+  OpenedClassroom({this.updateInitialQuestionStats});
   @override
   _OpenedClassroomState createState() => _OpenedClassroomState();
 }
@@ -35,6 +38,7 @@ class _OpenedClassroomState extends State<OpenedClassroom> {
     } else if (_openedClassroomStatus ==
         OpenedClassroomStatus.PickingQuestion) {
       _mainContent = QuestionList(
+          updateInitialQuestionStats: widget.updateInitialQuestionStats,
           questionBankId: _currentQuestionBankId,
           updateMyClassroomState: updateMyClassroomState);
     }
