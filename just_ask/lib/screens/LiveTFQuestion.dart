@@ -94,7 +94,6 @@ class _LiveTFQuestionState extends State<LiveTFQuestion> {
                               widget.hostQuestionBankId,
                               widget.hostQuestionId,
                               _myAnswer == widget.correctAnswer);
-                          print("hello there");
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   _myAnswer != widget.correctAnswer
