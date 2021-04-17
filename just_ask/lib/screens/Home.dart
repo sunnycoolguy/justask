@@ -8,7 +8,7 @@ import 'my_question_banks/MyQuestionBanks.dart';
 import 'my_classroom/MyClassroom.dart';
 import 'join_classroom/JoinClassroom.dart';
 import 'package:flutter/material.dart';
-import '../enums.dart';
+import 'package:just_ask/enums.dart';
 import '../services/Authenticator.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
